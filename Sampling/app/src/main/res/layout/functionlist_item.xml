@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_more_work"
+    style="@style/more_relativelayout"
+    android:paddingBottom="@dimen/margin_padding5"
+    android:paddingTop="@dimen/margin_padding5">
+
+    <ImageView
+        android:id="@+id/function_image"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:paddingBottom="13dip"
+        android:paddingRight="8dip"
+        android:paddingTop="13dip"
+        tools:background="@mipmap/icon_datadic" />
+
+    <TextView
+        android:id="@+id/function_name"
+        style="@style/more_text"
+        android:layout_toRightOf="@id/function_image"
+        tools:text="@string/more_work" />
+
+    <TextView
+        android:id="@+id/function_arrow"
+        style="@style/more_arrows" />
+
+    <TextView
+        android:id="@+id/function_note"
+        style="@style/more_text2"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/layoutSize20"
+        tools:text="@string/more_worknote" />
+</RelativeLayout>
