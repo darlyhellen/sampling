@@ -1,11 +1,16 @@
 package com.xiangxun.sampling.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
@@ -13,11 +18,13 @@ import com.bigkoo.convenientbanner.holder.Holder;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.ui.setting.SettingActivity;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 import java.util.ArrayList;
@@ -36,6 +43,8 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
 
     @ViewsBinder(R.id.id_main_convenientBanner)
     private ConvenientBanner<Integer> banner;
+    @ViewsBinder(R.id.id_main_iv)
+    private ImageView iv;
 
     private List<Integer> data = new ArrayList<Integer>();
 
@@ -44,9 +53,7 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
         titleView.setTitle(R.string.app_name);
         titleView.setRightViewRightOneListener(R.drawable.btn_selecter_mune, this);
         data.add(R.mipmap.ic_main_menu1);
-        data.add(R.mipmap.ic_main_menu2);
-        data.add(R.mipmap.ic_main_menu3);
-
+        initFragments(MainIndexFragment.class, R.id.id_main_index);
     }
 
     @Override
@@ -59,29 +66,47 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
 
     @Override
     public void initListener() {
-        banner.setPages(
-                new CBViewHolderCreator<LocalImageHolderView>() {
-                    @Override
-                    public LocalImageHolderView createHolder() {
-                        return new LocalImageHolderView();
-                    }
-                }, data)
-                //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-                .setPageIndicator(new int[]{R.mipmap.ic_point_normal, R.mipmap.ic_point_select})
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
-                .startTurning(2000)
-                .setOnItemClickListener(this);
+        if (data.size() > 1) {
+            banner.setVisibility(View.VISIBLE);
+            iv.setVisibility(View.GONE);
+            banner.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.57)));
+            banner.setPages(
+                    new CBViewHolderCreator<LocalImageHolderView>() {
+                        @Override
+                        public LocalImageHolderView createHolder() {
+                            return new LocalImageHolderView();
+                        }
+                    }, data)
+                    //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
+                    .setPageIndicator(new int[]{R.mipmap.ic_point_normal, R.mipmap.ic_point_select})
+                    .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+                    .startTurning(5000)
+                    .setOnItemClickListener(this);
+        } else if (data.size() == 1) {
+            banner.setVisibility(View.GONE);
+            iv.setVisibility(View.VISIBLE);
+            iv.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.57)));
+            iv.setBackgroundResource(data.get(0));
+            iv.setOnClickListener(this);
+        }
     }
 
 
     @Override
     public void onItemClick(int i) {
-        ToastApp.showToast("点击到了第" + i + "页");
+        DLog.i(getClass().getSimpleName(), "点击-->" + i);
     }
 
     @Override
     public void onClick(View v) {
-        ToastApp.showToast("菜单");
+        switch (v.getId()) {
+            case R.id.title_view_operation_imageview_right:
+                startActivity(new Intent(this, SettingActivity.class));
+                break;
+            default:
+                break;
+        }
+        DLog.i(getClass().getSimpleName(), "菜单");
     }
 
     public class LocalImageHolderView implements Holder<Integer> {

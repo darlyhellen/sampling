@@ -3,13 +3,15 @@ package com.xiangxun.sampling.base;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.binder.InitBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
-
 
 
 /**
@@ -26,7 +28,6 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        DLog.d(getClass().getSimpleName(), "onCreate()");
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         initGlobalVariable();
@@ -67,6 +68,20 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     protected abstract void initListener();
 
+
+    protected void initFragments(Class<?> cls, int resId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) cls.newInstance();
+            transaction.add(resId, fragment);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        transaction.commit();
+    }
 
     @Override
     public void startActivity(Intent intent) {

@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import com.xiangxun.sampling.BuildConfig;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.http.DcHttpClient;
+import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.service.MainService;
 
 import java.util.concurrent.ExecutorService;
@@ -57,7 +58,7 @@ public class XiangXunApplication extends Application {
         registerReceiver(mReceiver, new IntentFilter(lOCALE_CHANGED));
         // 网络对象初始化
         DcHttpClient.getInstance().init(getBaseContext());
-
+        ImageLoaderUtil.init(this);
         if (SystemCfg.getWidth(this) == 0 || SystemCfg.getHeight(this) == 0) {
             calculate();
         }

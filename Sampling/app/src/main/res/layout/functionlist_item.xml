@@ -2,19 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_more_work"
-    style="@style/more_relativelayout"
-    android:paddingBottom="@dimen/margin_padding5"
-    android:paddingTop="@dimen/margin_padding5">
+    android:layout_width="match_parent"
+    android:layout_height="49dp"
+    android:background="@drawable/more_item_selector"
+    android:paddingBottom="@dimen/margin_padding10"
+    android:paddingRight="@dimen/margin_padding20"
+    android:paddingTop="@dimen/margin_padding10">
 
     <ImageView
         android:id="@+id/function_image"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:paddingBottom="13dip"
-        android:paddingRight="8dip"
-        android:paddingTop="13dip"
         tools:background="@mipmap/icon_datadic" />
 
     <TextView

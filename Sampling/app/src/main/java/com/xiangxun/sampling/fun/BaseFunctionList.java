@@ -15,13 +15,11 @@ public abstract class BaseFunctionList extends BaseFunFragment {
     private Function[] functions;
 
     private String Title;
-    private TitleView titleView;
     private ListView functionListView;
     private FunctionListAdapter adapter;
 
     @Override
     public void initView(View mParentView) {
-        titleView = (TitleView) mParentView.findViewById(R.id.tv_comm_title);
         functionListView = (ListView) mParentView.findViewById(R.id.lv_functions);
         adapter = new FunctionListAdapter(getActivity(), functionListView);
     }
@@ -34,18 +32,6 @@ public abstract class BaseFunctionList extends BaseFunFragment {
     public void initData() {
     }
 
-    public void setTitle(String title) {
-        Title = title;
-        titleView.setTitle(Title);
-    }
-
-    public void setTitleLeft(int drawable, View.OnClickListener listener) {
-        titleView.setLeftBackOneListener(drawable, listener);
-    }
-
-    public void setTitleRight(int drawable, View.OnClickListener listener) {
-        titleView.setRightViewRightOneListener(drawable, listener);
-    }
 
     public void setFunctions(Function[] functions) {
         this.functions = functions;

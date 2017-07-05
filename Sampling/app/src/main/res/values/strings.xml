@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">土壤安全管理</string>
+    <string name="st_set_title">个人中心</string>
+
 
     <!-- strings from Menu -->
     <string name="menu_tab1">首页</string>

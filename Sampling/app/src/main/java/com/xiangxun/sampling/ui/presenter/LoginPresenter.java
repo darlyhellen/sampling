@@ -61,6 +61,13 @@ public class LoginPresenter {
             case R.id.id_login_btn:
                 //if (!NetUtils.isNetworkAvailable(context) && SystemCfg.getUserId(context) != null && !SystemCfg.getUserId(context).equals("")) {
                 LoginInfo.isOffLine = true;
+                SystemCfg.setUserId(context, "00001");
+                SystemCfg.setAccount(context, main.getUserName());
+                SystemCfg.setUserName(context, "管理员");
+                SystemCfg.setDepartment(context, "研究所");
+                SystemCfg.setDepartmentID(context, "101");
+                SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
+                SystemCfg.setWhitePwd(context, main.getPassword());
                 Intent offline = new Intent(context, MainFragmentActivity.class);
                 context.startActivity(offline);
                 main.end();

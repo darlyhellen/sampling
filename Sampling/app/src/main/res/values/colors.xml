@@ -93,4 +93,6 @@
     <color name="tab_line">#9c9c9c</color> <!-- If background is white, set to black, else set to white -->
     <color name="color_green">#67BD1E</color>
 
+    <!--index-->
+    <color name="index_line">#f9f9f7</color>
 </resources>

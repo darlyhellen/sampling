@@ -112,7 +112,6 @@ public class SettingFragment extends BaseFunctionList {
     public void initData() {
         super.initData();
 
-        setTitle(getString(R.string.menu_tab3));
         if (1 == isNoLoginFlag) {
             setFunctions(functionsNoLogin);
         } else {
@@ -135,12 +134,6 @@ public class SettingFragment extends BaseFunctionList {
                 }
             });
         } else {
-            setTitleRight(R.mipmap.user_normal, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //startActivity(new Intent(getActivity(), MyInformationActivity.class));
-                }
-            });
 
             functionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
