@@ -21,9 +21,12 @@ import java.util.List;
  * @TODO:展示计划组的适配器
  */
 public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
+    //是否現場採集 true 為現場
+    private boolean isSence;
 
-    public PlanningAdapter(List<SamplingPlanning> data, int resID, Context context) {
+    public PlanningAdapter(List<SamplingPlanning> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
+        this.isSence = isSence;
     }
 
     @Override
@@ -41,35 +44,66 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-
-        if (position == 0) {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("计划名称");
-            hocker.name.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.name.setTextSize(16);
-            hocker.dept.setText("实施机构");
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.dept.setTextSize(16);
-            hocker.position.setText("采样选址");
-            hocker.position.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.position.setTextSize(16);
-            hocker.desc.setText("");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.desc.setTextSize(16);
+        if (isSence) {
+            if (position == 0) {
+                hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+                hocker.name.setText("计划名称");
+                hocker.name.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.name.setTextSize(16);
+                hocker.dept.setText("采样样品");
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.dept.setTextSize(16);
+                hocker.position.setText("采样点位数");
+                hocker.position.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.position.setTextSize(16);
+                hocker.desc.setText("");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.desc.setTextSize(16);
+            } else {
+                hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                hocker.name.setText(s.getTitle());
+                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextSize(14);
+                hocker.dept.setText(s.getSamplingexzample());
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextSize(14);
+                hocker.position.setText(String.valueOf(s.getPoints().size()).concat("个"));
+                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextSize(14);
+                hocker.desc.setText("点击查看范围");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.setTextSize(14);
+            }
         } else {
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getTitle());
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(s.getDepate());
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(s.getPlace());
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.position.setTextSize(14);
-            hocker.desc.setText("点击查看");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.desc.setTextSize(14);
+            if (position == 0) {
+                hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+                hocker.name.setText("计划名称");
+                hocker.name.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.name.setTextSize(16);
+                hocker.dept.setText("采样样品");
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.dept.setTextSize(16);
+                hocker.position.setText("采样选址");
+                hocker.position.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.position.setTextSize(16);
+                hocker.desc.setText("");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.desc.setTextSize(16);
+            } else {
+                hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                hocker.name.setText(s.getTitle());
+                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextSize(14);
+                hocker.dept.setText(s.getType());
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextSize(14);
+                hocker.position.setText(s.getPlace());
+                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextSize(14);
+                hocker.desc.setText("点击查看");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.setTextSize(14);
+            }
         }
         return view;
     }

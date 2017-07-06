@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -49,11 +48,12 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
 
     @Override
     protected void loadData() {
-        adapter = new PlanningAdapter(null, R.layout.item_planning_list, this);
+        adapter = new PlanningAdapter(null, R.layout.item_planning_list, this, false);
         wlist.setAdapter(adapter);
         StaticListener.getInstance().setRefreshMainUIListener(this);
         if (data == null) {
             data = StaticListener.findData();
+            data.add(0, new SamplingPlanning());
         }
         StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(data);
     }
@@ -75,6 +75,7 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
                     SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
                     Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
                     intent.putExtra("SamplingPlanning", planning);
+                    intent.putExtra("SENCE", false);
                     startActivity(intent);
                 }
             }

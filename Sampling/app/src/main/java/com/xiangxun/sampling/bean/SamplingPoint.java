@@ -15,6 +15,7 @@ public class SamplingPoint implements Serializable {
     private float longitude;
     private float latitude;
     private String desc;
+    private boolean samply;
 
     public String getId() {
         return id;
@@ -46,5 +47,13 @@ public class SamplingPoint implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public boolean isSamply() {
+        return samply;
+    }
+
+    public void setSamply(boolean samply) {
+        this.samply = samply;
     }
 }

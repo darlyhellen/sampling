@@ -17,6 +17,7 @@ public class SamplingPlanning implements Serializable {
     private String depate;
     private String place;
     private String type;
+    private String samplingexzample;
     private List<SamplingPoint> points;
 
     public String getId() {
@@ -57,6 +58,14 @@ public class SamplingPlanning implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSamplingexzample() {
+        return samplingexzample;
+    }
+
+    public void setSamplingexzample(String samplingexzample) {
+        this.samplingexzample = samplingexzample;
     }
 
     public List<SamplingPoint> getPoints() {

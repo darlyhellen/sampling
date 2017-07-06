@@ -23,8 +23,11 @@ import java.util.List;
  */
 public class PointAdapter extends ParentAdapter<SamplingPoint> {
 
-    public PointAdapter(List<SamplingPoint> data, int resID, Context context) {
+    private boolean isSence;
+
+    public PointAdapter(List<SamplingPoint> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
+        this.isSence = isSence;
     }
 
     @Override
@@ -43,34 +46,69 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> {
             hocker = (ViewHocker) view.getTag();
         }
 
-        if (position == 0) {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("点位编号");
-            hocker.name.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.name.setTextSize(16);
-            hocker.dept.setText("经度");
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.dept.setTextSize(16);
-            hocker.position.setText("纬度");
-            hocker.position.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.position.setTextSize(16);
-            hocker.desc.setText("");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.desc.setTextSize(16);
+        if (isSence) {
+            if (position == 0) {
+                hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+                hocker.name.setText("点位编号");
+                hocker.name.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.name.setTextSize(16);
+                hocker.dept.setText("经度");
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.dept.setTextSize(16);
+                hocker.position.setText("纬度");
+                hocker.position.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.position.setTextSize(16);
+                hocker.desc.setText("");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.desc.setTextSize(16);
+            } else {
+                //已经采集过的点,不进行展示.
+                if (!s.isSamply()) {
+                    hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                    hocker.name.setText(s.getId());
+                    hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                    hocker.name.setTextSize(14);
+                    hocker.dept.setText(String.valueOf(s.getLatitude()));
+                    hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                    hocker.dept.setTextSize(14);
+                    hocker.position.setText(String.valueOf(s.getLongitude()));
+                    hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                    hocker.position.setTextSize(14);
+                    hocker.desc.setText("采样记录");
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                    hocker.desc.setTextSize(14);
+                }
+            }
         } else {
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getId());
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getLatitude()));
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getLongitude()));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.position.setTextSize(14);
-            hocker.desc.setText("点击修改");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.desc.setTextSize(14);
+            if (position == 0) {
+                hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+                hocker.name.setText("点位编号");
+                hocker.name.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.name.setTextSize(16);
+                hocker.dept.setText("经度");
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.dept.setTextSize(16);
+                hocker.position.setText("纬度");
+                hocker.position.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.position.setTextSize(16);
+                hocker.desc.setText("");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+                hocker.desc.setTextSize(16);
+            } else {
+                hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                hocker.name.setText(s.getId());
+                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextSize(14);
+                hocker.dept.setText(String.valueOf(s.getLatitude()));
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextSize(14);
+                hocker.position.setText(String.valueOf(s.getLongitude()));
+                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextSize(14);
+                hocker.desc.setText("点击修改");
+                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.setTextSize(14);
+            }
         }
         return view;
     }

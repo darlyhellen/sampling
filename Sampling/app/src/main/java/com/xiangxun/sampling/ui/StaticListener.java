@@ -63,21 +63,25 @@ public class StaticListener {
                     planning.setTitle("国家项目计划" + i);
                     planning.setPlace("曹家庄");
                     planning.setType("土壤");
+                    planning.setSamplingexzample("农田土壤、水稻、玉米、大豆");
                     break;
                 case 1:
                     planning.setTitle("城鎮项目计划" + i);
                     planning.setPlace("何家营");
                     planning.setType("地表水");
+                    planning.setSamplingexzample("农田土壤、地表水、河水");
                     break;
                 case 2:
                     planning.setTitle("省市项目计划" + i);
                     planning.setPlace("凯泰铭");
-                    planning.setType("空气");
+                    planning.setType("农作物");
+                    planning.setSamplingexzample("水稻、玉米、大豆");
                     break;
                 case 3:
                     planning.setTitle("區域项目计划" + i);
                     planning.setPlace("西高村");
                     planning.setType("地下水");
+                    planning.setSamplingexzample("暗流河、地下水、根作物");
                     break;
             }
             List<SamplingPoint> points = new ArrayList<SamplingPoint>();
@@ -87,9 +91,11 @@ public class StaticListener {
                 point.setLatitude((float) (31.12490875901834 + new Random().nextInt(j + 1)));
                 point.setLongitude((float) (104.12490875901834 + new Random().nextInt(j + 1)));
                 point.setDesc(i + "说明文件" + j);
+                point.setSamply(false);
                 points.add(point);
             }
             planning.setPoints(points);
+            DLog.i(points.size());
             data.add(planning);
         }
         return data;
