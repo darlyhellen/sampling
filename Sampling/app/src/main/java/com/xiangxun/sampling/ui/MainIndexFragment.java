@@ -1,11 +1,14 @@
 package com.xiangxun.sampling.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseFragment;
@@ -14,6 +17,11 @@ import com.xiangxun.sampling.binder.InitBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.GridViewAdapter;
+import com.xiangxun.sampling.ui.main.SamplingExceptionActivity;
+import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
+import com.xiangxun.sampling.ui.main.SamplingPlanningActivity;
+import com.xiangxun.sampling.ui.main.SamplingSenceActivity;
+import com.xiangxun.sampling.ui.main.SamplingTargetActivity;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
 
 import java.util.ArrayList;
@@ -22,7 +30,7 @@ import java.util.List;
 /**
  * @author zhangyh2 MainActivity 下午3:27:48 TODO
  */
-public class MainIndexFragment extends BaseFragment {
+public class MainIndexFragment extends BaseFragment implements OnItemClickListener {
 
     private String TAG = getClass().getSimpleName();
     public View rootView;
@@ -71,10 +79,11 @@ public class MainIndexFragment extends BaseFragment {
         // TODO Auto-generated metdhod stub
         if (data == null) {
             data = new ArrayList<Index>();
-            data.add(new Index("采样计划", R.drawable.grid_selecter_simp));
-            data.add(new Index("现场采样", R.drawable.grid_selecter_sence));
-            data.add(new Index("指标查询", R.drawable.grid_selecter_target));
-            data.add(new Index("历史采样", R.drawable.grid_selecter_his));
+            data.add(new Index(0, "采样计划", R.drawable.grid_selecter_simp));
+            data.add(new Index(1, "现场采样", R.drawable.grid_selecter_sence));
+            data.add(new Index(2, "指标查询", R.drawable.grid_selecter_target));
+            data.add(new Index(3, "历史采样", R.drawable.grid_selecter_his));
+            data.add(new Index(4, "地块异常", R.drawable.grid_selecter_his));
         }
         adapter.setData(data);
     }
@@ -87,6 +96,37 @@ public class MainIndexFragment extends BaseFragment {
     @Override
     protected void initListener() {
         // TODO Auto-generated method stub
+        gridView.setOnItemClickListener(this);
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Index index = (Index) parent.getItemAtPosition(position);
+        if (index != null) {
+            Intent intent = new Intent();
+            switch (index.getId()) {
+                case 0:
+                    intent.setClass(getActivity(), SamplingPlanningActivity.class);
+                    break;
+                case 1:
+                    intent.setClass(getActivity(), SamplingSenceActivity.class);
+                    break;
+                case 2:
+                    intent.setClass(getActivity(), SamplingTargetActivity.class);
+                    break;
+                case 3:
+                    intent.setClass(getActivity(), SamplingHistoryActivity.class);
+                    break;
+                case 4:
+                    intent.setClass(getActivity(), SamplingExceptionActivity.class);
+                    break;
+                default:
+                    break;
+            }
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -137,4 +177,5 @@ public class MainIndexFragment extends BaseFragment {
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
     }
+
 }

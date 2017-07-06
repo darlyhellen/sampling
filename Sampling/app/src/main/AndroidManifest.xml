@@ -52,6 +52,21 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SamplingPlanningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SamplingSenceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SamplingTargetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SamplingHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SamplingExceptionActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.setting.SetGuide"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"

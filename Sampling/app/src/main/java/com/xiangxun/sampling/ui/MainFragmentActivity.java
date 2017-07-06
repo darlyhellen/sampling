@@ -109,6 +109,9 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
         DLog.i(getClass().getSimpleName(), "菜单");
     }
 
+    /**
+     * @TODO：此方式是轮播的展示补充
+     */
     public class LocalImageHolderView implements Holder<Integer> {
         private ImageView imageView;
 
