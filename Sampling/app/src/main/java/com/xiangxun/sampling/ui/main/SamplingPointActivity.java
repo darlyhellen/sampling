@@ -13,49 +13,46 @@ import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.ui.StaticListener;
-import com.xiangxun.sampling.ui.StaticListener.RefreshMainUIListener;
-import com.xiangxun.sampling.ui.adapter.PlanningAdapter;
+import com.xiangxun.sampling.ui.adapter.PointAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
-
-import java.util.List;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
  * Copyright by [Zhangyuhui/Darly]
  * ©2017 XunXiang.Company. All rights reserved.
  *
- * @TODO:采样计划展示表格,逻辑为：服务端通过推送，下发到所有手机端，手机端根据推送资料。获取到任务列表，这里进行任务列表展示。
+ * @TODO:采样计划点击到某个计划页面，展示详细点位信息。
  */
-@ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingPlanningActivity extends BaseActivity implements RefreshMainUIListener {
+@ContentBinder(R.layout.activity_sampling_point)
+public class SamplingPointActivity extends BaseActivity {
 
-    @ViewsBinder(R.id.id_planning_title)
+    @ViewsBinder(R.id.id_point_title)
     private TitleView titleView;
 
-    @ViewsBinder(R.id.id_planning_wlist)
+    @ViewsBinder(R.id.id_point_wlist)
     private ListView wlist;
-    @ViewsBinder(R.id.id_planning_text)
+    @ViewsBinder(R.id.id_point_text)
     private TextView textView;
-    private List<SamplingPlanning> data;
-    private PlanningAdapter adapter;
+    private SamplingPlanning planning;
+    private PointAdapter adapter;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        titleView.setTitle("采样计划");
+        planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
+        if (planning == null) {
+            ToastApp.showToast("传递参数错误");
+            return;
+        }
+        titleView.setTitle(planning.getTitle());
     }
 
     @Override
     protected void loadData() {
-        adapter = new PlanningAdapter(null, R.layout.item_planning_list, this);
+        adapter = new PointAdapter(planning.getPoints(), R.layout.item_planning_list, this);
         wlist.setAdapter(adapter);
-        StaticListener.getInstance().setRefreshMainUIListener(this);
-        if (data == null) {
-            data = StaticListener.findData();
-        }
-        StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(data);
     }
 
     @Override
@@ -67,32 +64,39 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
                 onBackPressed();
             }
         });
-
+        titleView.setRightViewRightOneListener(R.mipmap.newfile, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //新增点位逻辑页面
+                Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
+                SamplingPlanning p = new SamplingPlanning();
+                p.setId(planning.getId());
+                p.setDepate(planning.getDepate());
+                p.setTitle(planning.getTitle());
+                p.setPlace(planning.getPlace());
+                intent.putExtra("SamplingPlanning", p);
+                startActivity(intent);
+            }
+        });
         wlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
+                DLog.i("onItemClick--" + position);
                 if (position != 0) {
-                    SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
-                    intent.putExtra("SamplingPlanning", planning);
+                    SamplingPoint point = (SamplingPoint) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
+                    SamplingPlanning p = new SamplingPlanning();
+                    p.setId(planning.getId());
+                    p.setDepate(planning.getDepate());
+                    p.setTitle(planning.getTitle());
+                    p.setPlace(planning.getPlace());
+                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("SamplingPoint",point);
                     startActivity(intent);
                 }
             }
         });
     }
-
-    @Override
-    public void refreshMainUI(List<SamplingPlanning> planningList) {
-        if (planningList != null && planningList.size() > 0) {
-            wlist.setVisibility(View.VISIBLE);
-            textView.setVisibility(View.GONE);
-            adapter.setData(planningList);
-        } else {
-            wlist.setVisibility(View.GONE);
-            textView.setVisibility(View.VISIBLE);
-        }
-    }
-
 
     @Override
     protected void onStart() {
@@ -129,4 +133,6 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
     }
+
+
 }

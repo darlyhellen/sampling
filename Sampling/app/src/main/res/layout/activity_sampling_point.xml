@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <com.xiangxun.sampling.widget.header.TitleView
-        android:id="@+id/id_planning_title"
+        android:id="@+id/id_point_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="visible" />
@@ -17,7 +17,7 @@
         android:paddingTop="@dimen/margin_padding1">
 
         <TextView
-            android:id="@+id/id_planning_text"
+            android:id="@+id/id_point_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -27,7 +27,7 @@
             android:visibility="gone" />
 
         <ListView
-            android:id="@+id/id_planning_wlist"
+            android:id="@+id/id_point_wlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"

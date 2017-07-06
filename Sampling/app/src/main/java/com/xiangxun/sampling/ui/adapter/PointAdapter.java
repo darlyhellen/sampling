@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.SamplingPlanning;
+import com.xiangxun.sampling.bean.SamplingPoint;
 
 import java.util.List;
 
@@ -18,16 +19,16 @@ import java.util.List;
  * Copyright by [Zhangyuhui/Darly]
  * ©2017 XunXiang.Company. All rights reserved.
  *
- * @TODO:展示计划组的适配器
+ * @TODO:展现点位信息的适配器
  */
-public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
+public class PointAdapter extends ParentAdapter<SamplingPoint> {
 
-    public PlanningAdapter(List<SamplingPlanning> data, int resID, Context context) {
+    public PointAdapter(List<SamplingPoint> data, int resID, Context context) {
         super(data, resID, context);
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, Context context, SamplingPlanning s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, Context context, SamplingPoint s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -44,13 +45,13 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
 
         if (position == 0) {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("计划名称");
+            hocker.name.setText("点位编号");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
-            hocker.dept.setText("实施机构");
+            hocker.dept.setText("经度");
             hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
             hocker.dept.setTextSize(16);
-            hocker.position.setText("采样选址");
+            hocker.position.setText("纬度");
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
             hocker.desc.setText("");
@@ -58,16 +59,16 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
             hocker.desc.setTextSize(16);
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getTitle());
+            hocker.name.setText(s.getId());
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(s.getDepate());
+            hocker.dept.setText(String.valueOf(s.getLatitude()));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(s.getPlace());
+            hocker.position.setText(String.valueOf(s.getLongitude()));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
-            hocker.desc.setText("点击查看");
+            hocker.desc.setText("点击修改");
             hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
             hocker.desc.setTextSize(14);
         }
