@@ -1,11 +1,15 @@
 package com.xiangxun.sampling.ui.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -39,6 +43,8 @@ public class SettingActivity extends BaseActivity {
     private TextView mTvPhone;
     @ViewsBinder(R.id.user_photo)
     private ImageView user_photo;
+    @ViewsBinder(R.id.id_user_info)
+    private RelativeLayout user_info;
 
 
     @Override
@@ -51,7 +57,9 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        ImageLoaderUtil.getInstance().loadImage("http://img2.imgtn.bdimg.com/it/u=1723413444,2688677868&fm=26&gp=0.jpg", user_photo);
+        if (!TextUtils.isEmpty(SystemCfg.getUserImage(this))) {
+            ImageLoaderUtil.getInstance().loadImage(SystemCfg.getUserImage(this), user_photo);
+        }
         String str;
         SpannableString ss;
         int color = getResources().getColor(R.color.white);
@@ -76,7 +84,13 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        title.setLeftBackOneListener(R.mipmap.back_normal, new View.OnClickListener() {
+        user_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, UserInformationActivity.class));
+            }
+        });
+        title.setLeftBackOneListener(R.mipmap.ic_back_title, new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 onBackPressed();

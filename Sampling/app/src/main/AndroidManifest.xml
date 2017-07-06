@@ -68,5 +68,8 @@
         <activity
             android:name=".ui.setting.SettingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.setting.UserInformationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

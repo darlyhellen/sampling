@@ -3,6 +3,8 @@ package com.xiangxun.sampling.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.xiangxun.sampling.ui.setting.UserInformationActivity;
+
 
 public class SystemCfg {
     private static SharedPreferences mysp = null;
@@ -234,19 +236,32 @@ public class SystemCfg {
         init(context);
         mysp.edit().putInt("phoneWidth", w).commit();
     }
+
     //手机宽度获取
     public static int getWidth(Context context) {
         init(context);
         return mysp.getInt("phoneWidth", 0);
     }
+
     //手机高度保存
     public static void setHeight(Context context, int h) {
         init(context);
         mysp.edit().putInt("phoneHeight", h).commit();
     }
+
     //手机高度获取
     public static int getHeight(Context context) {
         init(context);
         return mysp.getInt("phoneHeight", 0);
+    }
+
+    public static void setUserImage(Context context, String str) {
+        init(context);
+        mysp.edit().putString("usericon", str).commit();
+    }
+
+    public static String getUserImage(Context context) {
+        init(context);
+        return mysp.getString("usericon", null);
     }
 }

@@ -46,7 +46,7 @@ public class SystemSettingActivity extends BaseActivity {
     @Override
     public void initListener() {
         btnset.setOnClickListener(new BtnSetListener());
-        titleView.setLeftBackOneListener(R.mipmap.back_normal, new OnClickListener() {
+        titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {

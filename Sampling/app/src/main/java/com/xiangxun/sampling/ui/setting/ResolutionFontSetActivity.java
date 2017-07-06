@@ -97,7 +97,7 @@ public class ResolutionFontSetActivity extends BaseActivity implements OnClickLi
         setFontSize.setOnClickListener(this);
         picSizeDialog.setSelectResultItemClick(this);
         fontSizeDialog.setSelectResultItemClick(this);
-        titleView.setLeftBackOneListener(R.mipmap.back_normal, new OnClickListener() {
+        titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {

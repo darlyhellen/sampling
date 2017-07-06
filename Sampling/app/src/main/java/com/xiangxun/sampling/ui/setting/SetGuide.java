@@ -78,7 +78,7 @@ public class SetGuide extends BaseActivity implements OnClickListener, SelectRes
         wordRoad.setOnClickListener(this);
         workRoadDialog.setSelectResultItemClick(this);
 
-        titleView.setLeftBackOneListener(R.mipmap.back_normal, new OnClickListener() {
+        titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
