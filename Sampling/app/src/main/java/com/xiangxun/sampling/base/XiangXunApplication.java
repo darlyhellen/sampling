@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -20,10 +21,12 @@ import android.view.WindowManager;
 
 import com.xiangxun.sampling.BuildConfig;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.common.http.DcHttpClient;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.service.MainService;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,6 +62,7 @@ public class XiangXunApplication extends Application {
         // 网络对象初始化
         DcHttpClient.getInstance().init(getBaseContext());
         ImageLoaderUtil.init(this);
+        createFiles();
         if (SystemCfg.getWidth(this) == 0 || SystemCfg.getHeight(this) == 0) {
             calculate();
         }
@@ -162,5 +166,13 @@ public class XiangXunApplication extends Application {
                 .getSystemService(Context.WINDOW_SERVICE);
         SystemCfg.setWidth(getInstance(), wm.getDefaultDisplay().getWidth());
         SystemCfg.setHeight(getInstance(), wm.getDefaultDisplay().getHeight());
+    }
+
+
+    public void createFiles() {
+        File boot = new File(Api.Root);
+        if (!boot.exists()) {
+            boot.mkdir();
+        }
     }
 }

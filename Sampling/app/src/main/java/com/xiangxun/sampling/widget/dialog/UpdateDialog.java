@@ -23,7 +23,9 @@ import android.widget.ViewFlipper;
 
 
 import com.xiangxun.sampling.R;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.http.Api;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -192,7 +194,7 @@ public class UpdateDialog extends Dialog {
         progressbar.setProgress(0);
         handler.sendEmptyMessage(4);
         String urlDownload = str;
-        mDirName = Environment.getExternalStorageDirectory() + "/xiangxun/app/";
+        mDirName = Api.Root + "app/";
         File f = new File(mDirName);
         if (!f.exists()) {
             f.mkdirs();

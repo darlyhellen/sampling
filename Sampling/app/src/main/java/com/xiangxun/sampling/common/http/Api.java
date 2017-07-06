@@ -28,9 +28,9 @@ public class Api {
     public String urlHeadMobile = urlHost;
     public String urlHeadMpts = urlHost;
     // path
-    public static String xXDir = Environment.getExternalStorageDirectory() + "/xiangxun/";
+    public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
     // 发布拍照path
-    public static String xXPublishPictureDir = xXDir.concat("publishPicture/");
+    public static String xXPublishPictureDir = Root.concat("/publishPicture/");
 
     public String getUrlHead() {
         if (DEBUGURL) {

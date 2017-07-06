@@ -18,7 +18,9 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.xiangxun.epms.mobile.util.CRC16Validator;
 import com.xiangxun.epms.mobile.util.DeEncryptUtil;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.GPSInfo;
+import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 
 import java.io.ByteArrayInputStream;
@@ -681,7 +683,7 @@ public class Utils {
 
     public static void SaveGPSdata(GPSInfo gps, boolean value) {
         try {
-            File file = new File(Environment.getExternalStorageDirectory(), "gps.log");
+            File file = new File(Api.Root, "gps.log");
             FileOutputStream fos = new FileOutputStream(file, true);
             String info = "Time:" + gps.datetime + " res:" + value + " latitude:" + gps.latitude + " longitude:" + gps.longitude + "\n";
             fos.write(info.getBytes());
@@ -694,7 +696,7 @@ public class Utils {
 
     public static void SaveSendAck(String ack) {
         try {
-            File file = new File(Environment.getExternalStorageDirectory(), "gps.log");
+            File file = new File(Api.Root, "gps.log");
             FileOutputStream fos = new FileOutputStream(file, true);
             String info = ack + "\n";
             fos.write(info.getBytes());

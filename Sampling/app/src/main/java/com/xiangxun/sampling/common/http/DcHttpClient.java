@@ -66,7 +66,7 @@ public class DcHttpClient {
     public void init(Context con) {
         this.con = con;
         File sdDir = Environment.getExternalStorageDirectory();
-        File file = new File(sdDir, "xiangxun/cache");
+        File file = new File(sdDir, "Sampling/cache");
         DiskBasedCache cache = new DiskBasedCache(file, 20 * 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);

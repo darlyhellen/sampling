@@ -14,15 +14,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.xiangxun.sampling.R;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ConstantStatus;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
+
+import java.io.File;
 
 
 public class SettingFragment extends BaseFunctionList {
@@ -174,6 +178,8 @@ public class SettingFragment extends BaseFunctionList {
         final LoadDialog loadDialog = new LoadDialog(getActivity());
         loadDialog.setTitle("正在处理,请稍后...");
         loadDialog.show();
+        //进行缓存数据清空操作，包括数据库数据和文件数据。
+
 
 //        DBManager.getInstance().clearAccidentData();
 //        DBManager.getInstance().clearDangerData();
@@ -185,10 +191,34 @@ public class SettingFragment extends BaseFunctionList {
 
             @Override
             public void run() {
+
+                RecursionDeleteFile(new File(Api.Root));
+                XiangXunApplication.getInstance().createFiles();
                 loadDialog.dismiss();
                 ToastApp.showToast("删除成功");
             }
-        }, 2000);
+        }, 0);
+    }
+
+    /**
+     * @param file TODO：删除文件夹下所有文件。
+     */
+    public void RecursionDeleteFile(File file) {
+        if (file.isFile()) {
+            file.delete();
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] childFile = file.listFiles();
+            if (childFile == null || childFile.length == 0) {
+                file.delete();
+                return;
+            }
+            for (File f : childFile) {
+                RecursionDeleteFile(f);
+            }
+            file.delete();
+        }
     }
 
     private void CheckUpdate() {
