@@ -1,6 +1,8 @@
 package com.xiangxun.sampling.ui;
 
 
+import com.xiangxun.sampling.R;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -84,23 +86,39 @@ public class StaticListener {
                     planning.setSamplingexzample("暗流河、地下水、根作物");
                     break;
             }
-            List<SamplingPoint> points = new ArrayList<SamplingPoint>();
-            for (int j = 0; j < 50; j++) {
-                SamplingPoint point = new SamplingPoint();
-                point.setId(UUID.randomUUID().toString());
-                point.setLatitude((float) (31.12490875901834 + new Random().nextInt(j + 1)));
-                point.setLongitude((float) (104.12490875901834 + new Random().nextInt(j + 1)));
-                point.setDesc(i + "说明文件" + j);
-                point.setSamply(false);
-                points.add(point);
-            }
-            planning.setPoints(points);
-            DLog.i(points.size());
+            planning.setPoints(findDouble(i));
             data.add(planning);
         }
         return data;
     }
 
+    public static List<SamplingPoint> findDouble(int i) {
+        //分16组数据，每组100条
+        String[] lis = XiangXunApplication.getInstance().getResources().getStringArray(R.array.mapPoint);
+        List<SamplingPoint> points = new ArrayList<SamplingPoint>();
 
+        for (int k = i * 100; k < (i + 1) * 100; k++) {
+            String[] ar = lis[k].split(",");
+            SamplingPoint point = new SamplingPoint();
+            point.setId(UUID.randomUUID().toString());
+            point.setLatitude((float) convertToDecimalByString(ar[0] + "″"));
+            point.setLongitude((float) convertToDecimalByString(ar[1] + "″"));
+            point.setDesc(k + "说明文件");
+            point.setSamply(false);
+            points.add(point);
+        }
+        return points;
+    }
+
+
+    public static double convertToDecimalByString(String latlng) {
+        double du = Double.parseDouble(latlng.substring(0, latlng.indexOf("°")));
+        double fen = Double.parseDouble(latlng.substring(latlng.indexOf("°") + 1, latlng.indexOf("′")));
+        double miao = Double.parseDouble(latlng.substring(latlng.indexOf("′") + 1, latlng.indexOf("″")));
+        if (du < 0)
+            return -(Math.abs(du) + (fen + (miao / 60)) / 60);
+        return du + (fen + (miao / 60)) / 60;
+
+    }
 }
 

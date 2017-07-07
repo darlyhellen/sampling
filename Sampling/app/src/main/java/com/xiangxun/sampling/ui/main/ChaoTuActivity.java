@@ -1,5 +1,8 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import com.supermap.android.maps.DefaultItemizedOverlay;
 import com.supermap.android.maps.ItemizedOverlay;
 import com.supermap.android.maps.LayerView;
 import com.supermap.android.maps.MapView;
+import com.supermap.android.maps.Overlay;
 import com.supermap.android.maps.OverlayItem;
 import com.supermap.android.maps.Point2D;
 import com.xiangxun.sampling.R;
@@ -52,12 +56,12 @@ public class ChaoTuActivity extends BaseActivity {
         }
         titleView.setTitle(planning.getTitle() + "点位分布");
         center = new Point2D(planning.getPoints().get(0).getLongitude(), planning.getPoints().get(0).getLatitude());
-        baseLayerView.setURL(url);
+        baseLayerView.setURL(DEFAULT_URL);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
         mapView.addLayer(baseLayerView);
-        mapView.getController().setCenter(center);// 39.904491, 116.391468 0.0d, 0.0d
+        mapView.getController().setCenter(center);
 
         // 启用内置放大缩小控件
         mapView.setBuiltInZoomControls(true);
@@ -81,6 +85,7 @@ public class ChaoTuActivity extends BaseActivity {
             overlay.addItem(overlayItem);
         }
         overlay.setOnFocusChangeListener(new SelectedOverlay());
+        mapView.getOverlays().add(new CustomOverlay());
         mapView.getOverlays().add(overlay);
 
         // 重新onDraw一次
@@ -130,6 +135,24 @@ public class ChaoTuActivity extends BaseActivity {
             // 弹出气泡展示消息
         }
 
+    }
+
+    /**
+     * 自定义Overlay
+     */
+    class CustomOverlay extends Overlay {
+
+        @Override
+        public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+            super.draw(canvas, mapView, shadow);
+            Paint paint = new Paint();
+            Point point = mapView.getProjection().toPixels(center, null);
+            paint.setTextSize(24);
+            paint.setStrokeWidth(0.8f);
+            paint.setARGB(255, 255, 0, 0);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            canvas.drawText(planning.getTitle(), point.x, point.y, paint);
+        }
     }
 
 
