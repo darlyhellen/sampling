@@ -69,7 +69,7 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
         if (data.size() > 1) {
             banner.setVisibility(View.VISIBLE);
             iv.setVisibility(View.GONE);
-            banner.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.57)));
+            banner.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.67)));
             banner.setPages(
                     new CBViewHolderCreator<LocalImageHolderView>() {
                         @Override
@@ -85,7 +85,7 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
         } else if (data.size() == 1) {
             banner.setVisibility(View.GONE);
             iv.setVisibility(View.VISIBLE);
-            iv.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.57)));
+            iv.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this), (int) (SystemCfg.getWidth(this) / 1.67)));
             iv.setBackgroundResource(data.get(0));
             iv.setOnClickListener(this);
         }
