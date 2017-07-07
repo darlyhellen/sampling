@@ -118,6 +118,15 @@ public class SamplingPointActivity extends BaseActivity {
                     if (isSence) {
                         //到现场采集页面.
                         DLog.i("到现场采集页面--" + position);
+                        Intent intent = new Intent(SamplingPointActivity.this, SenceActivity.class);
+                        SamplingPlanning p = new SamplingPlanning();
+                        p.setId(planning.getId());
+                        p.setDepate(planning.getDepate());
+                        p.setTitle(planning.getTitle());
+                        p.setPlace(planning.getPlace());
+                        intent.putExtra("SamplingPlanning", p);
+                        intent.putExtra("SamplingPoint", point);
+                        startActivity(intent);
                     } else {
                         Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
                         SamplingPlanning p = new SamplingPlanning();

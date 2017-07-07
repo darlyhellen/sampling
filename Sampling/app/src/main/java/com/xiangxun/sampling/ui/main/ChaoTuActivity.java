@@ -40,15 +40,13 @@ public class ChaoTuActivity extends BaseActivity {
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
     protected MapView mapView;
-    private LayerView baseLayerView;
     private SamplingPlanning planning;
-    private int titleBarHeight;
 
     private Point2D center;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        baseLayerView = new LayerView(this);
+        LayerView baseLayerView = new LayerView(this);
         planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
         if (planning == null) {
             titleView.setTitle("点位分布");
@@ -69,7 +67,7 @@ public class ChaoTuActivity extends BaseActivity {
         mapView.getController().setZoom(8);
         mapView.post(new Runnable() {
             public void run() {
-                titleBarHeight = initHeight();
+                initHeight();
             }
         });
     }
@@ -124,8 +122,7 @@ public class ChaoTuActivity extends BaseActivity {
         //标题栏跟状态栏的总体高度
         int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
         //标题栏的高度
-        int titleBarHeight = contentViewTop - statusBarHight;
-        return titleBarHeight;
+        return contentViewTop - statusBarHight;
     }
 
     /**

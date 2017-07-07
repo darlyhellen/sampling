@@ -103,6 +103,9 @@
             android:name=".ui.main.ChaoTuActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SenceActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.setting.SetGuide"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
@@ -128,6 +131,6 @@
             android:name="com.amap.api.v2.apikey"
             android:value="1717c506496508f8b9ac87edf0fd9579" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"/>
+        <service android:name="com.amap.api.location.APSService" />
     </application>
 </manifest>

@@ -18,6 +18,16 @@ public class SamplingPoint implements Serializable {
     private boolean samply;
     private boolean userSee;
 
+    private String name;
+
+    private String type;
+
+    private String deep;
+
+    private String proj;
+
+    private String note;
+
     public String getId() {
         return id;
     }
@@ -64,6 +74,47 @@ public class SamplingPoint implements Serializable {
 
     public void setUserSee(boolean userSee) {
         this.userSee = userSee;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDeep() {
+        return deep;
+    }
+
+    public void setDeep(String deep) {
+        this.deep = deep;
+    }
+
+    public String getProj() {
+        return proj;
+    }
+
+    public void setProj(String proj) {
+        this.proj = proj;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     @Override

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><!--现场采样首页展示-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.xiangxun.sampling.widget.header.TitleView
+        android:id="@+id/id_user_sence_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_round_corner_panel"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/margin_padding10"
+            android:paddingRight="@dimen/margin_padding10"
+            android:paddingTop="@dimen/margin_padding20">
+
+            <com.xiangxun.sampling.widget.groupview.DetailView
+                android:id="@+id/id_user_sence_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding2" />
+
+            <com.xiangxun.sampling.widget.groupview.DetailView
+                android:id="@+id/id_user_sence_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding2" />
+
+            <com.xiangxun.sampling.widget.groupview.DetailView
+                android:id="@+id/id_user_sence_params"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding2" />
+
+            <com.xiangxun.sampling.widget.groupview.DetailView
+                android:id="@+id/id_user_sence_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding2" />
+
+            <com.xiangxun.sampling.widget.groupview.DetailView
+                android:id="@+id/id_user_sence_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding2" />
+
+            <!--定位信息-->
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="现场采样定位："
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSize16" />
+
+                <ImageView
+                    android:id="@+id/id_user_sence_location"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@mipmap/ic_sence_location" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/margin_padding10">
+
+                <com.supermap.android.maps.MapView
+                    android:id="@+id/id_user_sence_mapview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:enabled="true" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.xiangxun.sampling.widget.groupview.DetailView
+                        android:id="@+id/id_user_sence_lat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.xiangxun.sampling.widget.groupview.DetailView
+                        android:id="@+id/id_user_sence_lont"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
