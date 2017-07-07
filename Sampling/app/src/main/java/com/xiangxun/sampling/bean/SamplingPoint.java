@@ -56,4 +56,9 @@ public class SamplingPoint implements Serializable {
     public void setSamply(boolean samply) {
         this.samply = samply;
     }
+
+    @Override
+    public String toString() {
+        return id.concat("=id").concat(",longitude=").concat(String.valueOf(longitude)).concat(",latitude=").concat(String.valueOf(latitude)).concat(",desc=").concat(desc).concat(",samply=").concat(String.valueOf(samply));
+    }
 }

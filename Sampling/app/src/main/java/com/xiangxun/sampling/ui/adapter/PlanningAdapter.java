@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.SamplingPlanning;
+import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, Context context, SamplingPlanning s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPlanning s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -73,6 +75,14 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
                 hocker.desc.setText("点击查看范围");
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.desc.setTextSize(14);
+                hocker.desc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, ChaoTuActivity.class);
+                        intent.putExtra("SamplingPlanning", s);
+                        context.startActivity(intent);
+                    }
+                });
             }
         } else {
             if (position == 0) {
