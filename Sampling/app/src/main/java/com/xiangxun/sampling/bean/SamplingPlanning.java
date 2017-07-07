@@ -20,6 +20,8 @@ public class SamplingPlanning implements Serializable {
     private String samplingexzample;
     private List<SamplingPoint> points;
 
+    private boolean userSee;
+
     public String getId() {
         return id;
     }
@@ -74,5 +76,13 @@ public class SamplingPlanning implements Serializable {
 
     public void setPoints(List<SamplingPoint> points) {
         this.points = points;
+    }
+
+    public boolean isUserSee() {
+        return userSee;
+    }
+
+    public void setUserSee(boolean userSee) {
+        this.userSee = userSee;
     }
 }

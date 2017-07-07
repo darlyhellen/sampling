@@ -104,7 +104,7 @@ public class StaticListener {
             point.setLatitude((float) convertToDecimalByString(ar[0] + "″"));
             point.setLongitude((float) convertToDecimalByString(ar[1] + "″"));
             point.setDesc(k + "说明文件");
-            point.setSamply(false);
+            point.setSamply(new Random().nextBoolean());
             points.add(point);
         }
         return points;

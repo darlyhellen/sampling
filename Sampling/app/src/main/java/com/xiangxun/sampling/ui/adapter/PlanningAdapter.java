@@ -2,6 +2,10 @@ package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
+import com.xiangxun.sampling.ui.main.SamplingPointActivity;
 
 import java.util.List;
 
@@ -73,14 +78,22 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
                 hocker.position.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.position.setTextSize(14);
                 hocker.desc.setText("点击查看范围");
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+                hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
+                if (s.isUserSee()) {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
+                }
                 hocker.desc.setTextSize(14);
                 hocker.desc.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        s.setUserSee(true);
                         Intent intent = new Intent(context, ChaoTuActivity.class);
                         intent.putExtra("SamplingPlanning", s);
                         context.startActivity(intent);
+                        notifyDataSetChanged();
                     }
                 });
             }
@@ -111,7 +124,13 @@ public class PlanningAdapter extends ParentAdapter<SamplingPlanning> {
                 hocker.position.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.position.setTextSize(14);
                 hocker.desc.setText("点击查看");
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+                hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
+                if (s.isUserSee()) {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
+                }
                 hocker.desc.setTextSize(14);
             }
         }

@@ -19,6 +19,7 @@ import com.xiangxun.sampling.ui.adapter.PointAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,9 +58,20 @@ public class SamplingPointActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        if (data == null){
+        if (data == null) {
             data = planning.getPoints();
-            data.add(0,new SamplingPoint());
+            data.add(0, new SamplingPoint());
+        }
+        if (isSence) {
+            //现场请情况,剔除掉,已经采集过的地方
+            Iterator<SamplingPoint> it = data.iterator();
+            while (it.hasNext()) {
+                SamplingPoint x = it.next();
+                if (x.isSamply()) {
+                    it.remove();
+                }
+            }
+            DLog.i(getClass().getSimpleName(), data.size());
         }
         adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence);
         wlist.setAdapter(adapter);
@@ -96,6 +108,13 @@ public class SamplingPointActivity extends BaseActivity {
                 DLog.i("onItemClick--" + position);
                 if (position != 0) {
                     SamplingPoint point = (SamplingPoint) parent.getItemAtPosition(position);
+                    for (SamplingPoint po : data) {
+                        if (point.getId().equals(po.getId())) {
+                            po.setUserSee(true);
+                            break;
+                        }
+                    }
+                    adapter.setData(data);
                     if (isSence) {
                         //到现场采集页面.
                         DLog.i("到现场采集页面--" + position);

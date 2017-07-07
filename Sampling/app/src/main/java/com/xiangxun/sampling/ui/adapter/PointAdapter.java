@@ -1,6 +1,8 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
+import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
+import com.xiangxun.sampling.ui.main.SamplingPointActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +36,7 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> {
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, Context context, SamplingPoint s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPoint s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -62,22 +67,25 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
                 hocker.desc.setTextSize(16);
             } else {
-                //已经采集过的点,不进行展示.
-                if (!s.isSamply()) {
-                    hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-                    hocker.name.setText(s.getId());
-                    hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-                    hocker.name.setTextSize(14);
-                    hocker.dept.setText(String.valueOf(s.getLatitude()));
-                    hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-                    hocker.dept.setTextSize(14);
-                    hocker.position.setText(String.valueOf(s.getLongitude()));
-                    hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-                    hocker.position.setTextSize(14);
-                    hocker.desc.setText("采样记录");
-                    hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
-                    hocker.desc.setTextSize(14);
+                hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                hocker.name.setText(s.getId());
+                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextSize(14);
+                hocker.dept.setText(String.valueOf(s.getLatitude()));
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextSize(14);
+                hocker.position.setText(String.valueOf(s.getLongitude()));
+                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextSize(14);
+                hocker.desc.setText("采样记录");
+                hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+                hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
+                if (s.isUserSee()) {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
                 }
+                hocker.desc.setTextSize(14);
             }
         } else {
             if (position == 0) {
@@ -106,7 +114,13 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> {
                 hocker.position.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.position.setTextSize(14);
                 hocker.desc.setText("点击修改");
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+                hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
+                if (s.isUserSee()) {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
+                }
                 hocker.desc.setTextSize(14);
             }
         }

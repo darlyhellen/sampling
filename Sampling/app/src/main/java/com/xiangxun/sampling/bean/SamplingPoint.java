@@ -16,6 +16,7 @@ public class SamplingPoint implements Serializable {
     private float latitude;
     private String desc;
     private boolean samply;
+    private boolean userSee;
 
     public String getId() {
         return id;
@@ -57,8 +58,16 @@ public class SamplingPoint implements Serializable {
         this.samply = samply;
     }
 
+    public boolean isUserSee() {
+        return userSee;
+    }
+
+    public void setUserSee(boolean userSee) {
+        this.userSee = userSee;
+    }
+
     @Override
     public String toString() {
-        return id.concat("=id").concat(",longitude=").concat(String.valueOf(longitude)).concat(",latitude=").concat(String.valueOf(latitude)).concat(",desc=").concat(desc).concat(",samply=").concat(String.valueOf(samply));
+        return id.concat("=id").concat(",longitude=").concat(String.valueOf(longitude)).concat(",latitude=").concat(String.valueOf(latitude)).concat(",desc=").concat(desc).concat(",samply=").concat(String.valueOf(samply).concat(",userSee=").concat(String.valueOf(userSee)));
     }
 }

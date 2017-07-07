@@ -78,10 +78,16 @@ public class ChaoTuActivity extends BaseActivity {
     protected void loadData() {
 
         Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_point_select);
+        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_point_normal);
         DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
         for (SamplingPoint point : planning.getPoints()) {
             Point2D poind = new Point2D(point.getLongitude(), point.getLatitude());
             OverlayItem overlayItem = new OverlayItem(poind, point.getDesc(), point.getId());
+            if (point.isSamply()) {
+                overlayItem.setMarker(drawableBlue);
+            } else {
+                overlayItem.setMarker(drawablenormal);
+            }
             overlay.addItem(overlayItem);
         }
         overlay.setOnFocusChangeListener(new SelectedOverlay());
@@ -157,12 +163,11 @@ public class ChaoTuActivity extends BaseActivity {
 
 
     @Override
-    protected void onDestroy() {
-        // LocationUtil.disposeLoction();
+    public void onBackPressed() {
         if (mapView != null) {
             mapView.destroy();
         }
-        super.onDestroy();
+        super.onBackPressed();
     }
 
 }

@@ -73,6 +73,13 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
+                    for (SamplingPlanning pl : data) {
+                        if (planning.getId().equals(pl.getId())) {
+                            pl.setUserSee(true);
+                            break;
+                        }
+                    }
+                    adapter.setData(data);
                     Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
                     intent.putExtra("SamplingPlanning", planning);
                     intent.putExtra("SENCE", false);
