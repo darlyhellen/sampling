@@ -39,7 +39,7 @@ public class SenceImageAdapter extends ParentAdapter<String> {
 
     @Override
     public int getCount() {
-        return data.size() > 5 ? 5 : data.size();
+        return data.size() > 3 ? 3 : data.size();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SenceImageAdapter extends ParentAdapter<String> {
             view = LayoutInflater.from(context).inflate(resID, null);
             hocker = new ViewHocker();
             hocker.relative = (RelativeLayout) view.findViewById(R.id.id_iv_relative);
-            hocker.relative.setLayoutParams(new AbsListView.LayoutParams(SystemCfg.getWidth(context) / 5, SystemCfg.getWidth(context) / 5));
+            hocker.relative.setLayoutParams(new AbsListView.LayoutParams(SystemCfg.getWidth(context) / 3, SystemCfg.getWidth(context) / 3));
             hocker.photo = (ImageView) view.findViewById(R.id.id_iv_photo);
             hocker.close = (ImageView) view.findViewById(R.id.id_iv_close);
             hocker.desc = (TextView) view.findViewById(R.id.id_tv_desc);

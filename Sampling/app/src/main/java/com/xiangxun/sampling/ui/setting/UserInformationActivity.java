@@ -41,13 +41,13 @@ public class UserInformationActivity extends BaseActivity {
     protected void loadData() {
 
         account.isEdit(false);
-        account.setInfo("用户名：", SystemCfg.getAccount(this));
+        account.setInfo("用户名：", SystemCfg.getAccount(this),"");
         name.isEdit(true);
-        name.setInfo("姓名：", SystemCfg.getUserName(this));
+        name.setInfo("姓名：", SystemCfg.getUserName(this),"");
         tel.isEdit(false);
-        tel.setInfo("手机号：", SystemCfg.getIMEI(this));
+        tel.setInfo("手机号：", SystemCfg.getIMEI(this),"");
         dept.isEdit(false);
-        dept.setInfo("所属部门：", SystemCfg.getDepartment(this));
+        dept.setInfo("所属部门：", SystemCfg.getDepartment(this),"");
 
         if (!TextUtils.isEmpty(SystemCfg.getUserImage(this))) {
             ImageLoaderUtil.getInstance().loadImage(SystemCfg.getUserImage(this), photo);

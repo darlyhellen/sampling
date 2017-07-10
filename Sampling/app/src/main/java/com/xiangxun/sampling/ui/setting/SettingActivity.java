@@ -87,7 +87,7 @@ public class SettingActivity extends BaseActivity {
         user_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, UserInformationActivity.class));
+                // startActivity(new Intent(SettingActivity.this, UserInformationActivity.class));
             }
         });
         title.setLeftBackOneListener(R.mipmap.ic_back_title, new View.OnClickListener() {

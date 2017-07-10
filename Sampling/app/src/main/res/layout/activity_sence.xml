@@ -13,52 +13,86 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/margin_padding10"
-            android:paddingRight="@dimen/margin_padding10"
-            android:paddingTop="@dimen/margin_padding20">
+            android:orientation="vertical">
 
-            <com.xiangxun.sampling.widget.groupview.DetailView
-                android:id="@+id/id_user_sence_type"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_padding2" />
+                android:layout_margin="@dimen/margin_padding10"
+                android:background="@drawable/app_shape_backgroud"
+                android:orientation="vertical">
 
-            <com.xiangxun.sampling.widget.groupview.DetailView
-                android:id="@+id/id_user_sence_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin_padding2" />
+                <com.xiangxun.sampling.widget.groupview.DetailView
+                    android:id="@+id/id_user_sence_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:padding="@dimen/margin_padding10" />
 
-            <com.xiangxun.sampling.widget.groupview.DetailView
-                android:id="@+id/id_user_sence_params"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin_padding2" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_edit_text" />
 
-            <com.xiangxun.sampling.widget.groupview.DetailView
-                android:id="@+id/id_user_sence_project"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin_padding2" />
+                <com.xiangxun.sampling.widget.groupview.DetailView
+                    android:id="@+id/id_user_sence_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:padding="@dimen/margin_padding10" />
 
-            <com.xiangxun.sampling.widget.groupview.DetailView
-                android:id="@+id/id_user_sence_other"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin_padding2" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_edit_text" />
 
+                <com.xiangxun.sampling.widget.groupview.DetailView
+                    android:id="@+id/id_user_sence_params"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:padding="@dimen/margin_padding10" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_edit_text" />
+
+                <com.xiangxun.sampling.widget.groupview.DetailView
+                    android:id="@+id/id_user_sence_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:padding="@dimen/margin_padding10" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/login_edit_text" />
+
+                <com.xiangxun.sampling.widget.groupview.DetailView
+                    android:id="@+id/id_user_sence_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:padding="@dimen/margin_padding10" />
+            </LinearLayout>
             <!--定位信息-->
+
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:background="@mipmap/list_red"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_padding10"
+                android:paddingRight="@dimen/margin_padding10">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -75,44 +109,66 @@
 
             </TableRow>
 
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/app_shape_backgroud"
                 android:gravity="center"
-                android:padding="@dimen/margin_padding10">
+                android:orientation="horizontal">
 
                 <com.supermap.android.maps.MapView
                     android:id="@+id/id_user_sence_mapview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:enabled="true" />
+                    android:layout_margin="@dimen/margin_padding1"
+                    android:clickable="false"
+                    android:enabled="false" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/login_edit_text" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_padding10"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <com.xiangxun.sampling.widget.groupview.DetailView
+                        android:id="@+id/id_user_sence_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:padding="@dimen/margin_padding4" />
+
+                    <com.xiangxun.sampling.widget.groupview.DetailView
                         android:id="@+id/id_user_sence_lat"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:padding="@dimen/margin_padding4" />
+
 
                     <com.xiangxun.sampling.widget.groupview.DetailView
                         android:id="@+id/id_user_sence_lont"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:padding="@dimen/margin_padding4" />
 
                 </LinearLayout>
-            </TableRow>
-
+            </LinearLayout>
             <!--照片信息-->
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:background="@mipmap/list_red"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_padding10"
+                android:paddingRight="@dimen/margin_padding10">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -134,13 +190,16 @@
                 android:layout_height="wrap_content"
                 android:horizontalSpacing="@dimen/margin_padding4"
                 android:listSelector="@color/transparent"
-                android:numColumns="5" />
+                android:numColumns="3" />
             <!--视频信息-->
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:background="@mipmap/list_red"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/margin_padding10"
+                android:paddingRight="@dimen/margin_padding10">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -162,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:horizontalSpacing="@dimen/margin_padding4"
                 android:listSelector="@color/transparent"
-                android:numColumns="5" />
+                android:numColumns="2" />
         </LinearLayout>
     </ScrollView>
 

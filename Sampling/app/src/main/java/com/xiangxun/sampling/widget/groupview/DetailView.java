@@ -72,56 +72,72 @@ public class DetailView extends LinearLayout {
         name.setText(titls);
     }
 
-    public void setInfo(String tital, String content) {
+    public void setInfo(String tital, String content, String hit) {
         if (TextUtils.isEmpty(tital) || TextUtils.isEmpty(content)) {
             lin.setVisibility(View.GONE);
         } else {
             lin.setVisibility(VISIBLE);
             name.setText(tital);
             if (flag) {
-                edit.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    edit.setText(content);
+                } else {
+                    edit.setHint(hit);
+                }
             } else {
                 value.setText(content);
             }
         }
     }
 
-    public void setInfo(int tital, String content) {
+    public void setInfo(int tital, String content, String hit) {
         if (tital == 0 || TextUtils.isEmpty(content)) {
             lin.setVisibility(View.GONE);
         } else {
             lin.setVisibility(VISIBLE);
             name.setText(tital);
             if (flag) {
-                edit.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    edit.setText(content);
+                } else {
+                    edit.setHint(hit);
+                }
             } else {
                 value.setText(content);
             }
         }
     }
 
-    public void setInfo(String tital, int content) {
+    public void setInfo(String tital, int content, String hit) {
         if (TextUtils.isEmpty(tital) || content == 0) {
             lin.setVisibility(View.GONE);
         } else {
             lin.setVisibility(VISIBLE);
             name.setText(tital);
             if (flag) {
-                edit.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    edit.setText(content);
+                } else {
+                    edit.setHint(hit);
+                }
             } else {
                 value.setText(content);
             }
         }
     }
 
-    public void setInfo(int tital, int content) {
+    public void setInfo(int tital, int content, String hit) {
         if (tital == 0 || content == 0) {
             lin.setVisibility(View.GONE);
         } else {
             lin.setVisibility(VISIBLE);
             name.setText(tital);
             if (flag) {
-                edit.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    edit.setText(content);
+                } else {
+                    edit.setHint(hit);
+                }
             } else {
                 value.setText(content);
             }

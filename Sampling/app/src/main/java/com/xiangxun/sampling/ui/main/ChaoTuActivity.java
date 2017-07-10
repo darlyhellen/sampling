@@ -89,7 +89,7 @@ public class ChaoTuActivity extends BaseActivity {
             overlay.addItem(overlayItem);
         }
         overlay.setOnFocusChangeListener(new SelectedOverlay());
-        mapView.getOverlays().add(new CustomOverlay());
+        //mapView.getOverlays().add(new CustomOverlay());
         mapView.getOverlays().add(overlay);
 
         // 重新onDraw一次

@@ -7,11 +7,13 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -64,6 +66,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private TitleView titleView;
     @ViewsBinder(R.id.id_user_sence_mapview)
     protected MapView mapView;
+    @ViewsBinder(R.id.id_user_sence_address)
+    private DetailView address;
     @ViewsBinder(R.id.id_user_sence_lat)
     private DetailView latitude;
     @ViewsBinder(R.id.id_user_sence_lont)
@@ -98,24 +102,28 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        //这句话解决了自动弹出输入按键
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
         point = (SamplingPoint) getIntent().getSerializableExtra("SamplingPoint");
         titleView.setTitle("现场采样");
-        mapView.setLayoutParams(new TableRow.LayoutParams(SystemCfg.getWidth(this) / 3, SystemCfg.getWidth(this) / 3));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(SystemCfg.getWidth(this) / 3, SystemCfg.getWidth(this) / 3);
+        lp.setMargins(2, 2, 2, 2);
+        mapView.setLayoutParams(lp);
     }
 
     @Override
     protected void loadData() {
         type.isEdit(false);
-        type.setInfo("采样类型:", point.getType() + " ");
-        name.isEdit(false);
-        name.setInfo("样品名称:", point.getName() + " ");
-        params.isEdit(false);
-        params.setInfo("样品深度:", point.getDeep() + " ");
-        project.isEdit(false);
-        project.setInfo("待测项目:", point.getProj() + " ");
+        type.setInfo("采样类型:", "请点击选择类型", " ");
+        name.isEdit(true);
+        name.setInfo("样品名称:", " ", "请输入样品名称");
+        params.isEdit(true);
+        params.setInfo("样品深度:", " ", "请输入样品深度");
+        project.isEdit(true);
+        project.setInfo("待测项目:", " ", "请输入待测项目");
         other.isEdit(true);
-        other.setInfo("其他說明:", point.getNote() + " ");
+        other.setInfo("其他說明:", " ", "请输入说明备注信息");
         //初始化图片和视频信息所在位置。
         if (images == null) {
             images = new ArrayList<String>();
@@ -161,14 +169,14 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         mapView.addLayer(baseLayerView);
         mapView.getController().setCenter(center);
         // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(true);
-        mapView.setClickable(true);
+        mapView.setBuiltInZoomControls(false);
+        mapView.setClickable(false);
         mapView.getController().setZoom(8);
         Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_point_select);
         DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
         OverlayItem overlayItem = new OverlayItem(center, point.getDesc(), point.getId());
         overlay.addItem(overlayItem);
-        mapView.getOverlays().add(new CustomOverlay(center, amapLocation.getAddress()));
+        //mapView.getOverlays().add(new CustomOverlay(center, amapLocation.getAddress()));
         mapView.getOverlays().add(overlay);
 
         // 重新onDraw一次
@@ -310,17 +318,21 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
+                address.isEdit(true);
+                address.setInfo("地址：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()));
+                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()));
+                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
                 startChao(amapLocation);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                address.isEdit(true);
+                address.setInfo("地址：", String.valueOf("未知地方"), "");
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0));
+                latitude.setInfo("经度：", String.valueOf(0), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(0));
+                longitude.setInfo("纬度：", String.valueOf(0), "");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();

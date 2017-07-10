@@ -65,7 +65,7 @@ public class SenceVideoAdapter extends ParentAdapter<String> implements OnPrepar
 
     @Override
     public int getCount() {
-        return data.size() > 5 ? 5 : data.size();
+        return data.size() > 2 ? 2 : data.size();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SenceVideoAdapter extends ParentAdapter<String> implements OnPrepar
             view = LayoutInflater.from(context).inflate(resID, null);
             hocker = new ViewHocker();
             hocker.relative = (RelativeLayout) view.findViewById(R.id.id_video_iv_relative);
-            hocker.relative.setLayoutParams(new AbsListView.LayoutParams(SystemCfg.getWidth(context) / 5, SystemCfg.getWidth(context) / 5));
+            hocker.relative.setLayoutParams(new AbsListView.LayoutParams(SystemCfg.getWidth(context) / 2, SystemCfg.getWidth(context) / 2));
             hocker.videoView = (VideoView) view.findViewById(R.id.id_video_recorder);
             hocker.image = (ImageView) view.findViewById(R.id.id_video_image);
             hocker.close = (ImageView) view.findViewById(R.id.id_video_iv_close);

@@ -69,11 +69,11 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     @Override
     protected void loadData() {
         name.isEdit(false);
-        name.setInfo("计划名称：", planning.getTitle());
+        name.setInfo("计划名称：", planning.getTitle(),"");
         dept.isEdit(false);
-        dept.setInfo("实施机构：", planning.getDepate());
+        dept.setInfo("实施机构：", planning.getDepate(),"");
         position.isEdit(false);
-        position.setInfo("采样选址：", planning.getPlace());
+        position.setInfo("采样选址：", planning.getPlace(),"");
         if (point == null) {
             //新增点位
             titleView.setTitle("新增" + planning.getTitle() + "点位");
@@ -99,11 +99,11 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             //修改点位
             titleView.setTitle("修改" + planning.getTitle() + "点位");
             latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(point.getLatitude()));
+            latitude.setInfo("经度：", String.valueOf(point.getLatitude()),"");
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(point.getLongitude()));
+            longitude.setInfo("纬度：", String.valueOf(point.getLongitude()),"");
             desc.isEdit(true);
-            desc.setInfo("说明：", point.getDesc());
+            desc.setInfo("说明：", point.getDesc(),"");
         }
     }
 
@@ -131,19 +131,19 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()));
+                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()),"");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()));
+                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()),"");
                 desc.isEdit(true);
-                desc.setInfo("说明：", amapLocation.getAddress());
+                desc.setInfo("说明：", amapLocation.getAddress(),"");
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0));
+                latitude.setInfo("经度：", String.valueOf(0),"");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(0));
+                longitude.setInfo("纬度：", String.valueOf(0),"");
                 desc.isEdit(true);
-                desc.setInfo("说明：", " ");
+                desc.setInfo("说明：", " ","");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();

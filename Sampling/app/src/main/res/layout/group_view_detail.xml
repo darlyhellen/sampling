@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/id_view_dt_value"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/margin_padding8"
         android:textColor="@color/color333333"
@@ -23,9 +23,9 @@
     <com.xiangxun.sampling.widget.clearedit.ClearEditText
         android:id="@+id/id_view_dt_edit"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/edit_normal"
+        android:background="@color/transparent"
         android:paddingLeft="@dimen/margin_padding8"
         android:textColor="@color/color333333"
         android:textSize="@dimen/textSize16" />
