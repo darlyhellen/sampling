@@ -89,6 +89,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     private Sensor mSensor = null;
     private int direction = 0;
     private int mSize;
+    private String filePaths;
     private int callbackTimes;
     private String currentTime;
     private ImageUtils iu;
@@ -207,6 +208,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     public void initData() {
         iu = new ImageUtils(this);
         mSize = getIntent().getIntExtra("size", 0);
+        filePaths = getIntent().getStringExtra("file");
         mysp = getSharedPreferences("xxsyscfg", Context.MODE_PRIVATE);
         openCamera();
     }
@@ -238,9 +240,9 @@ public class CameraActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                String picpath = Api.Root + "vio/" + "vio" + MDate.getDateAsFileName() + "-" + Math.round(Math.random() * 8999 + 1000) + ".jpg";
+                String picpath = filePaths + "/vio" + MDate.getDateAsFileName() + "-" + Math.round(Math.random() * 8999 + 1000) + ".jpg";
 
-                File picture = new File(Api.Root + "vio/");
+                File picture = new File(filePaths);
                 if (!picture.exists())
                     picture.mkdirs();
 

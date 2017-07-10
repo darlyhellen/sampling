@@ -58,7 +58,7 @@ public class StaticListener {
         List<SamplingPlanning> data = new ArrayList<SamplingPlanning>();
         for (int i = 0; i < 10; i++) {
             SamplingPlanning planning = new SamplingPlanning();
-            planning.setId(UUID.randomUUID().toString());
+            planning.setId(i + "");
             planning.setDepate("四川大学地址检测系");
             switch (i % 4) {
                 case 0:
@@ -100,7 +100,7 @@ public class StaticListener {
         for (int k = i * 100; k < (i + 1) * 100; k++) {
             String[] ar = lis[k].split(",");
             SamplingPoint point = new SamplingPoint();
-            point.setId(UUID.randomUUID().toString());
+            point.setId(k + "");
             point.setLatitude((float) convertToDecimalByString(ar[0] + "″"));
             point.setLongitude((float) convertToDecimalByString(ar[1] + "″"));
             point.setDesc(k + "说明文件");

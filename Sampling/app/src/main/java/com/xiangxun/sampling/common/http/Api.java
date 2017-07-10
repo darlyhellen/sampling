@@ -31,6 +31,8 @@ public class Api {
     public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
     // 发布拍照path
     public static String xXPublishPictureDir = Root.concat("/publishPicture/");
+    public static String VIDEO = Root.concat("video/");
+    public static String SENCE = VIDEO.concat("sence/");
 
     public String getUrlHead() {
         if (DEBUGURL) {

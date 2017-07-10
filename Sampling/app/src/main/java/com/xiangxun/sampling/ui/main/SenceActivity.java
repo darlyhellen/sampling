@@ -33,6 +33,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
@@ -40,8 +41,10 @@ import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
+import com.xiangxun.video.camera.VCamera;
 import com.xiangxun.video.ui.WechatRecoderActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +124,23 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         if (videos == null) {
             videos = new ArrayList<String>();
             videos.add("add");
+        }
+
+        File root = new File(Api.SENCE.concat(point.getId()));
+        if (root.exists()) {
+
+            File[] file = root.listFiles();
+            if (file != null) {
+                for (int i = 0; i < file.length; i++) {
+                    DLog.i(file[i].getPath() + "---->" + file[i].getAbsolutePath());
+                    if (file[i].getAbsolutePath().endsWith(".mp4")) {
+                        videos.add(videos.size() - 1, file[i].getAbsolutePath());
+                    }
+                    if (file[i].getAbsolutePath().endsWith(".jpg")) {
+                        images.add(images.size() - 1, file[i].getAbsolutePath());
+                    }
+                }
+            }
         }
 
         imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
@@ -227,6 +247,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 if (position == (images.size() - 1)) {
                     Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
                     intentCamera.putExtra("size", images.size());
+                    intentCamera.putExtra("file", Api.SENCE.concat(point.getId()));
                     intentCamera.setAction("Sence");
                     startActivityForResult(intentCamera, 1);
                 } else {
@@ -250,6 +271,13 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (videos.size() - 1)) {
                     //跳转到视频录制页面
+
+                    //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
+                    File root = new File(Api.SENCE.concat(point.getId()));
+                    if (!root.exists()) {
+                        root.mkdir();
+                    }
+                    VCamera.setVideoCachePath(root + "/cache/");
                     startActivityForResult(new Intent(SenceActivity.this, WechatRecoderActivity.class), 900);
                 } else {
                 }

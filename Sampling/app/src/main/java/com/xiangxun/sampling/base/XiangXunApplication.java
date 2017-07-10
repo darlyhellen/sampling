@@ -69,12 +69,7 @@ public class XiangXunApplication extends Application {
         }
         // 日志记录
         DLog.init(BuildConfig.DEBUG, "sampling");
-        //初始化视频录制功能参数。
-        File boot = new File(Api.Root + "/video/");
-        if (!boot.exists()) {
-            boot.mkdir();
-        }
-        VCamera.setVideoCachePath(boot + "/recoder/");
+
         //  VCamera.setVideoCachePath(FileUtils.getRecorderPath());
         // 开启log输出,ffmpeg输出到logcat
         VCamera.setDebugMode(false);
@@ -184,9 +179,18 @@ public class XiangXunApplication extends Application {
 
 
     public void createFiles() {
-        File boot = new File(Api.Root);
+        File root = new File(Api.Root);
+        if (!root.exists()) {
+            root.mkdir();
+        }
+        //初始化视频录制功能参数。
+        File boot = new File(Api.VIDEO);
         if (!boot.exists()) {
             boot.mkdir();
+        }
+        File sence = new File(Api.SENCE);
+        if (!sence.exists()) {
+            sence.mkdir();
         }
     }
 }
