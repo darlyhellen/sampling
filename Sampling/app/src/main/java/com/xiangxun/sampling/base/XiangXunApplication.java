@@ -25,6 +25,7 @@ import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.common.http.DcHttpClient;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.service.MainService;
+import com.xiangxun.video.camera.VCamera;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -68,6 +69,19 @@ public class XiangXunApplication extends Application {
         }
         // 日志记录
         DLog.init(BuildConfig.DEBUG, "sampling");
+        //初始化视频录制功能参数。
+        File boot = new File(Api.Root + "/video/");
+        if (!boot.exists()) {
+            boot.mkdir();
+        }
+        VCamera.setVideoCachePath(boot + "/recoder/");
+        //  VCamera.setVideoCachePath(FileUtils.getRecorderPath());
+        // 开启log输出,ffmpeg输出到logcat
+        VCamera.setDebugMode(false);
+        // 初始化拍摄SDK，必须
+        VCamera.initialize(this);
+
+
 //        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()//
 //                .detectCustomSlowCalls()//
 //                .detectDiskReads()//

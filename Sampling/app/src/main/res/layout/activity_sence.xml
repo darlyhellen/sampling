@@ -70,8 +70,8 @@
 
                 <ImageView
                     android:id="@+id/id_user_sence_location"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@mipmap/ic_sence_location" />
 
             </TableRow>
@@ -108,6 +108,62 @@
                 </LinearLayout>
             </TableRow>
 
+            <!--照片信息-->
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="现场采样照片："
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSize16" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@mipmap/ic_sence_location" />
+
+            </TableRow>
+
+            <com.xiangxun.sampling.widget.listview.WholeGridView
+                android:id="@+id/id_user_sence_image_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="@dimen/margin_padding4"
+                android:listSelector="@color/transparent"
+                android:numColumns="5" />
+            <!--视频信息-->
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="现场采样视频："
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSize16" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@mipmap/ic_sence_location" />
+
+            </TableRow>
+
+            <com.xiangxun.sampling.widget.listview.WholeGridView
+                android:id="@+id/id_user_sence_video_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="@dimen/margin_padding4"
+                android:listSelector="@color/transparent"
+                android:numColumns="5" />
         </LinearLayout>
     </ScrollView>
 

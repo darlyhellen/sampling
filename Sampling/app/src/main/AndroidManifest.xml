@@ -47,13 +47,26 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- 3.2.0版本增加-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true" />
 
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".base.XiangXunApplication"
@@ -105,6 +118,14 @@
         <activity
             android:name=".ui.main.SenceActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ShowImageViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.CameraActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".ui.setting.SetGuide"
             android:configChanges="keyboardHidden|orientation|screenSize"

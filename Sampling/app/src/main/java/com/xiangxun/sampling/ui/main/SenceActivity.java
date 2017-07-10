@@ -1,5 +1,7 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -7,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TableRow;
 
@@ -30,8 +33,17 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
+import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
+import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
+import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
+import com.xiangxun.sampling.widget.listview.WholeGridView;
+import com.xiangxun.video.ui.WechatRecoderActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/7.
@@ -41,7 +53,7 @@ import com.xiangxun.sampling.widget.header.TitleView;
  * @TODO: 現場情況的展示頁面
  */
 @ContentBinder(R.layout.activity_sence)
-public class SenceActivity extends BaseActivity implements AMapLocationListener,OnClickListener {
+public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private SamplingPlanning planning;
     private SamplingPoint point;
@@ -66,10 +78,20 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @ViewsBinder(R.id.id_user_sence_location)
     private ImageView loca;
 
-
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationClient mlocationClient = null;
+
+    @ViewsBinder(R.id.id_user_sence_image_grid)
+    private WholeGridView imageGrid;
+    @ViewsBinder(R.id.id_user_sence_video_grid)
+    private WholeGridView videoGrid;
+
+    private SenceImageAdapter imageAdapter;
+    private SenceVideoAdapter videoAdapter;
+
+    private List<String> images;
+    private List<String> videos;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -82,15 +104,29 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void loadData() {
         type.isEdit(false);
-        type.setInfo("采样类型:", point.getType()+" ");
+        type.setInfo("采样类型:", point.getType() + " ");
         name.isEdit(false);
-        name.setInfo("样品名称:", point.getName()+" ");
+        name.setInfo("样品名称:", point.getName() + " ");
         params.isEdit(false);
-        params.setInfo("样品深度:", point.getDeep()+" ");
+        params.setInfo("样品深度:", point.getDeep() + " ");
         project.isEdit(false);
-        project.setInfo("待测项目:", point.getProj()+" ");
+        project.setInfo("待测项目:", point.getProj() + " ");
         other.isEdit(true);
-        other.setInfo("其他說明:", point.getNote()+" ");
+        other.setInfo("其他說明:", point.getNote() + " ");
+        //初始化图片和视频信息所在位置。
+        if (images == null) {
+            images = new ArrayList<String>();
+            images.add("add");
+        }
+        if (videos == null) {
+            videos = new ArrayList<String>();
+            videos.add("add");
+        }
+
+        imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
+        imageGrid.setAdapter(imageAdapter);
+        videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
+        videoGrid.setAdapter(videoAdapter);
         //啟動定位
         startLocate();
     }
@@ -119,6 +155,19 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         mapView.invalidate();
     }
 
+    //点击删除图片
+    @Override
+    public void onConsImageListener(View v, int position) {
+        images.remove(position);
+        imageAdapter.setData(images);
+    }
+
+    //点击删除视频
+    @Override
+    public void onConsVideoListener(View v, int position) {
+        videos.remove(position);
+        videoAdapter.setData(videos);
+    }
 
 
     /**
@@ -170,6 +219,44 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void initListener() {
+        imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //这里跳转不同的图片页面
+                String st = (String) parent.getItemAtPosition(position);
+                if (position == (images.size() - 1)) {
+                    Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
+                    intentCamera.putExtra("size", images.size());
+                    intentCamera.setAction("Sence");
+                    startActivityForResult(intentCamera, 1);
+                } else {
+                    Intent intent = new Intent(SenceActivity.this, ShowImageViewActivity.class);
+                    intent.putExtra("position", position);
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    intent.putExtra("locationX", location[0]);//必须
+                    intent.putExtra("locationY", location[1]);//必须
+                    intent.putExtra("url", st);
+                    intent.putExtra("width", view.getWidth());//必须
+                    intent.putExtra("height", view.getHeight());//必须
+                    startActivity(intent);
+                }
+            }
+        });
+        videoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //这里跳转不同的视频页面
+                String st = (String) parent.getItemAtPosition(position);
+                if (position == (videos.size() - 1)) {
+                    //跳转到视频录制页面
+                    startActivityForResult(new Intent(SenceActivity.this, WechatRecoderActivity.class), 900);
+                } else {
+                }
+            }
+        });
+
+
         loca.setOnClickListener(this);
         titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new OnClickListener() {
 
@@ -183,12 +270,13 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.id_user_sence_location:
                 startLocate();
                 break;
         }
     }
+
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         if (amapLocation != null) {
@@ -208,6 +296,21 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 901 && requestCode == 900) {
+            String video = data.getStringExtra("path");
+            videos.add(videos.size() - 1, video);
+            videoAdapter.setData(videos);
+        } else if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+            List<String> photos = (List<String>) data.getSerializableExtra("camera_picture");
+            images.addAll(images.size() - 1, photos);
+            imageAdapter.setData(images);
         }
     }
 

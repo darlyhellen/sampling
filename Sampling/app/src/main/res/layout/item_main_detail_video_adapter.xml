@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_video_iv_relative"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <VideoView
+        android:id="@+id/id_video_recorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/id_video_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/id_video_iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="3dp"
+        android:src="@mipmap/icon_photo_close" />
+
+    <TextView
+        android:id="@+id/id_video_tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="5dp"
+        android:singleLine="true"
+        android:textSize="12sp" />
+
+</RelativeLayout>
