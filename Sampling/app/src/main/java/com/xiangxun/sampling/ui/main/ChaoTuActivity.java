@@ -64,7 +64,7 @@ public class ChaoTuActivity extends BaseActivity {
         // 启用内置放大缩小控件
         mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
-        mapView.getController().setZoom(8);
+        mapView.getController().setZoom(10);
         mapView.post(new Runnable() {
             public void run() {
                 initHeight();
@@ -75,8 +75,8 @@ public class ChaoTuActivity extends BaseActivity {
     @Override
     protected void loadData() {
 
-        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_point_select);
-        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_point_normal);
+        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
         DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
         for (SamplingPoint point : planning.getPoints()) {
             Point2D poind = new Point2D(point.getLongitude(), point.getLatitude());
