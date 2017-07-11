@@ -186,6 +186,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     //点击删除图片
     @Override
     public void onConsImageListener(View v, int position) {
+        File file = new File(images.get(position));
+        if (file.exists()) {
+            file.delete();
+        }
         images.remove(position);
         imageAdapter.setData(images);
     }
@@ -193,6 +197,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     //点击删除视频
     @Override
     public void onConsVideoListener(View v, int position) {
+        File file = new File(videos.get(position));
+        if (file.exists()) {
+            file.delete();
+        }
         videos.remove(position);
         videoAdapter.setData(videos);
     }
@@ -257,6 +265,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                     intentCamera.putExtra("size", images.size());
                     intentCamera.putExtra("file", Api.SENCE.concat(point.getId()));
                     intentCamera.setAction("Sence");
+                    intentCamera.putExtra("LOGO", false);//不打印水印
                     startActivityForResult(intentCamera, 1);
                 } else {
                     Intent intent = new Intent(SenceActivity.this, ShowImageViewActivity.class);

@@ -99,6 +99,8 @@ public class CameraActivity extends Activity implements OnClickListener {
     private int mode = 0;
     private float oldDist;
 
+    private boolean logo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +162,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                     case MotionEvent.ACTION_MOVE:
                         if (mode >= 2) {
                             float newDist = spacing(event);
-                            if (newDist > oldDist + 1) {
+                            if (newDist > oldDist + 10) {
                                 if (zoo >= camera.getParameters().getMaxZoom()) {
                                     zoo = camera.getParameters().getMaxZoom();
                                 } else {
@@ -209,6 +211,7 @@ public class CameraActivity extends Activity implements OnClickListener {
         iu = new ImageUtils(this);
         mSize = getIntent().getIntExtra("size", 0);
         filePaths = getIntent().getStringExtra("file");
+        logo = getIntent().getBooleanExtra("LOGO", false);
         mysp = getSharedPreferences("xxsyscfg", Context.MODE_PRIVATE);
         openCamera();
     }
@@ -261,7 +264,8 @@ public class CameraActivity extends Activity implements OnClickListener {
                     if (file.exists()) {
 
                         File f = new File(picpath);
-                        if (f != null && f.exists() && f.isFile()) {
+                        //在这里判断是否需要添加水印效果
+                        if (f != null && f.exists() && f.isFile() && logo) {
                             iu.pressText(picpath, getResources().getString(R.string.textviewtime) + ":" + MDate.getDate(), "", "");
                         }
 
@@ -361,7 +365,11 @@ public class CameraActivity extends Activity implements OnClickListener {
 
                             parameters.setFlashMode(SystemCfg.getFlashModes(CameraActivity.this));
                             list = parameters.getSupportedPreviewSizes();
-                            parameters.setPreviewSize(list.get(0).width, list.get(0).height);
+                            if (list.get(0).width > list.get(list.size() - 1).width) {
+                                parameters.setPreviewSize(list.get(0).width, list.get(0).height);
+                            } else {
+                                parameters.setPreviewSize(list.get(list.size() - 1).width, list.get(list.size() - 1).height);
+                            }
                             parameters.setWhiteBalance(SystemCfg.getWhiteBalance(CameraActivity.this));
                             parameters.setSceneMode(SystemCfg.getSceneModes(CameraActivity.this));
                             if (SystemCfg.getExposureCompensation(CameraActivity.this) != 10)
@@ -567,8 +575,8 @@ public class CameraActivity extends Activity implements OnClickListener {
                         return;
                     }
                 } else if (getIntent().getAction() != null && getIntent().getAction().equals("Sence")) {
-                    if (mSize + listPath.size() >= 6) {
-                        ToastApp.showToast("最多可拍摄5张照片!");
+                    if (mSize + listPath.size() >= 4) {
+                        ToastApp.showToast("最多可拍摄3张照片!");
                         return;
                     }
                 } else if (getIntent().getAction() != null && getIntent().getAction().equals("publishThreePhotos")) {
