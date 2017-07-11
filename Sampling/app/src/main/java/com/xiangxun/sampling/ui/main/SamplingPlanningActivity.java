@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -15,11 +14,13 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.StaticListener.RefreshMainUIListener;
-import com.xiangxun.sampling.ui.adapter.PlanningAdapter;
+import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
 import java.util.List;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -35,11 +36,12 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
     private TitleView titleView;
 
     @ViewsBinder(R.id.id_planning_wlist)
-    private ListView wlist;
+    private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_planning_text)
     private TextView textView;
     private List<SamplingPlanning> data;
-    private PlanningAdapter adapter;
+    private StickyAdapter adapter;
+
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -48,12 +50,11 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
 
     @Override
     protected void loadData() {
-        adapter = new PlanningAdapter(null, R.layout.item_planning_list, this, false);
+        adapter = new StickyAdapter(null, R.layout.item_planning_list, this, false);
         wlist.setAdapter(adapter);
         StaticListener.getInstance().setRefreshMainUIListener(this);
         if (data == null) {
             data = StaticListener.findData();
-            data.add(0, new SamplingPlanning());
         }
         StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(data);
     }
@@ -71,20 +72,18 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
         wlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
-                    for (SamplingPlanning pl : data) {
-                        if (planning.getId().equals(pl.getId())) {
-                            pl.setUserSee(true);
-                            break;
-                        }
+                SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
+                for (SamplingPlanning pl : data) {
+                    if (planning.getId().equals(pl.getId())) {
+                        pl.setUserSee(true);
+                        break;
                     }
-                    adapter.setData(data);
-                    Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
-                    intent.putExtra("SamplingPlanning", planning);
-                    intent.putExtra("SENCE", false);
-                    startActivity(intent);
                 }
+                adapter.setData(data);
+                Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
+                intent.putExtra("SamplingPlanning", planning);
+                intent.putExtra("SENCE", false);
+                startActivity(intent);
             }
         });
     }

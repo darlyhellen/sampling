@@ -63,6 +63,7 @@
     <color name="translucent_background_75">#BF000000</color>
     <color name="button_black_background">#424253</color>
     <color name="import_video_thumb_bg">#FF515154</color>
+    <color name="sence_bg">#fafafa</color>
     <!--VCamera-->
 
 </resources>

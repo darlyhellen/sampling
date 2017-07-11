@@ -16,7 +16,8 @@
         android:id="@+id/id_video_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_padding20"/>
 
     <ImageView
         android:id="@+id/id_video_iv_close"

@@ -13,8 +13,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/margin_padding1">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/id_sence_text"
@@ -26,12 +25,13 @@
             android:textSize="@dimen/textSize20"
             android:visibility="gone" />
 
-        <ListView
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
             android:id="@+id/id_sence_wlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="4dp"
+            android:divider="@color/login_edit_text"
+            android:dividerHeight="0.5dp"
+            android:listSelector="@null"
             android:scrollbars="none" />
     </FrameLayout>
 </LinearLayout>

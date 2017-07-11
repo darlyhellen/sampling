@@ -22,6 +22,8 @@ import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 import java.util.Iterator;
 import java.util.List;
 
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
  * Copyright by [Zhangyuhui/Darly]
@@ -36,7 +38,7 @@ public class SamplingPointActivity extends BaseActivity {
     private TitleView titleView;
 
     @ViewsBinder(R.id.id_point_wlist)
-    private ListView wlist;
+    private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_point_text)
     private TextView textView;
     private SamplingPlanning planning;
@@ -60,7 +62,6 @@ public class SamplingPointActivity extends BaseActivity {
     protected void loadData() {
         if (data == null) {
             data = planning.getPoints();
-            data.add(0, new SamplingPoint());
         }
         if (isSence) {
             //现场请情况,剔除掉,已经采集过的地方
@@ -106,38 +107,36 @@ public class SamplingPointActivity extends BaseActivity {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 DLog.i("onItemClick--" + position);
-                if (position != 0) {
-                    SamplingPoint point = (SamplingPoint) parent.getItemAtPosition(position);
-                    for (SamplingPoint po : data) {
-                        if (point.getId().equals(po.getId())) {
-                            po.setUserSee(true);
-                            break;
-                        }
+                SamplingPoint point = (SamplingPoint) parent.getItemAtPosition(position);
+                for (SamplingPoint po : data) {
+                    if (point.getId().equals(po.getId())) {
+                        po.setUserSee(true);
+                        break;
                     }
-                    adapter.setData(data);
-                    if (isSence) {
-                        //到现场采集页面.
-                        DLog.i("到现场采集页面--" + position);
-                        Intent intent = new Intent(SamplingPointActivity.this, SenceActivity.class);
-                        SamplingPlanning p = new SamplingPlanning();
-                        p.setId(planning.getId());
-                        p.setDepate(planning.getDepate());
-                        p.setTitle(planning.getTitle());
-                        p.setPlace(planning.getPlace());
-                        intent.putExtra("SamplingPlanning", p);
-                        intent.putExtra("SamplingPoint", point);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
-                        SamplingPlanning p = new SamplingPlanning();
-                        p.setId(planning.getId());
-                        p.setDepate(planning.getDepate());
-                        p.setTitle(planning.getTitle());
-                        p.setPlace(planning.getPlace());
-                        intent.putExtra("SamplingPlanning", p);
-                        intent.putExtra("SamplingPoint", point);
-                        startActivity(intent);
-                    }
+                }
+                adapter.setData(data);
+                if (isSence) {
+                    //到现场采集页面.
+                    DLog.i("到现场采集页面--" + position);
+                    Intent intent = new Intent(SamplingPointActivity.this, SenceActivity.class);
+                    SamplingPlanning p = new SamplingPlanning();
+                    p.setId(planning.getId());
+                    p.setDepate(planning.getDepate());
+                    p.setTitle(planning.getTitle());
+                    p.setPlace(planning.getPlace());
+                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("SamplingPoint", point);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
+                    SamplingPlanning p = new SamplingPlanning();
+                    p.setId(planning.getId());
+                    p.setDepate(planning.getDepate());
+                    p.setTitle(planning.getTitle());
+                    p.setPlace(planning.getPlace());
+                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("SamplingPoint", point);
+                    startActivity(intent);
                 }
             }
         });

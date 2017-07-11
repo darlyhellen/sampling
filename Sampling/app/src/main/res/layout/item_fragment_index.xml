@@ -3,9 +3,8 @@
     android:id="@+id/grid_relative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/item_fragment_index_bg"
     android:orientation="vertical">
-
+    <!--android:background="@drawable/item_fragment_index_bg"-->
     <ImageView
         android:id="@+id/grid_round_image"
         android:layout_width="wrap_content"
@@ -17,8 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/grid_round_image"
+        android:padding="@dimen/margin_padding4"
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/textSize20" />
+        android:textSize="@dimen/textSize14" />
 
 </RelativeLayout>

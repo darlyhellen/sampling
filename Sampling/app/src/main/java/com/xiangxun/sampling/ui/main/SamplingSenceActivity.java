@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -14,11 +13,13 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.StaticListener;
-import com.xiangxun.sampling.ui.adapter.PlanningAdapter;
+import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
 import java.util.List;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -33,11 +34,11 @@ public class SamplingSenceActivity extends BaseActivity {
     private TitleView titleView;
 
     @ViewsBinder(R.id.id_sence_wlist)
-    private ListView wlist;
+    private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_sence_text)
     private TextView textView;
     private List<SamplingPlanning> data;
-    private PlanningAdapter adapter;
+    private StickyAdapter adapter;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -48,9 +49,8 @@ public class SamplingSenceActivity extends BaseActivity {
     protected void loadData() {
         if (data == null) {
             data = StaticListener.findData();
-            data.add(0, new SamplingPlanning());
         }
-        adapter = new PlanningAdapter(data, R.layout.item_planning_list, this, true);
+        adapter = new StickyAdapter(data, R.layout.item_planning_list, this, true);
         wlist.setAdapter(adapter);
     }
 
@@ -67,13 +67,11 @@ public class SamplingSenceActivity extends BaseActivity {
         wlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(SamplingSenceActivity.this, SamplingPointActivity.class);
-                    intent.putExtra("SamplingPlanning", planning);
-                    intent.putExtra("SENCE", true);
-                    startActivity(intent);
-                }
+                SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
+                Intent intent = new Intent(SamplingSenceActivity.this, SamplingPointActivity.class);
+                intent.putExtra("SamplingPlanning", planning);
+                intent.putExtra("SENCE", true);
+                startActivity(intent);
             }
         });
     }

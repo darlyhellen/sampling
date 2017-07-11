@@ -12,11 +12,8 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
-import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
-import com.xiangxun.sampling.ui.main.SamplingPointActivity;
+import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -26,22 +23,22 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  * Copyright by [Zhangyuhui/Darly]
  * ©2017 XunXiang.Company. All rights reserved.
  *
- * @TODO:展现点位信息的适配器
+ * @TODO:展示计划组的适配器
  */
-public class PointAdapter extends ParentAdapter<SamplingPoint> implements StickyListHeadersAdapter {
-
+public class StickyAdapter extends ParentAdapter<SamplingPlanning> implements StickyListHeadersAdapter {
+    //是否現場採集 true 為現場
     private boolean isSence;
 
-    public PointAdapter(List<SamplingPoint> data, int resID, Context context, boolean isSence) {
+    public StickyAdapter(List<SamplingPlanning> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
         this.isSence = isSence;
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPoint s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPlanning s) {
         ViewHocker hocker = null;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(resID, null);
+            view = LayoutInflater.from(context).inflate(resID, parent, false);
             hocker = new ViewHocker();
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
@@ -52,19 +49,18 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getId());
+            hocker.name.setText(s.getTitle());
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getLatitude()));
+            hocker.dept.setText(s.getSamplingexzample());
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getLongitude()));
+            hocker.position.setText(String.valueOf(s.getPoints().size()).concat("个"));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
-            hocker.desc.setText("采样记录");
+            hocker.desc.setText("点击查看范围");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
             if (s.isUserSee()) {
@@ -73,18 +69,28 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
             }
             hocker.desc.setTextSize(14);
+            hocker.desc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    s.setUserSee(true);
+                    Intent intent = new Intent(context, ChaoTuActivity.class);
+                    intent.putExtra("SamplingPlanning", s);
+                    context.startActivity(intent);
+                    notifyDataSetChanged();
+                }
+            });
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getId());
+            hocker.name.setText(s.getTitle());
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getLatitude()));
+            hocker.dept.setText(s.getType());
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getLongitude()));
+            hocker.position.setText(s.getPlace());
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
-            hocker.desc.setText("点击修改");
+            hocker.desc.setText("点击查看");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
             if (s.isUserSee()) {
@@ -93,6 +99,16 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
             }
             hocker.desc.setTextSize(14);
+            hocker.desc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    s.setUserSee(true);
+                    Intent intent = new Intent(context, ChaoTuActivity.class);
+                    intent.putExtra("SamplingPlanning", s);
+                    context.startActivity(intent);
+                    notifyDataSetChanged();
+                }
+            });
         }
         return view;
     }
@@ -101,7 +117,7 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
     public View getHeaderView(int i, View view, ViewGroup viewGroup) {
         ViewHocker hocker = null;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(resID, null);
+            view = LayoutInflater.from(context).inflate(resID, viewGroup, false);
             hocker = new ViewHocker();
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
@@ -112,16 +128,15 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-
         if (isSence) {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("点位编号");
+            hocker.name.setText("计划名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
-            hocker.dept.setText("经度");
+            hocker.dept.setText("采样样品");
             hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
             hocker.dept.setTextSize(16);
-            hocker.position.setText("纬度");
+            hocker.position.setText("采样点位数");
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
             hocker.desc.setText("");
@@ -129,13 +144,13 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
             hocker.desc.setTextSize(16);
         } else {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("点位编号");
+            hocker.name.setText("计划名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
-            hocker.dept.setText("经度");
+            hocker.dept.setText("采样样品");
             hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
             hocker.dept.setTextSize(16);
-            hocker.position.setText("纬度");
+            hocker.position.setText("采样选址");
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
             hocker.desc.setText("");

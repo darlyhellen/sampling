@@ -66,7 +66,6 @@ public class LoginPresenter {
                 SystemCfg.setUserName(context, "管理员");
                 SystemCfg.setDepartment(context, "研究所");
                 SystemCfg.setDepartmentID(context, "101");
-                SystemCfg.setUserImage(context,"http://img0.imgtn.bdimg.com/it/u=852482742,684232062&fm=26&gp=0.jpg");
                 SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
                 SystemCfg.setWhitePwd(context, main.getPassword());
                 Intent offline = new Intent(context, MainFragmentActivity.class);
