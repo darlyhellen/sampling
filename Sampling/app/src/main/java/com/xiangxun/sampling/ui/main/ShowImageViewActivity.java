@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,11 +19,17 @@ import com.xiangxun.sampling.widget.image.SmoothImageView;
  *
  * @TODO:GridView图片点击放大的展示效果。
  */
-public class ShowImageViewActivity extends BaseActivity implements OnClickListener {
+public class ShowImageViewActivity extends Activity implements OnClickListener {
 
     SmoothImageView imageView;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView(savedInstanceState);
+        initListener();
+    }
+
     protected void initView(Bundle savedInstanceState) {
         int mLocationX = getIntent().getIntExtra("locationX", 0);
         int mLocationY = getIntent().getIntExtra("locationY", 0);
@@ -43,12 +50,6 @@ public class ShowImageViewActivity extends BaseActivity implements OnClickListen
         }
     }
 
-    @Override
-    protected void loadData() {
-        
-    }
-
-    @Override
     protected void initListener() {
         imageView.setOnClickListener(this);
     }
