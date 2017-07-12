@@ -1,14 +1,20 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.supermap.android.maps.CoordinateReferenceSystem;
 import com.supermap.android.maps.DefaultItemizedOverlay;
@@ -26,7 +32,11 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.widget.header.TitleView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/7.
@@ -38,7 +48,7 @@ import com.xiangxun.sampling.widget.header.TitleView;
 @ContentBinder(R.layout.activity_chaotu)
 public class GroundChooseActivity extends BaseActivity implements OnClickListener {
     private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
-    String url = "http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China";
+    String url = "http://10.10.15.201:8090/iserver/services/map-etkqimage/rest/maps/etkq@etkqimg";
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -57,7 +67,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         }
         titleView.setTitle(planning.getTitle() + "选择地块");
         center = new Point2D(planning.getPoints().get(0).getLongitude(), planning.getPoints().get(0).getLatitude());
-        baseLayerView.setURL(DEFAULT_URL);
+        baseLayerView.setURL(url);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
@@ -95,6 +105,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
             @Override
             public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
                 DLog.i(overlayItem);
+                handler.sendEmptyMessage(0);
             }
         });
         overlay.setOnFocusChangeListener(new SelectedOverlay());
@@ -105,6 +116,17 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         mapView.invalidate();
 
     }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            File f = saveCustomViewBitmap(mapView);
+            Intent intent = new Intent();
+            intent.putExtra("URL", f == null ? null : f.getAbsolutePath());
+            setResult(Activity.RESULT_OK, intent);
+            onBackPressed();
+        }
+    };
 
     @Override
     protected void initListener() {
@@ -186,5 +208,29 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         }
         super.onBackPressed();
     }
+
+    //保存自定义view的截图
+    private File saveCustomViewBitmap(View view) {
+        //获取自定义view图片的大小
+        Bitmap temBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        //使用Canvas，调用自定义view控件的onDraw方法，绘制图片
+        Canvas canvas = new Canvas(temBitmap);
+        view.draw(canvas);
+        //输出到sd卡
+        File file = new File(Api.Root.concat(planning.getId()).concat(".png"));
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream foStream = new FileOutputStream(file);
+            temBitmap.compress(Bitmap.CompressFormat.PNG, 100, foStream);
+            foStream.flush();
+            foStream.close();
+            return file;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
 }

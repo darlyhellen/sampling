@@ -56,12 +56,18 @@
                         android:textSize="@dimen/textSize16" />
                 </TableRow>
 
-                <ImageView
-                    android:id="@+id/id_exception_map"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_publish_image"
-                    android:layout_margin="@dimen/margin_padding10" />
+                    android:background="@drawable/app_shape_backgroud">
+
+                    <ImageView
+                        android:id="@+id/id_exception_map"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_margin="@dimen/margin_padding10"
+                        android:src="@drawable/add_publish_image" />
+                </LinearLayout>
             </LinearLayout>
             <!--异常类型-->
             <RelativeLayout
@@ -113,9 +119,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_padding20"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/margin_padding20"
                 android:padding="@dimen/margin_padding10">
 
                 <LinearLayout

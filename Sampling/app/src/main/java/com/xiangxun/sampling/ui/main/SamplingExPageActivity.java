@@ -1,11 +1,13 @@
 
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.supermap.android.maps.MapView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
@@ -25,6 +28,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
@@ -78,6 +82,8 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        //这句话解决了自动弹出输入按键
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         iShow = getIntent().getBooleanExtra("EXCEPTION", false);
         titleView.setTitle("地块异常上报");
         locationname.setText("异常定位：");
@@ -186,7 +192,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             case R.id.id_exception_map:
                 Intent intent = new Intent(this, GroundChooseActivity.class);
                 intent.putExtra("SamplingPlanning", StaticListener.findData().get(0));
-                startActivity(intent);
+                startActivityForResult(intent, 900);
                 break;
         }
     }
@@ -226,6 +232,16 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         }
         images.remove(position);
         imageAdapter.setData(images);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 900 && resultCode == Activity.RESULT_OK) {
+            String rul = data.getStringExtra("URL");
+            ImageLoader.getInstance().displayImage("file://" + rul, map);
+        }
     }
 
     @Override
