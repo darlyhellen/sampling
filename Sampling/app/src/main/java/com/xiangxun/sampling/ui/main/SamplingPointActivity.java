@@ -88,7 +88,7 @@ public class SamplingPointActivity extends BaseActivity {
             }
         });
         if (!isSence) {
-            titleView.setRightViewRightOneListener(R.mipmap.newfile, new View.OnClickListener() {
+            titleView.setRightViewRightTextOneListener("新增", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //新增点位逻辑页面

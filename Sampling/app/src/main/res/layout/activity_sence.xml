@@ -79,7 +79,6 @@
                     android:id="@+id/id_user_sence_project"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
                     android:paddingLeft="@dimen/margin_padding10"
                     android:paddingRight="@dimen/margin_padding10"
                     android:paddingTop="@dimen/margin_padding10" />
@@ -107,93 +106,7 @@
             </LinearLayout>
             <!--定位信息-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_padding20"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/margin_padding10">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/margin_padding4"
-                        android:layout_marginRight="@dimen/margin_padding4"
-                        android:src="@mipmap/ic_sence_title_gb" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="现场采样定位："
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/textSize16" />
-
-                    <ImageView
-                        android:id="@+id/id_user_sence_location"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@mipmap/ic_sence_location" />
-                </TableRow>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/app_shape_backgroud"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.supermap.android.maps.MapView
-                        android:id="@+id/id_user_sence_mapview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_padding1"
-                        android:clickable="false"
-                        android:enabled="false" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/login_edit_text" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_padding10"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <com.xiangxun.sampling.widget.groupview.DetailView
-                            android:id="@+id/id_user_sence_address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:padding="@dimen/margin_padding4" />
-
-                        <com.xiangxun.sampling.widget.groupview.DetailView
-                            android:id="@+id/id_user_sence_lat"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:padding="@dimen/margin_padding4" />
-
-
-                        <com.xiangxun.sampling.widget.groupview.DetailView
-                            android:id="@+id/id_user_sence_lont"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:padding="@dimen/margin_padding4" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+            <include layout="@layout/layout_locations" />
             <!--照片信息-->
 
             <LinearLayout

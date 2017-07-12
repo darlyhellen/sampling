@@ -107,6 +107,12 @@
             android:name=".ui.main.SamplingExceptionActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SamplingHisExceptionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SamplingExPageActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.SamplingPointActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -114,6 +120,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.ChaoTuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.GroundChooseActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.SenceActivity"

@@ -17,7 +17,9 @@ import com.xiangxun.sampling.binder.InitBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.GridViewAdapter;
+import com.xiangxun.sampling.ui.main.SamplingExPageActivity;
 import com.xiangxun.sampling.ui.main.SamplingExceptionActivity;
+import com.xiangxun.sampling.ui.main.SamplingHisExceptionActivity;
 import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
 import com.xiangxun.sampling.ui.main.SamplingPlanningActivity;
 import com.xiangxun.sampling.ui.main.SamplingSenceActivity;
@@ -84,6 +86,7 @@ public class MainIndexFragment extends BaseFragment implements OnItemClickListen
             data.add(new Index(2, "指标查询", R.drawable.grid_selecter_target));
             data.add(new Index(3, "历史采样", R.drawable.grid_selecter_his));
             data.add(new Index(4, "地块异常", R.drawable.grid_selecter_his));
+            data.add(new Index(5, "历史异常", R.drawable.grid_selecter_his));
         }
         adapter.setData(data);
     }
@@ -119,7 +122,10 @@ public class MainIndexFragment extends BaseFragment implements OnItemClickListen
                     intent.setClass(getActivity(), SamplingHistoryActivity.class);
                     break;
                 case 4:
-                    intent.setClass(getActivity(), SamplingExceptionActivity.class);
+                    intent.setClass(getActivity(), SamplingExPageActivity.class);
+                    break;
+                case 5:
+                    intent.setClass(getActivity(), SamplingHisExceptionActivity.class);
                     break;
                 default:
                     break;

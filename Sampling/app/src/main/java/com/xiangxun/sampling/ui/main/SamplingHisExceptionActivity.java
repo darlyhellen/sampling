@@ -22,10 +22,10 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * Copyright by [Zhangyuhui/Darly]
  * ©2017 XunXiang.Company. All rights reserved.
  *
- * @TODO:地块异常查询各个功能
+ * @TODO:历史地块异常查询各个功能
  */
 @ContentBinder(R.layout.activity_sampling_exception)
-public class SamplingExceptionActivity extends BaseActivity {
+public class SamplingHisExceptionActivity extends BaseActivity {
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
 

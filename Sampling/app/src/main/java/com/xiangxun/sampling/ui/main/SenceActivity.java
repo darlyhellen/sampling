@@ -8,12 +8,14 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -64,8 +66,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private SamplingPoint point;
     @ViewsBinder(R.id.id_user_sence_title)
     private TitleView titleView;
-    @ViewsBinder(R.id.id_user_sence_mapview)
-    protected MapView mapView;
+    @ViewsBinder(R.id.id_user_locations_name)
+    private TextView locationname;
     @ViewsBinder(R.id.id_user_sence_address)
     private DetailView address;
     @ViewsBinder(R.id.id_user_sence_lat)
@@ -84,6 +86,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private DetailView other;
     @ViewsBinder(R.id.id_user_sence_location)
     private ImageView loca;
+
 
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
@@ -107,9 +110,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
         point = (SamplingPoint) getIntent().getSerializableExtra("SamplingPoint");
         titleView.setTitle("现场采样");
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(SystemCfg.getWidth(this) / 3, SystemCfg.getWidth(this) / 3);
-        lp.setMargins(2, 2, 2, 2);
-        mapView.setLayoutParams(lp);
+        locationname.setText("现场采样定位：");
     }
 
     @Override
@@ -159,30 +160,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         startLocate();
     }
 
-    private void startChao(AMapLocation amapLocation) {
-        LayerView baseLayerView = new LayerView(this);
-        Point2D center = new Point2D(amapLocation.getLongitude(), amapLocation.getLatitude());
-        baseLayerView.setURL(DEFAULT_URL);
-        CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
-        crs.wkid = 4326;
-        baseLayerView.setCRS(crs);
-        mapView.addLayer(baseLayerView);
-        mapView.getController().setCenter(center);
-        // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(false);
-        mapView.setClickable(false);
-        mapView.getController().setZoom(8);
-        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_point_select);
-        DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-        OverlayItem overlayItem = new OverlayItem(center, point.getDesc(), point.getId());
-        overlay.addItem(overlayItem);
-        //mapView.getOverlays().add(new CustomOverlay(center, amapLocation.getAddress()));
-        mapView.getOverlays().add(overlay);
-
-        // 重新onDraw一次
-        mapView.invalidate();
-    }
-
     //点击删除图片
     @Override
     public void onConsImageListener(View v, int position) {
@@ -203,33 +180,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         }
         videos.remove(position);
         videoAdapter.setData(videos);
-    }
-
-
-    /**
-     * 自定义Overlay
-     */
-    class CustomOverlay extends Overlay {
-
-        private Point2D center;
-        private String title;
-
-        public CustomOverlay(Point2D center, String title) {
-            this.center = center;
-            this.title = title;
-        }
-
-        @Override
-        public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-            super.draw(canvas, mapView, shadow);
-            Paint paint = new Paint();
-            Point point = mapView.getProjection().toPixels(center, null);
-            paint.setTextSize(24);
-            paint.setStrokeWidth(0.8f);
-            paint.setARGB(255, 255, 0, 0);
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-            canvas.drawText(title, point.x, point.y, paint);
-        }
     }
 
 
@@ -310,7 +260,12 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 onBackPressed();
             }
         });
-
+        titleView.setRightViewRightTextOneListener("保存", new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastApp.showToast("保存采集点位信息");
+            }
+        });
     }
 
     @Override
@@ -327,13 +282,13 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
-                address.isEdit(true);
-                address.setInfo("地址：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
                 latitude.isEdit(true);
                 latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
                 longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
-                startChao(amapLocation);
+                address.isEdit(true);
+                address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
+                //startChao(amapLocation);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 address.isEdit(true);
@@ -407,9 +362,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void onBackPressed() {
-        if (mapView != null) {
-            mapView.destroy();
-        }
         super.onBackPressed();
     }
 }

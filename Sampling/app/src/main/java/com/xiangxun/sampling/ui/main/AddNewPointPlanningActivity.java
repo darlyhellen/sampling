@@ -116,7 +116,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
                 onBackPressed();
             }
         });
-        titleView.setRightViewRightOneListener(R.mipmap.key_end, new View.OnClickListener() {
+        titleView.setRightViewRightTextOneListener("保存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //提交服务端,进行重新获取.
