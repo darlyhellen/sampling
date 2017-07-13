@@ -2,6 +2,7 @@ package com.xiangxun.sampling.ui;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -71,14 +72,14 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
         }
         idLoginBtn.setViewInit(R.string.mine_login_login, R.string.mine_login_loginning, idLoginName, idLoginPassword);    //, mSettings, mTakePic);
 
-        String server_set_str = getResources().getString(R.string.loginset);
-        SpannableString ss = new SpannableString(server_set_str);
-        ss.setSpan(new URLSpan(server_set_str), 0, server_set_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        idLoginSet.setText(ss);
-        String loginGuide_str = getResources().getString(R.string.loginguide);
-        SpannableString guide = new SpannableString(loginGuide_str);
-        guide.setSpan(new URLSpan(loginGuide_str), 0, loginGuide_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        idLoginGuide.setText(guide);
+        idLoginSet.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        idLoginSet.getPaint().setAntiAlias(true);//抗锯齿
+        idLoginSet.setText(R.string.loginset);
+        idLoginSet.setTextColor(getResources().getColor(R.color.color_login_guide));
+        idLoginGuide.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        idLoginGuide.getPaint().setAntiAlias(true);//抗锯齿
+        idLoginGuide.setText(R.string.loginguide);
+        idLoginGuide.setTextColor(getResources().getColor(R.color.color_login_guide));
 
         if (ActivityManager.isUserAMonkey()) {
             idLoginName.setEnabled(false);

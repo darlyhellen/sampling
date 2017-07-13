@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_padding20"
+    android:layout_marginBottom="@dimen/margin_padding10"
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
@@ -46,6 +46,7 @@
         android:id="@+id/id_user_sence_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_padding4"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
@@ -55,12 +56,13 @@
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/margin_padding10"
         android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/login_edit_text" />
+        android:background="@color/index_line" />
 
     <com.xiangxun.sampling.widget.groupview.DetailView
         android:id="@+id/id_user_sence_lat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_padding4"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
@@ -70,12 +72,13 @@
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/margin_padding10"
         android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/login_edit_text" />
+        android:background="@color/index_line" />
 
     <com.xiangxun.sampling.widget.groupview.DetailView
         android:id="@+id/id_user_sence_lont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_padding4"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
@@ -85,6 +88,6 @@
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/margin_padding10"
         android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/login_edit_text" />
+        android:background="@color/index_line" />
 
 </LinearLayout>

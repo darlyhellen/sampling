@@ -94,5 +94,6 @@
     <color name="color_green">#67BD1E</color>
 
     <!--index-->
-    <color name="index_line">#f9f9f7</color>
+    <color name="index_line">#e6e6e6</color>
+    <color name="color_login_guide">#c5c4d4</color>
 </resources>

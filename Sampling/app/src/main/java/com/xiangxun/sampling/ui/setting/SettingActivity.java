@@ -1,6 +1,5 @@
 package com.xiangxun.sampling.ui.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -51,6 +50,7 @@ public class SettingActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         title.setTitle(R.string.st_set_title);
         title.removeBackground();
+        user_photo.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this) / 5, SystemCfg.getWidth(this) / 5));
         initFragments(SettingFragment.class, R.id.id_set_frame);
 
     }
@@ -59,6 +59,8 @@ public class SettingActivity extends BaseActivity {
     protected void loadData() {
         if (!TextUtils.isEmpty(SystemCfg.getUserImage(this))) {
             ImageLoaderUtil.getInstance().loadImage(SystemCfg.getUserImage(this), user_photo);
+        } else {
+            user_photo.setImageResource(R.mipmap.ic_user);
         }
         String str;
         SpannableString ss;

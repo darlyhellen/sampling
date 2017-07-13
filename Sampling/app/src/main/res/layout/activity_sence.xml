@@ -24,8 +24,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_padding20"
-                android:layout_marginTop="@dimen/margin_padding20"
+                android:layout_marginBottom="@dimen/margin_padding10"
+                android:layout_marginTop="@dimen/margin_padding10"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="@dimen/margin_padding10">
@@ -43,7 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
-                    android:background="@color/login_edit_text" />
+                    android:background="@color/index_line"
+                    android:paddingTop="@dimen/margin_padding2" />
 
                 <com.xiangxun.sampling.widget.groupview.DetailView
                     android:id="@+id/id_user_sence_name"
@@ -58,7 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
-                    android:background="@color/login_edit_text" />
+                    android:background="@color/index_line"
+                    android:paddingTop="@dimen/margin_padding2" />
 
                 <com.xiangxun.sampling.widget.groupview.DetailView
                     android:id="@+id/id_user_sence_params"
@@ -73,7 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
-                    android:background="@color/login_edit_text" />
+                    android:background="@color/index_line"
+                    android:paddingTop="@dimen/margin_padding2" />
 
                 <com.xiangxun.sampling.widget.groupview.DetailView
                     android:id="@+id/id_user_sence_project"
@@ -87,7 +90,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
-                    android:background="@color/login_edit_text" />
+                    android:background="@color/index_line"
+                    android:paddingTop="@dimen/margin_padding2" />
 
                 <com.xiangxun.sampling.widget.groupview.DetailView
                     android:id="@+id/id_user_sence_other"
@@ -102,7 +106,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
-                    android:background="@color/login_edit_text" />
+                    android:background="@color/index_line"
+                    android:paddingTop="@dimen/margin_padding2" />
             </LinearLayout>
             <!--定位信息-->
 
@@ -112,7 +117,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_padding20"
+                android:layout_marginBottom="@dimen/margin_padding10"
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -156,7 +161,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_padding20"
+                android:layout_marginBottom="@dimen/margin_padding10"
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="vertical">

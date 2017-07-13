@@ -79,7 +79,7 @@ public class TitleView extends FrameLayout {
      * @param listener 监听事件
      */
     public void setRightViewRightOneListener(int drawable, OnClickListener listener) {
-        title_view_operation_imageview_right.setBackgroundResource(drawable);
+        title_view_operation_imageview_right.setImageResource(drawable);
         title_view_operation_imageview_right.setVisibility(View.VISIBLE);
         title_view_operation_imageview_right.setOnClickListener(listener);
     }
@@ -101,7 +101,7 @@ public class TitleView extends FrameLayout {
      * @param listener 监听事件
      */
     public void setLeftBackOneListener(int drawable, OnClickListener listener) {
-        title_view_back_img.setBackgroundResource(drawable);
+        title_view_back_img.setImageResource(drawable);
         title_view_back_img.setVisibility(View.VISIBLE);
         title_view_back_img.setOnClickListener(listener);
     }
@@ -112,7 +112,7 @@ public class TitleView extends FrameLayout {
      * @param drawable
      */
     public void setLeftBackOneListener(int drawable) {
-        title_view_back_img.setBackgroundResource(drawable);
+        title_view_back_img.setImageResource(drawable);
         title_view_back_img.setVisibility(View.VISIBLE);
     }
 
@@ -133,7 +133,7 @@ public class TitleView extends FrameLayout {
      * @param listener 监听事件
      */
     public void setRightViewLeftOneListener(int drawable, OnClickListener listener) {
-        title_view_operation_imageview.setBackgroundResource(drawable);
+        title_view_operation_imageview.setImageResource(drawable);
         title_view_operation_imageview.setVisibility(View.VISIBLE);
         title_view_operation_imageview.setOnClickListener(listener);
     }

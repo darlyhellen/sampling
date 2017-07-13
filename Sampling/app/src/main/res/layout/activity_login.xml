@@ -51,8 +51,8 @@
             android:drawablePadding="@dimen/margin_padding15"
             android:hint="请输入账户名"
             android:maxLength="20"
-            android:text="admin"
             android:padding="@dimen/margin_padding10"
+            android:text="admin"
             android:textColor="@color/login_edit_text"
             android:textColorHint="@color/landscape_background"
             android:textSize="@dimen/textSize20" />
@@ -76,8 +76,8 @@
             android:hint="请输入密码"
             android:inputType="textPassword"
             android:maxLength="16"
-            android:text="admin"
             android:padding="@dimen/margin_padding10"
+            android:text="admin"
             android:textColor="@color/login_edit_text"
             android:textColorHint="@color/landscape_background"
             android:textSize="@dimen/textSize20" />
@@ -102,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:padding="@dimen/margin_padding10"
+                android:textColor="@color/color_login_guide"
                 android:textSize="13sp" />
 
             <TextView
@@ -110,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/margin_padding10"
+                android:textColor="@color/color_login_guide"
                 android:textSize="13sp" />
         </RelativeLayout>
 

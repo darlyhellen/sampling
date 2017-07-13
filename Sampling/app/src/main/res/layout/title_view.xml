@@ -8,14 +8,12 @@
 
     <ImageView
         android:id="@+id/title_view_back_img"
-        android:layout_width="@dimen/layoutSize25"
-        android:layout_height="@dimen/layoutSize25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/margin_padding5"
-        android:layout_marginLeft="@dimen/margin_padding10"
-        android:layout_marginRight="@dimen/margin_padding3"
         android:clickable="true"
         android:gravity="center"
+        android:padding="@dimen/margin_padding10"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -26,8 +24,8 @@
         android:layout_centerVertical="true"
         android:text="@string/tools"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/textSize18"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textSize="@dimen/textSize22"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,11 +47,11 @@
 
         <ImageView
             android:id="@+id/title_view_operation_imageview_right"
-            android:layout_width="@dimen/layoutSize25"
-            android:layout_height="@dimen/layoutSize25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/margin_padding10"
-            android:background="@mipmap/user_normal"
+            android:padding="@dimen/margin_padding10"
+            android:src="@mipmap/user_normal"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
 

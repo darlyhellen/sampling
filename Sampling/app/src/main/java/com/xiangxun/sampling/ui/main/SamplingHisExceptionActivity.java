@@ -2,20 +2,13 @@ package com.xiangxun.sampling.ui.main;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
-
-import java.util.List;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -26,15 +19,9 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  */
 @ContentBinder(R.layout.activity_sampling_exception)
 public class SamplingHisExceptionActivity extends BaseActivity {
-    @ViewsBinder(R.id.id_planning_title)
+    @ViewsBinder(R.id.id_exception_title)
     private TitleView titleView;
 
-    @ViewsBinder(R.id.id_planning_wlist)
-    private StickyListHeadersListView wlist;
-    @ViewsBinder(R.id.id_planning_text)
-    private TextView textView;
-    private List<SamplingPlanning> data;
-    private StickyAdapter adapter;
 
     @Override
     protected void initView(Bundle savedInstanceState) {

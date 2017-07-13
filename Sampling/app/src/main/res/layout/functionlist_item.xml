@@ -11,10 +11,10 @@
 
     <ImageView
         android:id="@+id/function_image"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_centerVertical="true"
-        tools:background="@mipmap/icon_datadic" />
+        android:src="@mipmap/icon_datadic" />
 
     <TextView
         android:id="@+id/function_name"

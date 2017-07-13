@@ -15,10 +15,10 @@
         android:id="@+id/grid_descrip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/grid_round_image"
-        android:padding="@dimen/margin_padding4"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/margin_padding10"
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/textSize14" />
+        android:textSize="@dimen/textSize16" />
 
 </RelativeLayout>

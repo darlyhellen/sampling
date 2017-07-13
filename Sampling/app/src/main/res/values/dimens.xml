@@ -13,6 +13,7 @@
     <dimen name="bottom_tab_padding_up">1.0dip</dimen>
     <!-- 字体大小 -->
     <dimen name="textSize36">36.0sp</dimen>
+    <dimen name="textSize22">22.0sp</dimen>
     <dimen name="textSize20">20.0sp</dimen>
     <dimen name="textSize18">18.0sp</dimen>
     <dimen name="textSize17">17.0sp</dimen>

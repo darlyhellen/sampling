@@ -41,6 +41,12 @@ public class SamplingTargetActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        titleView.setRightViewRightTextOneListener("筛选", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击筛选，获取删选列表。进行数据重新请求
+            }
+        });
     }
 
 

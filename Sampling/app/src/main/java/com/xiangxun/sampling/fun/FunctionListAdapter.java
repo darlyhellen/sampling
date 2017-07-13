@@ -70,7 +70,7 @@ public class FunctionListAdapter extends BaseAdapter {
         TextView arrow = (TextView) view.findViewById(R.id.function_arrow);
 
         Function function = functions[position];
-        image.setBackgroundResource(function.getIconId());
+        image.setImageResource(function.getIconId());
         name.setText(function.getTitleId());
 
         if (function.getDescription() != null)

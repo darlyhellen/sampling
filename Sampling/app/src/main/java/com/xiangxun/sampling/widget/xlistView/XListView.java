@@ -12,12 +12,13 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
 import com.xiangxun.sampling.R;
-import com.xiangxun.sampling.common.Tools;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
 /**
@@ -28,7 +29,7 @@ import com.xiangxun.sampling.common.Tools;
  * @author: HanGJ
  * @date: 2015-10-12 下午2:13:50
  */
-public class XListView extends ListView implements OnScrollListener {
+public class XListView extends StickyListHeadersListView implements OnScrollListener {
 
     private float mLastY = -1; // save event y
     private Scroller mScroller; // used for scroll back
@@ -114,7 +115,7 @@ public class XListView extends ListView implements OnScrollListener {
     }
 
     @Override
-    public void setAdapter(ListAdapter adapter) {
+    public void setAdapter(StickyListHeadersAdapter adapter) {
         // make sure XListViewFooter is the last footer view, and only add once.
         if (adapter.getCount() > 9) {
             if (mIsFooterReady == false) {
