@@ -15,8 +15,8 @@ public class ResultData {
 		public String id;		//用户ID
 		public String account;	//账号
 		public String name;		//用户名
-		public String orgId;	//部门ID
-		public String orgName;	//部门名称
+		public String deptId;	//部门ID
+		public String deptName;	//部门名称
 		public String imei;		//设备串号
 	}
 
