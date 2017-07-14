@@ -45,7 +45,7 @@ public class SettingFragment extends BaseFunctionList {
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
             new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
             new Function(R.mipmap.set_cleardata, R.string.set_fun3, "清除缓存数据", null),
-            new Function(R.mipmap.set_font, R.string.set_fun4, "设置拍摄图片大小", ResolutionFontSetActivity.class),
+            //new Function(R.mipmap.set_font, R.string.set_fun4, "设置拍摄图片大小", ResolutionFontSetActivity.class),
             new Function(R.mipmap.set_update, R.string.set_fun5, "检查更新", null),
     };
 
@@ -147,7 +147,7 @@ public class SettingFragment extends BaseFunctionList {
                     else {
                         if (2 == position) {
                             clearDateOnClick();
-                        } else if (4 == position)
+                        } else if (3 == position)
                             CheckUpdate();
                     }
                 }
@@ -232,10 +232,10 @@ public class SettingFragment extends BaseFunctionList {
 
     private void showNew() {
         if (InfoCache.getInstance().isNewVer()) {
-            functions[4].setDescription("New!");
+            functions[3].setDescription("New!");
         } else {
             String version = new StringBuilder(getString(R.string.curr_ver)).append(InfoCache.getInstance().getAppVersionName(getActivity())).toString();
-            functions[4].setDescription(version);
+            functions[3].setDescription(version);
         }
     }
 }

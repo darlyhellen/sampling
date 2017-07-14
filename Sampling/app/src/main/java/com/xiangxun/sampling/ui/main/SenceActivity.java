@@ -2,37 +2,23 @@ package com.xiangxun.sampling.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.supermap.android.maps.CoordinateReferenceSystem;
-import com.supermap.android.maps.DefaultItemizedOverlay;
-import com.supermap.android.maps.LayerView;
-import com.supermap.android.maps.MapView;
-import com.supermap.android.maps.Overlay;
-import com.supermap.android.maps.OverlayItem;
-import com.supermap.android.maps.Point2D;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.base.SystemCfg;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
@@ -63,7 +49,7 @@ import java.util.List;
 public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private SamplingPlanning planning;
-    private SamplingPoint point;
+    private SamplingKey point;
     @ViewsBinder(R.id.id_user_sence_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_user_locations_name)
@@ -108,7 +94,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         //这句话解决了自动弹出输入按键
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
-        point = (SamplingPoint) getIntent().getSerializableExtra("SamplingPoint");
+        point = (SamplingKey) getIntent().getSerializableExtra("SamplingKey");
         titleView.setTitle("现场采样");
         locationname.setText("现场采样定位：");
     }

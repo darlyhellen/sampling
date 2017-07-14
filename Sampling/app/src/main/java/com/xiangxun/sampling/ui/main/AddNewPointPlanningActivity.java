@@ -1,12 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 
 import com.amap.api.location.AMapLocation;
@@ -15,17 +9,14 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -37,7 +28,7 @@ import java.util.Date;
 @ContentBinder(R.layout.activity_planning_add)
 public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener {
     private SamplingPlanning planning;
-    private SamplingPoint point;
+    private SamplingKey point;
 
     @ViewsBinder(R.id.id_add_title)
     private TitleView titleView;
@@ -61,7 +52,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     @Override
     protected void initView(Bundle savedInstanceState) {
         planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
-        point = (SamplingPoint) getIntent().getSerializableExtra("SamplingPoint");
+        point = (SamplingKey) getIntent().getSerializableExtra("SamplingKey");
 
 
     }
@@ -99,11 +90,11 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             //修改点位
             titleView.setTitle("修改" + planning.getTitle() + "点位");
             latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(point.getLatitude()),"");
+            latitude.setInfo("经度：", String.valueOf(point.getPoint().getLatitude()),"");
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(point.getLongitude()),"");
+            longitude.setInfo("纬度：", String.valueOf(point.getPoint().getLongitude()),"");
             desc.isEdit(true);
-            desc.setInfo("说明：", point.getDesc(),"");
+            desc.setInfo("说明：", point.getPoint().getDesc(),"");
         }
     }
 

@@ -67,7 +67,7 @@ public class FunctionListAdapter extends BaseAdapter {
         ImageView image = (ImageView) view.findViewById(R.id.function_image);
         TextView name = (TextView) view.findViewById(R.id.function_name);
         TextView note = (TextView) view.findViewById(R.id.function_note);
-        TextView arrow = (TextView) view.findViewById(R.id.function_arrow);
+        ImageView arrow = (ImageView) view.findViewById(R.id.function_arrow);
 
         Function function = functions[position];
         image.setImageResource(function.getIconId());

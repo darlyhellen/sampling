@@ -18,7 +18,7 @@ public class SamplingPlanning implements Serializable {
     private String place;
     private String type;
     private String samplingexzample;
-    private List<SamplingPoint> points;
+    private List<SamplingKey> points;
 
     private boolean userSee;
 
@@ -70,11 +70,11 @@ public class SamplingPlanning implements Serializable {
         this.samplingexzample = samplingexzample;
     }
 
-    public List<SamplingPoint> getPoints() {
+    public List<SamplingKey> getPoints() {
         return points;
     }
 
-    public void setPoints(List<SamplingPoint> points) {
+    public void setPoints(List<SamplingKey> points) {
         this.points = points;
     }
 

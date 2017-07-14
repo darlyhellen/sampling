@@ -6,13 +6,12 @@
     android:layout_height="49dp"
     android:background="@drawable/more_item_selector"
     android:paddingBottom="@dimen/margin_padding10"
-    android:paddingRight="@dimen/margin_padding20"
     android:paddingTop="@dimen/margin_padding10">
 
     <ImageView
         android:id="@+id/function_image"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@mipmap/icon_datadic" />
 
@@ -22,7 +21,7 @@
         android:layout_toRightOf="@id/function_image"
         tools:text="@string/more_work" />
 
-    <TextView
+    <ImageView
         android:id="@+id/function_arrow"
         style="@style/more_arrows" />
 

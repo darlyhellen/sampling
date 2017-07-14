@@ -57,9 +57,9 @@ public class SystemCfg {
     public static String getServerIP(Context context) {
         init(context);
         if (AppBuildConfig.DEBUGURL)
-            return mysp.getString("serverip", "193.169.100.237");
+            return mysp.getString("serverip", "193.169.100.113");
         else
-            return mysp.getString("serverip", "193.169.100.237");
+            return mysp.getString("serverip", "193.169.100.113");
     }
 
     public static String getServerPort(Context context) {
@@ -263,5 +263,18 @@ public class SystemCfg {
     public static String getUserImage(Context context) {
         init(context);
         return mysp.getString("usericon", null);
+    }
+
+
+    //记忆密码
+    public static void setRemark(Context context, boolean w) {
+        init(context);
+        mysp.edit().putBoolean("LOGINREMARK", w).commit();
+    }
+
+    //记忆密码
+    public static boolean getRemark(Context context) {
+        init(context);
+        return mysp.getBoolean("LOGINREMARK", false);
     }
 }

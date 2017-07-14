@@ -10,6 +10,7 @@ import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.ResultData.LoginData;
 import com.xiangxun.sampling.common.Utils;
+import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.http.ApiUrl;
 import com.xiangxun.sampling.common.http.DcHttpClient;
 import com.xiangxun.vollynet.Response;
@@ -67,9 +68,8 @@ public class LoginListener implements FramePresenter {
         DcHttpClient.getInstance().postWithURL(XiangXunApplication.getInstance(), url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject object) {
-                String resCode = object.optString("resCode");
-                System.out.println("resCode - > " + resCode);
                 if (null != object) {
+                    DLog.json(object.toString());
                     try {
                         LoginData loginData = Utils.getGson().fromJson(object.toString(), LoginData.class);
                         listener.onSucces(loginData);

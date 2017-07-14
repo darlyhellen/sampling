@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
@@ -28,17 +29,17 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:展现点位信息的适配器
  */
-public class PointAdapter extends ParentAdapter<SamplingPoint> implements StickyListHeadersAdapter {
+public class PointAdapter extends ParentAdapter<SamplingKey> implements StickyListHeadersAdapter {
 
     private boolean isSence;
 
-    public PointAdapter(List<SamplingPoint> data, int resID, Context context, boolean isSence) {
+    public PointAdapter(List<SamplingKey> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
         this.isSence = isSence;
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPoint s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingKey s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -58,16 +59,16 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
             hocker.name.setText(s.getId());
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getLatitude()));
+            hocker.dept.setText(String.valueOf(s.getPoint().getLatitude()));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getLongitude()));
+            hocker.position.setText(String.valueOf(s.getPoint().getLongitude()));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("采样记录");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.isUserSee()) {
+            if (s.getPoint().isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
@@ -78,16 +79,16 @@ public class PointAdapter extends ParentAdapter<SamplingPoint> implements Sticky
             hocker.name.setText(s.getId());
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getLatitude()));
+            hocker.dept.setText(String.valueOf(s.getPoint().getLatitude()));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getLongitude()));
+            hocker.position.setText(String.valueOf(s.getPoint().getLongitude()));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("点击修改");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.isUserSee()) {
+            if (s.getPoint().isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));

@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,10 +36,10 @@ import com.xiangxun.sampling.widget.clearedit.ClearEditText;
  * @TODO:登录页面展示
  */
 @ContentBinder(R.layout.activity_login)
-public class LoginActivity extends BaseActivity implements LoginInterface, View.OnClickListener {
+public class LoginActivity extends BaseActivity implements LoginInterface, View.OnClickListener, OnCheckedChangeListener {
 
     @ViewsBinder(R.id.id_login_guide)
-    TextView idLoginGuide;
+    CheckBox idLoginGuide;
     @ViewsBinder(R.id.id_login_set)
     TextView idLoginSet;
     @ViewsBinder(R.id.id_login_btn)
@@ -76,8 +79,6 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
         idLoginSet.getPaint().setAntiAlias(true);//抗锯齿
         idLoginSet.setText(R.string.loginset);
         idLoginSet.setTextColor(getResources().getColor(R.color.color_login_guide));
-        idLoginGuide.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-        idLoginGuide.getPaint().setAntiAlias(true);//抗锯齿
         idLoginGuide.setText(R.string.loginguide);
         idLoginGuide.setTextColor(getResources().getColor(R.color.color_login_guide));
 
@@ -93,7 +94,7 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
     public void initListener() {
         idLoginBtn.setOnClickListener(this);
         idLoginSet.setOnClickListener(this);
-        idLoginGuide.setOnClickListener(this);
+        idLoginGuide.setOnCheckedChangeListener(this);
     }
 
     private void setUsernameAndPassword() {
@@ -101,9 +102,14 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
             return;
         String username = SystemCfg.getAccount(this);
         String password = SystemCfg.getWhitePwd(this);
-        if (username.length() > 1 && password.length() > 1) {
-            idLoginName.setText(username);
+        idLoginName.setText(username);
+
+        if (SystemCfg.getRemark(this)) {
             idLoginPassword.setText(password);
+            idLoginGuide.setChecked(true);
+        } else {
+            idLoginPassword.setText(null);
+            idLoginGuide.setChecked(false);
         }
     }
 
@@ -149,7 +155,7 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
         Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
         startActivity(intent);
         //XiangXunApplication.getInstance().startPushService();
-        XiangXunApplication.getInstance().getMainService().clearGPSLimitData();
+        //XiangXunApplication.getInstance().getMainService().clearGPSLimitData();
         LoginActivity.this.finish();
     }
 
@@ -218,5 +224,10 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
     protected void onDestroy() {
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        SystemCfg.setRemark(this, isChecked);
     }
 }

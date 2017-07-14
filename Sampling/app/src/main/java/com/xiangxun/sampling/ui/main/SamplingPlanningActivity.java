@@ -8,9 +8,11 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.StaticListener.RefreshMainUIListener;
@@ -54,7 +56,23 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
         wlist.setAdapter(adapter);
         StaticListener.getInstance().setRefreshMainUIListener(this);
         if (data == null) {
-            data = StaticListener.findData();
+            Object s = SharePreferHelp.getValue("SamplingPlanning");
+            if (s == null) {
+                data = StaticListener.findData();
+                SharePreferHelp.putValue("SamplingPlanning", data);
+            } else {
+                data = (List<SamplingPlanning>) s;
+                for (SamplingPlanning p : data) {
+                    for (SamplingKey key : p.getPoints()) {
+                        if ("102".equals(key.getId())) {
+                            key.getPoint().setName("我的歌神啊");
+                            key.getPoint().setSamply(false);
+                            key.getPoint().setLatitude(111);
+                            key.getPoint().setLongitude(222);
+                        }
+                    }
+                }
+            }
         }
         StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(data);
     }

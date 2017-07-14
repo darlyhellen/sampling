@@ -90,20 +90,25 @@
             android:layout_marginTop="-5dp"
             android:background="@color/grey_bg" />
 
-        <RelativeLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding20">
 
-            <TextView
+            <CheckBox
                 android:id="@+id/id_login_guide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:button="@drawable/checkbox_select"
                 android:padding="@dimen/margin_padding10"
-                android:textColor="@color/color_login_guide"
-                android:textSize="13sp" />
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/id_login_set"
@@ -112,8 +117,8 @@
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/margin_padding10"
                 android:textColor="@color/color_login_guide"
-                android:textSize="13sp" />
-        </RelativeLayout>
+                android:textSize="16sp" />
+        </TableRow>
 
         <com.xiangxun.sampling.widget.XSubButton
             android:id="@+id/id_login_btn"
@@ -131,6 +136,6 @@
         android:paddingBottom="@dimen/margin_padding20"
         android:text="Copyright © 西安翔迅科技有限责任公司"
         android:textColor="@color/login_edit_text"
-        android:textSize="13sp" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

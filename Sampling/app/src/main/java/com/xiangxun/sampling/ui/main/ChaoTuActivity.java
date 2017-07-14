@@ -19,6 +19,7 @@ import com.supermap.android.maps.OverlayItem;
 import com.supermap.android.maps.Point2D;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
@@ -53,7 +54,7 @@ public class ChaoTuActivity extends BaseActivity {
             return;
         }
         titleView.setTitle(planning.getTitle() + "点位分布");
-        center = new Point2D(planning.getPoints().get(0).getLongitude(), planning.getPoints().get(0).getLatitude());
+        center = new Point2D(planning.getPoints().get(0).getPoint().getLongitude(), planning.getPoints().get(0).getPoint().getLatitude());
         baseLayerView.setURL(DEFAULT_URL);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
@@ -78,10 +79,10 @@ public class ChaoTuActivity extends BaseActivity {
         Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
         Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
         DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-        for (SamplingPoint point : planning.getPoints()) {
-            Point2D poind = new Point2D(point.getLongitude(), point.getLatitude());
-            OverlayItem overlayItem = new OverlayItem(poind, point.getDesc(), point.getId());
-            if (point.isSamply()) {
+        for (SamplingKey point : planning.getPoints()) {
+            Point2D poind = new Point2D(point.getPoint().getLongitude(), point.getPoint().getLatitude());
+            OverlayItem overlayItem = new OverlayItem(poind, point.getPoint().getDesc(), point.getId());
+            if (point.getPoint().isSamply()) {
                 overlayItem.setMarker(drawableBlue);
             } else {
                 overlayItem.setMarker(drawablenormal);

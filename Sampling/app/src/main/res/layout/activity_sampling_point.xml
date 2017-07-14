@@ -29,7 +29,7 @@
             android:id="@+id/id_point_wlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/login_edit_text"
+            android:divider="@color/index_line"
             android:dividerHeight="0.5dp"
             android:listSelector="@null"
             android:scrollbars="none" />

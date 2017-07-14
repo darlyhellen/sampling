@@ -1327,7 +1327,7 @@
     <string name="nowarn">不预警</string>
 
     <string name="loginset">系统设置</string>
-    <string name="loginguide">设置向导</string>
+    <string name="loginguide">记住密码</string>
 
     <string name="trade01"><![CDATA[<font color="#888888">违法代码: </font><font color="#333333">%1$s</font>]]></string>
     <string name="trade02"><![CDATA[<font color="#888888">交款状态: </font><font color="#333333">%1$s</font>]]></string>

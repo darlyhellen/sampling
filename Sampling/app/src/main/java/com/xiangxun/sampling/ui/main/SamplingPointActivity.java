@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
@@ -44,7 +43,7 @@ public class SamplingPointActivity extends BaseActivity {
     private SamplingPlanning planning;
     private PointAdapter adapter;
 
-    private List<SamplingPoint> data;
+    private List<SamplingKey> data;
     private boolean isSence;
 
     @Override
@@ -65,10 +64,10 @@ public class SamplingPointActivity extends BaseActivity {
         }
         if (isSence) {
             //现场请情况,剔除掉,已经采集过的地方
-            Iterator<SamplingPoint> it = data.iterator();
+            Iterator<SamplingKey> it = data.iterator();
             while (it.hasNext()) {
-                SamplingPoint x = it.next();
-                if (x.isSamply()) {
+                SamplingKey x = it.next();
+                if (x.getPoint().isSamply()) {
                     it.remove();
                 }
             }
@@ -107,10 +106,10 @@ public class SamplingPointActivity extends BaseActivity {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 DLog.i("onItemClick--" + position);
-                SamplingPoint point = (SamplingPoint) parent.getItemAtPosition(position);
-                for (SamplingPoint po : data) {
+                SamplingKey point = (SamplingKey) parent.getItemAtPosition(position);
+                for (SamplingKey po : data) {
                     if (point.getId().equals(po.getId())) {
-                        po.setUserSee(true);
+                        po.getPoint().setUserSee(true);
                         break;
                     }
                 }
@@ -125,7 +124,7 @@ public class SamplingPointActivity extends BaseActivity {
                     p.setTitle(planning.getTitle());
                     p.setPlace(planning.getPlace());
                     intent.putExtra("SamplingPlanning", p);
-                    intent.putExtra("SamplingPoint", point);
+                    intent.putExtra("SamplingKey", point);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
@@ -135,7 +134,7 @@ public class SamplingPointActivity extends BaseActivity {
                     p.setTitle(planning.getTitle());
                     p.setPlace(planning.getPlace());
                     intent.putExtra("SamplingPlanning", p);
-                    intent.putExtra("SamplingPoint", point);
+                    intent.putExtra("SamplingKey", point);
                     startActivity(intent);
                 }
             }

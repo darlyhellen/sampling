@@ -3,6 +3,7 @@ package com.xiangxun.sampling.ui;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -92,20 +93,24 @@ public class StaticListener {
         return data;
     }
 
-    public static List<SamplingPoint> findDouble(int i) {
+    public static List<SamplingKey> findDouble(int i) {
         //分16组数据，每组100条
         String[] lis = XiangXunApplication.getInstance().getResources().getStringArray(R.array.mapPoint);
-        List<SamplingPoint> points = new ArrayList<SamplingPoint>();
+        List<SamplingKey> points = new ArrayList<SamplingKey>();
 
         for (int k = i * 100; k < (i + 1) * 100; k++) {
             String[] ar = lis[k].split(",");
+            SamplingKey key = new SamplingKey();
+
             SamplingPoint point = new SamplingPoint();
             point.setId(k + "");
             point.setLatitude((float) convertToDecimalByString(ar[0] + "″"));
             point.setLongitude((float) convertToDecimalByString(ar[1] + "″"));
             point.setDesc(k + "说明文件");
             point.setSamply(new Random().nextBoolean());
-            points.add(point);
+            key.setId(k + "");
+            key.setPoint(point);
+            points.add(key);
         }
         return points;
     }
