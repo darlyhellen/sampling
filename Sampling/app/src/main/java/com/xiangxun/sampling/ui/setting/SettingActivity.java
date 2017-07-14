@@ -50,7 +50,7 @@ public class SettingActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         title.setTitle(R.string.st_set_title);
         title.removeBackground();
-        user_photo.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this) / 5, SystemCfg.getWidth(this) / 5));
+        user_photo.setLayoutParams(new LinearLayout.LayoutParams(SystemCfg.getWidth(this) / 6, SystemCfg.getWidth(this) / 6));
         initFragments(SettingFragment.class, R.id.id_set_frame);
 
     }

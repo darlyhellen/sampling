@@ -85,8 +85,8 @@ public class MainIndexFragment extends BaseFragment implements OnItemClickListen
             data.add(new Index(1, "现场采样", R.drawable.grid_selecter_sence));
             data.add(new Index(2, "指标查询", R.drawable.grid_selecter_target));
             data.add(new Index(3, "历史采样", R.drawable.grid_selecter_his));
-            data.add(new Index(4, "地块异常", R.drawable.grid_selecter_his));
-            data.add(new Index(5, "历史异常", R.drawable.grid_selecter_his));
+            data.add(new Index(4, "地块异常", R.drawable.grid_selecter_exc));
+            data.add(new Index(5, "历史异常", R.drawable.grid_selecter_exchis));
         }
         adapter.setData(data);
     }

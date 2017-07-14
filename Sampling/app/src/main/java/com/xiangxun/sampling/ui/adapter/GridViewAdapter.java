@@ -36,6 +36,9 @@ public class GridViewAdapter extends ParentAdapter<Index> {
             hocker.relative = (RelativeLayout) view.findViewById(R.id.grid_relative);
             hocker.relative.setLayoutParams(new AbsListView.LayoutParams(SystemCfg.getWidth(context) / 3, SystemCfg.getWidth(context) / 3));
             hocker.icon = (ImageView) view.findViewById(R.id.grid_round_image);
+            RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(SystemCfg.getWidth(context) / 6, SystemCfg.getWidth(context) / 6);
+            rl.addRule(RelativeLayout.CENTER_IN_PARENT);
+            hocker.icon.setLayoutParams(rl);
             hocker.name = (TextView) view.findViewById(R.id.grid_descrip);
             view.setTag(hocker);
         } else {

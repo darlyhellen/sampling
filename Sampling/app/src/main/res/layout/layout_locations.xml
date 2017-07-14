@@ -6,9 +6,7 @@
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/margin_padding10"
-    android:paddingRight="@dimen/margin_padding10"
-    android:paddingTop="@dimen/margin_padding10">
+    android:padding="@dimen/margin_padding10">
 
 
     <!--定位信息-->
