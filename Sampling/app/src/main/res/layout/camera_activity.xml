@@ -41,7 +41,7 @@
             android:background="@drawable/publish_click_selector"
             android:gravity="center"
             android:padding="@dimen/margin_padding10"
-            android:text="@string/tvcamok"
+            android:text="@string/ok"
             android:textColor="@color/color666666" />
 
         <ImageView
@@ -64,7 +64,7 @@
             android:background="@drawable/publish_click_selector"
             android:gravity="center"
             android:padding="@dimen/margin_padding10"
-            android:text="@string/dialog_but1"
+            android:text="@string/cancel"
             android:textColor="@color/color666666"/>
     </RelativeLayout>
 

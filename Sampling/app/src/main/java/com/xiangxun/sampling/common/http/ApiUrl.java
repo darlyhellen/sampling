@@ -25,6 +25,17 @@ public class ApiUrl {
 		init(context);
 		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/login").toString()));
 	}
+	// 采样计划获取方案接口
+	public static String planning(Context context) {
+		init(context);
+		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/server/land/sheme/queryByFinish").toString()));
+	}
+	// 采样计划获取点位接口
+	public static String point(Context context) {
+		init(context);
+		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/server/land/point/queryBySchemeId").toString()));
+	}
+
 
 	public static String updateVersion(Context context) {
 		init(context);

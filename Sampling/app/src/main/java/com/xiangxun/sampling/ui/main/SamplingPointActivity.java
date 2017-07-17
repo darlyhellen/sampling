@@ -8,13 +8,19 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.PointAdapter;
+import com.xiangxun.sampling.ui.biz.SamplingPointListener;
+import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
+import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
@@ -31,7 +37,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:采样计划点击到某个计划页面，展示详细点位信息。
  */
 @ContentBinder(R.layout.activity_sampling_point)
-public class SamplingPointActivity extends BaseActivity {
+public class SamplingPointActivity extends BaseActivity implements SamplingPointInterface {
 
     @ViewsBinder(R.id.id_point_title)
     private TitleView titleView;
@@ -40,27 +46,35 @@ public class SamplingPointActivity extends BaseActivity {
     private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_point_text)
     private TextView textView;
-    private SamplingPlanning planning;
+    private Scheme planning;
     private PointAdapter adapter;
 
     private List<SamplingKey> data;
     private boolean isSence;
 
+    private SamplingPointPresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
-        planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
+        planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         isSence = getIntent().getBooleanExtra("SENCE", false);
         if (planning == null) {
             ToastApp.showToast("传递参数错误");
             return;
         }
-        titleView.setTitle(planning.getTitle());
+        titleView.setTitle(planning.name);
+        //在这里根据方案ID请求点位信息。
+        presenter = new SamplingPointPresenter(this);
+
     }
 
     @Override
     protected void loadData() {
+        Object ob = SharePreferHelp.getValue(planning.id);
         if (data == null) {
-            data = planning.getPoints();
+            if (ob != null) {
+                data = (List<SamplingKey>) ob;
+            }
         }
         if (isSence) {
             //现场请情况,剔除掉,已经采集过的地方
@@ -75,6 +89,7 @@ public class SamplingPointActivity extends BaseActivity {
         }
         adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence);
         wlist.setAdapter(adapter);
+        presenter.point(planning.id, ob == null ? null : String.valueOf(System.currentTimeMillis()));
     }
 
     @Override
@@ -92,12 +107,7 @@ public class SamplingPointActivity extends BaseActivity {
                 public void onClick(View v) {
                     //新增点位逻辑页面
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
-                    SamplingPlanning p = new SamplingPlanning();
-                    p.setId(planning.getId());
-                    p.setDepate(planning.getDepate());
-                    p.setTitle(planning.getTitle());
-                    p.setPlace(planning.getPlace());
-                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("Scheme", planning);//新增时将方案传递过去。
                     startActivity(intent);
                 }
             });
@@ -118,27 +128,43 @@ public class SamplingPointActivity extends BaseActivity {
                     //到现场采集页面.
                     DLog.i("到现场采集页面--" + position);
                     Intent intent = new Intent(SamplingPointActivity.this, SenceActivity.class);
-                    SamplingPlanning p = new SamplingPlanning();
-                    p.setId(planning.getId());
-                    p.setDepate(planning.getDepate());
-                    p.setTitle(planning.getTitle());
-                    p.setPlace(planning.getPlace());
-                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("Scheme", planning);
                     intent.putExtra("SamplingKey", point);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
-                    SamplingPlanning p = new SamplingPlanning();
-                    p.setId(planning.getId());
-                    p.setDepate(planning.getDepate());
-                    p.setTitle(planning.getTitle());
-                    p.setPlace(planning.getPlace());
-                    intent.putExtra("SamplingPlanning", p);
+                    intent.putExtra("Scheme", planning);
                     intent.putExtra("SamplingKey", point);
                     startActivity(intent);
                 }
             }
         });
+    }
+
+    //点位解析回调
+    @Override
+    public void onLoginSuccess(List<Scheme> info) {
+
+    }
+
+    @Override
+    public void onLoginFailed(String info) {
+
+    }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 
     @Override
@@ -176,6 +202,5 @@ public class SamplingPointActivity extends BaseActivity {
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
     }
-
 
 }

@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
+import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
@@ -25,17 +27,17 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:展示计划组的适配器
  */
-public class StickyAdapter extends ParentAdapter<SamplingPlanning> implements StickyListHeadersAdapter {
+public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHeadersAdapter {
     //是否現場採集 true 為現場
     private boolean isSence;
 
-    public StickyAdapter(List<SamplingPlanning> data, int resID, Context context, boolean isSence) {
+    public StickyAdapter(List<Scheme> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
         this.isSence = isSence;
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingPlanning s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final Scheme s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, parent, false);
@@ -51,13 +53,13 @@ public class StickyAdapter extends ParentAdapter<SamplingPlanning> implements St
         }
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getTitle());
+            hocker.name.setText(s.name);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(s.getSamplingexzample());
+            hocker.dept.setText(s.dept);
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getPoints().size()).concat("个"));
+            hocker.position.setText(String.valueOf(s.quantity).concat("个"));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("点击查看范围");
@@ -81,13 +83,13 @@ public class StickyAdapter extends ParentAdapter<SamplingPlanning> implements St
             });
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getTitle());
+            hocker.name.setText(s.name);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(s.getType());
+            hocker.dept.setText(s.sampleCode);
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(s.getPlace());
+            hocker.position.setText(s.regionName);
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("点击查看");

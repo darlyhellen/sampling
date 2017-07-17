@@ -3,11 +3,13 @@ package com.xiangxun.sampling.common.http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.xiangxun.sampling.common.BitmapCache;
 import com.xiangxun.sampling.common.LocalQueue;
 import com.xiangxun.sampling.common.UpLoadImageQueue;
+import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.vollynet.Network;
 import com.xiangxun.vollynet.Request;
 import com.xiangxun.vollynet.RequestQueue;
@@ -146,9 +148,13 @@ public class DcHttpClient {
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
                 encodedParams.append('=');
-                encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
+                if (!TextUtils.isEmpty(entry.getValue())) {
+                    encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
+                }
                 encodedParams.append('&');
             }
+            encodedParams.deleteCharAt(encodedParams.length() - 1);
+            DLog.i(getClass().getSimpleName(), encodedParams.toString());
             return encodedParams.toString();
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
@@ -261,7 +267,6 @@ public class DcHttpClient {
      * @param niv
      * @param imgUrl
      * @param resId
-     * @param responseImageListener
      * @Description: 请求图片 设置事件监听
      * @return: void
      */

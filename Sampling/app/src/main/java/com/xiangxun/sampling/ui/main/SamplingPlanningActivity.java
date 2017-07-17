@@ -8,15 +8,16 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
+import com.xiangxun.sampling.bean.PlannningData.ResultData;
+import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.ui.StaticListener;
-import com.xiangxun.sampling.ui.StaticListener.RefreshMainUIListener;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
+import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;
+import com.xiangxun.sampling.ui.presenter.SamplingPlanningPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
@@ -32,7 +33,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:采样计划展示表格,逻辑为：服务端通过推送，下发到所有手机端，手机端根据推送资料。获取到任务列表，这里进行任务列表展示。
  */
 @ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingPlanningActivity extends BaseActivity implements RefreshMainUIListener {
+public class SamplingPlanningActivity extends BaseActivity implements SamplingPlanningInterface {
 
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
@@ -41,40 +42,31 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
     private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_planning_text)
     private TextView textView;
-    private List<SamplingPlanning> data;
+    private List<Scheme> data;
     private StickyAdapter adapter;
+
+    private SamplingPlanningPresenter presenter;
 
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle("采样计划");
+        //在这里进行方案列表请求。获取到的信息，进行缓存。对修改的信息进行处理操作。
+        presenter = new SamplingPlanningPresenter(this);
     }
 
     @Override
     protected void loadData() {
         adapter = new StickyAdapter(null, R.layout.item_planning_list, this, false);
         wlist.setAdapter(adapter);
-        StaticListener.getInstance().setRefreshMainUIListener(this);
+        Object s = SharePreferHelp.getValue("ResultData");
         if (data == null) {
-            Object s = SharePreferHelp.getValue("SamplingPlanning");
-            if (s == null) {
-                data = StaticListener.findData();
-                SharePreferHelp.putValue("SamplingPlanning", data);
-            } else {
-                data = (List<SamplingPlanning>) s;
-                for (SamplingPlanning p : data) {
-                    for (SamplingKey key : p.getPoints()) {
-                        if ("102".equals(key.getId())) {
-                            key.getPoint().setName("我的歌神啊");
-                            key.getPoint().setSamply(false);
-                            key.getPoint().setLatitude(111);
-                            key.getPoint().setLongitude(222);
-                        }
-                    }
-                }
+            if (s != null) {
+                data = ((ResultData) s).result;
+                adapter.setData(data);
             }
         }
-        StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(data);
+        presenter.planning(s == null ? null : ((ResultData) s).resTime);
     }
 
     @Override
@@ -90,34 +82,62 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
         wlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
-                SamplingPlanning planning = (SamplingPlanning) parent.getItemAtPosition(position);
-                for (SamplingPlanning pl : data) {
-                    if (planning.getId().equals(pl.getId())) {
+                Scheme planning = (Scheme) parent.getItemAtPosition(position);
+                for (Scheme pl : data) {
+                    if (planning.id.equals(pl.id)) {
                         pl.setUserSee(true);
                         break;
                     }
                 }
                 adapter.setData(data);
                 Intent intent = new Intent(SamplingPlanningActivity.this, SamplingPointActivity.class);
-                intent.putExtra("SamplingPlanning", planning);
+                intent.putExtra("Scheme", planning);//传递过去方案对象
                 intent.putExtra("SENCE", false);
                 startActivity(intent);
             }
         });
     }
 
+    //实现整个View操作
     @Override
-    public void refreshMainUI(List<SamplingPlanning> planningList) {
-        if (planningList != null && planningList.size() > 0) {
+    public void onLoginSuccess(List<Scheme> info) {
+        data = info;
+        if (data != null && data.size() > 0) {
             wlist.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            adapter.setData(planningList);
+            adapter.setData(data);
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
         }
     }
 
+    @Override
+    public void onLoginFailed() {
+        Object s = SharePreferHelp.getValue("ResultData");
+        if (s != null) {
+            data = ((ResultData) s).result;
+            adapter.setData(data);
+        } else {
+            wlist.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
+    }
 
     @Override
     protected void onStart() {
@@ -154,4 +174,5 @@ public class SamplingPlanningActivity extends BaseActivity implements RefreshMai
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
     }
+
 }

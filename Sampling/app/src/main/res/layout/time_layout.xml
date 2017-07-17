@@ -52,7 +52,7 @@
             android:layout_marginBottom="@dimen/margin_padding10"
             android:layout_marginRight="@dimen/margin_padding10"
             android:background="@drawable/bg_line_white"
-            android:text="@string/tvcamok"
+            android:text="@string/ok"
             android:textColor="@color/black" />
 
         <Button
@@ -62,7 +62,7 @@
             android:layout_marginBottom="@dimen/margin_padding10"
             android:layout_marginRight="@dimen/margin_padding10"
             android:background="@drawable/bg_line_white"
-            android:text="@string/syscfgcanel"
+            android:text="@string/cancel"
             android:textColor="@color/black" />
     </LinearLayout>
 
