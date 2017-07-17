@@ -182,6 +182,17 @@ public class SystemCfg {
         return mysp.getString("imei", "");
     }
 
+    public static void loginOut(Context context){
+        init(context);
+        mysp.edit().remove("userId").commit();
+        mysp.edit().remove("account").commit();
+        mysp.edit().remove("pwd").commit();
+        mysp.edit().remove("imei").commit();
+        mysp.edit().remove("departmentId").commit();
+        mysp.edit().remove("department").commit();
+        mysp.edit().remove("Name").commit();
+    }
+
 
     /**
      * 首次登陆

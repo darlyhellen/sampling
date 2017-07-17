@@ -89,7 +89,6 @@
 
         <activity
             android:name=".ui.MainFragmentActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.SamplingPlanningActivity"

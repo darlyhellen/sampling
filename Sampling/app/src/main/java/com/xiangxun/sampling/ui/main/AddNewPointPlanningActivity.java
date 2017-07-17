@@ -9,12 +9,15 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.PlannningData.Point;
+import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
+import com.xiangxun.sampling.ui.presenter.AddPointPresenter;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 
@@ -26,8 +29,8 @@ import com.xiangxun.sampling.widget.header.TitleView;
  * @TODO: 新增修改计划中的点位信息。
  */
 @ContentBinder(R.layout.activity_planning_add)
-public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener {
-    private SamplingPlanning planning;
+public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener, AddPointInterface {
+    private Scheme planning;
     private SamplingKey point;
 
     @ViewsBinder(R.id.id_add_title)
@@ -49,25 +52,27 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationClient mlocationClient = null;
 
+    private AddPointPresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
-        planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
+        planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         point = (SamplingKey) getIntent().getSerializableExtra("SamplingKey");
-
+        presenter = new AddPointPresenter(this);
 
     }
 
     @Override
     protected void loadData() {
         name.isEdit(false);
-        name.setInfo("计划名称：", planning.getTitle(),"");
+        name.setInfo("计划名称：", planning.name, "");
         dept.isEdit(false);
-        dept.setInfo("实施机构：", planning.getDepate(),"");
+        dept.setInfo("实施机构：", planning.dept, "");
         position.isEdit(false);
-        position.setInfo("采样选址：", planning.getPlace(),"");
+        position.setInfo("采样选址：", planning.regionName, "");
         if (point == null) {
             //新增点位
-            titleView.setTitle("新增" + planning.getTitle() + "点位");
+            titleView.setTitle("新增" + planning.name + "点位");
             mlocationClient = new AMapLocationClient(this);
             //初始化定位参数
             mLocationOption = new AMapLocationClientOption();
@@ -88,13 +93,13 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
 
         } else {
             //修改点位
-            titleView.setTitle("修改" + planning.getTitle() + "点位");
+            titleView.setTitle("修改" + planning.name + "点位");
             latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(point.getPoint().getLatitude()),"");
+            latitude.setInfo("经度：", String.valueOf(point.getPoint().getLatitude()), "");
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(point.getPoint().getLongitude()),"");
+            longitude.setInfo("纬度：", String.valueOf(point.getPoint().getLongitude()), "");
             desc.isEdit(true);
-            desc.setInfo("说明：", point.getPoint().getDesc(),"");
+            desc.setInfo("说明：", point.getPoint().getDesc(), "");
         }
     }
 
@@ -111,6 +116,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             @Override
             public void onClick(View v) {
                 //提交服务端,进行重新获取.
+                presenter.addPoint(planning);
             }
         });
     }
@@ -122,23 +128,59 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()),"");
+                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()),"");
+                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
                 desc.isEdit(true);
-                desc.setInfo("说明：", amapLocation.getAddress(),"");
+                desc.setInfo("说明：", amapLocation.getAddress(), "");
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0),"");
+                latitude.setInfo("经度：", String.valueOf(0), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(0),"");
+                longitude.setInfo("纬度：", String.valueOf(0), "");
                 desc.isEdit(true);
-                desc.setInfo("说明：", " ","");
+                desc.setInfo("说明：", " ", "");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();
         }
+    }
+
+    //网络请求，新增点位接口
+    @Override
+    public void onLoginSuccess(Point info) {
+
+    }
+
+    @Override
+    public void onLoginFailed(String info) {
+
+    }
+
+    @Override
+    public String longitude() {
+        return longitude.getText();
+    }
+
+    @Override
+    public String latitude() {
+        return latitude.getText();
+    }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 
     @Override
@@ -182,6 +224,5 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
         DLog.d(getClass().getSimpleName(), "onDestroy()");
         super.onDestroy();
     }
-
 
 }

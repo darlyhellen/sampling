@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.xiangxun.sampling.R;
+import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ConstantStatus;
 import com.xiangxun.sampling.common.NetUtils;
@@ -22,6 +23,7 @@ import com.xiangxun.sampling.common.http.Api;
 import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
+import com.xiangxun.sampling.ui.LoginActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
@@ -47,6 +49,7 @@ public class SettingFragment extends BaseFunctionList {
             new Function(R.mipmap.set_cleardata, R.string.set_fun3, "清除缓存数据", null),
             //new Function(R.mipmap.set_font, R.string.set_fun4, "设置拍摄图片大小", ResolutionFontSetActivity.class),
             new Function(R.mipmap.set_update, R.string.set_fun5, "检查更新", null),
+            new Function(R.mipmap.set_loginout, R.string.set_out, "", null)
     };
 
     private Function[] functionsNoLogin = {
@@ -140,19 +143,49 @@ public class SettingFragment extends BaseFunctionList {
         } else {
 
             functionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (null != functions[position].getActivityClass())
-                        startActivity(new Intent(getActivity(), functions[position].getActivityClass()));
-                    else {
-                        if (2 == position) {
-                            clearDateOnClick();
-                        } else if (3 == position)
-                            CheckUpdate();
-                    }
-                }
-            });
+                                                        @Override
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            if (null != functions[position].getActivityClass())
+                                                                startActivity(new Intent(getActivity(), functions[position].getActivityClass()));
+                                                            else {
+                                                                if (2 == position) {
+                                                                    clearDateOnClick();
+                                                                } else if (3 == position) {
+                                                                    CheckUpdate();
+                                                                } else if (4 == position) {
+                                                                    loginout();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+            );
         }
+    }
+
+    private void loginout() {
+
+        msgDialog = new MsgDialog(getActivity());
+        msgDialog.setTiele("确认退出登录？");
+        msgDialog.setButLeftListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msgDialog.dismiss();
+            }
+        });
+        msgDialog.setButRightListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msgDialog.dismiss();
+                //进行退出登录操作，清理登录缓存。
+                SystemCfg.loginOut(getActivity());
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().startActivity(i);
+                getActivity().onBackPressed();
+            }
+        });
+        msgDialog.show();
     }
 
     public void clearDateOnClick() {

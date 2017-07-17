@@ -175,17 +175,6 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
     @Override
     public void onLoginFailed(String info) {
         ToastApp.showToast(info);
-        LoginInfo.isOffLine = true;
-        SystemCfg.setUserId(this, "1503152210416979856e76ad4e5425d4");
-        SystemCfg.setAccount(this, getUserName());
-        SystemCfg.setUserName(this, "超级管理员");
-        SystemCfg.setDepartment(this, "鄂托克旗环保局");
-        SystemCfg.setDepartmentID(this, "00");
-        SystemCfg.setIMEI(this, XiangXunApplication.getInstance().getDevId());
-        SystemCfg.setWhitePwd(this, getPassword());
-        Intent offline = new Intent(this, MainFragmentActivity.class);
-        startActivity(offline);
-        end();
     }
 
     @Override

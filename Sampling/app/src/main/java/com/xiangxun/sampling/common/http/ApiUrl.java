@@ -35,6 +35,16 @@ public class ApiUrl {
 		init(context);
 		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/server/land/point/queryBySchemeId").toString()));
 	}
+	// 采样点位新增接口
+	public static String addPoint(Context context) {
+		init(context);
+		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/server/land/point/doAdd").toString()));
+	}
+	// 采样点位修改接口
+	public static String changePoint(Context context) {
+		init(context);
+		return EncodeTools.Utf8URLencode(EncodeTools.getEnUrl(Tools.getSB().append(api.urlHeadlogin).append("/server/land/point/doUpdate").toString()));
+	}
 
 
 	public static String updateVersion(Context context) {
