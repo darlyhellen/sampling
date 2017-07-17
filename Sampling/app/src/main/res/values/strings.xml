@@ -23,6 +23,7 @@
     <string name="tool_fun2">电话本</string>
 
     <string name="set_fun1">修改密码</string>
+    <string name="st_change_pass">密码由6-20位英文字母、数字或符合组成</string>
     <string name="set_fun2">系统参数设置</string>
     <string name="set_fun3">清除数据</string>
     <string name="set_fun4">图片大小</string>
@@ -95,6 +96,7 @@
     <string name="mine_login_loginning">登录中</string>
     <string name="loginset">系统设置</string>
     <string name="loginguide">设置向导</string>
+    <string name="loginpass">记住密码</string>
 
     <string name="textviewtime">时间</string>
     <string name="textviewaddress">地点</string>

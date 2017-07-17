@@ -1,7 +1,11 @@
 package com.xiangxun.sampling.widget.groupview;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +86,10 @@ public class DetailView extends LinearLayout {
                 if (TextUtils.isEmpty(hit)) {
                     edit.setText(content);
                 } else {
-                    edit.setHint(hit);
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    edit.setHint(new SpannedString(ss));
                 }
             } else {
                 value.setText(content);
@@ -100,7 +107,10 @@ public class DetailView extends LinearLayout {
                 if (TextUtils.isEmpty(hit)) {
                     edit.setText(content);
                 } else {
-                    edit.setHint(hit);
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    edit.setHint(new SpannedString(ss));
                 }
             } else {
                 value.setText(content);
@@ -118,7 +128,10 @@ public class DetailView extends LinearLayout {
                 if (TextUtils.isEmpty(hit)) {
                     edit.setText(content);
                 } else {
-                    edit.setHint(hit);
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    edit.setHint(new SpannedString(ss));
                 }
             } else {
                 value.setText(content);
@@ -136,7 +149,10 @@ public class DetailView extends LinearLayout {
                 if (TextUtils.isEmpty(hit)) {
                     edit.setText(content);
                 } else {
-                    edit.setHint(hit);
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    edit.setHint(new SpannedString(ss));
                 }
             } else {
                 value.setText(content);
@@ -144,8 +160,20 @@ public class DetailView extends LinearLayout {
         }
     }
 
-    public String getEdit() {
+
+    public void setEditTextInputMode(int type) {
+        edit.setInputType(type);
+    }
+
+    public String getText() {
         return edit.getText().toString().trim();
     }
 
+    public void setEditText(String text) {
+        if (TextUtils.isEmpty(text)) {
+            edit.setText(null);
+        } else {
+            edit.setText(text);
+        }
+    }
 }

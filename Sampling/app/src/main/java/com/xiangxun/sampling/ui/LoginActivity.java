@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.view.WindowManager;
@@ -74,13 +76,23 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
                 idLoginBtn.setEnabled(false);
             }
         }
+
+        SpannableString nams = new SpannableString("请输入账户名");//定义hint的值
+        AbsoluteSizeSpan namass = new AbsoluteSizeSpan(16, true);//设置字体大小 true表示单位是sp
+        nams.setSpan(namass, 0, nams.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        idLoginName.setHint(new SpannedString(nams));
+        SpannableString ss = new SpannableString("请输入密码");//定义hint的值
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(16, true);//设置字体大小 true表示单位是sp
+        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        idLoginPassword.setHint(new SpannedString(ss));
+
         idLoginBtn.setViewInit(R.string.mine_login_login, R.string.mine_login_loginning, idLoginName, idLoginPassword);    //, mSettings, mTakePic);
 
         idLoginSet.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         idLoginSet.getPaint().setAntiAlias(true);//抗锯齿
         idLoginSet.setText(R.string.loginset);
         idLoginSet.setTextColor(getResources().getColor(R.color.color_login_guide));
-        idLoginGuide.setText(R.string.loginguide);
+        idLoginGuide.setText(R.string.loginpass);
         idLoginGuide.setTextColor(getResources().getColor(R.color.color_login_guide));
 
         if (ActivityManager.isUserAMonkey()) {

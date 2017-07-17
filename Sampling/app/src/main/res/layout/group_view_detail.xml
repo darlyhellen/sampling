@@ -27,6 +27,7 @@
         android:layout_weight="1"
         android:background="@color/transparent"
         android:paddingLeft="@dimen/margin_padding8"
+        android:textColorHint="@color/landscape_background"
         android:textColor="@color/color333333"
         android:textSize="@dimen/textSize16" />
 
