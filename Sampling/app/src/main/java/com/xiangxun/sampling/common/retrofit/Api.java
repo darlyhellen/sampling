@@ -16,25 +16,15 @@ public class Api {
     /**
      * true为测试机
      */
-    private final boolean DEBUGURL = AppBuildConfig.DEBUGURL;
-    public String urlHost = getUrlHead();
-    /**
-     * m模块下
-     */
-    public String urlHeadlogin = urlHost;
-    /**
-     * mobile模块下
-     */
-    public String urlHeadMobile = urlHost;
-    public String urlHeadMpts = urlHost;
-    // path
+    private static final boolean DEBUGURL = AppBuildConfig.DEBUGURL;
+
     public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
     // 发布拍照path
     public static String xXPublishPictureDir = Root.concat("/publishPicture/");
     public static String VIDEO = Root.concat("video/");
     public static String SENCE = VIDEO.concat("sence/");
 
-    public String getUrlHead() {
+    public static String getUrlHead() {
         if (DEBUGURL) {
             return "http://" + SystemCfg.getServerIP(XiangXunApplication.getInstance()) + ":" + SystemCfg.getServerPort(XiangXunApplication.getInstance());
         }

@@ -17,7 +17,6 @@
             android:id="@+id/user_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding10"
             android:src="@mipmap/ic_user" />
 
         <LinearLayout

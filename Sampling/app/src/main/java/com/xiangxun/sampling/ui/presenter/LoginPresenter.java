@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
+import com.xiangxun.sampling.BuildConfig;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.SystemCfg;
@@ -114,7 +115,19 @@ public class LoginPresenter {
             public void onFaild(int code, String info) {
                 main.setEnableClick();
                 main.onLoginFailed(info);
-
+                if (BuildConfig.DEBUG) {
+                    LoginInfo.isOffLine = true;
+                    SystemCfg.setUserId(context, "00001");
+                    SystemCfg.setAccount(context, main.getUserName());
+                    SystemCfg.setUserName(context, "管理员");
+                    SystemCfg.setDepartment(context, "研究所");
+                    SystemCfg.setDepartmentID(context, "101");
+                    SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
+                    SystemCfg.setWhitePwd(context, main.getPassword());
+                    Intent offline = new Intent(context, MainFragmentActivity.class);
+                    context.startActivity(offline);
+                    main.end();
+                }
             }
         });
     }

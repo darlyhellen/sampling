@@ -8,8 +8,6 @@ import com.xiangxun.sampling.common.dlog.DLog;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +32,12 @@ public class RxjavaRetrofitRequestUtil {
     private int interSize = 0;
 
     private OkHttpClient.Builder builder;
-    private Api api;
 
     private RxjavaRetrofitRequestUtil() {
         initClient();
     }
 
     private void initClient() {
-        api = new Api();
         builder = new OkHttpClient.Builder();
         //设置请求超时时间
         builder.readTimeout(REQUEST_TIME, TimeUnit.SECONDS);//设置读取超时时间
@@ -86,7 +82,7 @@ public class RxjavaRetrofitRequestUtil {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(api.urlHost)
+                .baseUrl(Api.getUrlHead())
                 .build();
         return retrofit.create(HttpRetrofitInterface.class);
     }
@@ -104,7 +100,7 @@ public class RxjavaRetrofitRequestUtil {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(api.urlHost)
+                .baseUrl(Api.getUrlHead())
                 .build();
         return retrofit.create(HttpRetrofitInterface.class);
     }

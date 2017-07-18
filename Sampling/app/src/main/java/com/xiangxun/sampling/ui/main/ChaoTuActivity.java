@@ -54,14 +54,12 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        LayerView baseLayerView = new LayerView(this);
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         if (planning == null) {
             titleView.setTitle("点位分布");
             return;
         }
         titleView.setTitle(planning.name + "点位分布");
-
         Object ob = SharePreferHelp.getValue(planning.id);
         if (data == null) {
             if (ob != null) {
@@ -72,7 +70,54 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         presenter = new SamplingPointPresenter(this);
         presenter.point(planning.id, ob == null ? null : String.valueOf(System.currentTimeMillis()));
 
-        center = new Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
+    }
+
+    @Override
+    protected void loadData() {
+        if (data != null) {
+            LayerView baseLayerView = new LayerView(this);
+            center = new Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
+            baseLayerView.setURL(DEFAULT_URL);
+            CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
+            crs.wkid = 4326;
+            baseLayerView.setCRS(crs);
+            mapView.addLayer(baseLayerView);
+            mapView.getController().setCenter(center);
+
+            // 启用内置放大缩小控件
+            mapView.setBuiltInZoomControls(true);
+            mapView.setClickable(true);
+            mapView.getController().setZoom(10);
+            mapView.post(new Runnable() {
+                public void run() {
+                    initHeight();
+                }
+            });
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
+            DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
+            for (PlannningData.Pointly point : data) {
+                Point2D poind = new Point2D(point.data.longitude, point.data.latitude);
+                OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
+                if (point.data.isSamply()) {
+                    overlayItem.setMarker(drawableBlue);
+                } else {
+                    overlayItem.setMarker(drawablenormal);
+                }
+                overlay.addItem(overlayItem);
+            }
+            overlay.setOnFocusChangeListener(new SelectedOverlay());
+            //mapView.getOverlays().add(new CustomOverlay());
+            mapView.getOverlays().add(overlay);
+
+            // 重新onDraw一次
+            mapView.invalidate();
+        }
+    }
+
+    private void loadNoData() {
+        LayerView baseLayerView = new LayerView(this);
+        center = new Point2D(38.111231, 104.4561321);
         baseLayerView.setURL(DEFAULT_URL);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
@@ -89,30 +134,6 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
                 initHeight();
             }
         });
-    }
-
-    @Override
-    protected void loadData() {
-        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
-        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
-        DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-        for (PlannningData.Pointly point : data) {
-            Point2D poind = new Point2D(point.data.longitude, point.data.latitude);
-            OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
-            if (point.data.isSamply()) {
-                overlayItem.setMarker(drawableBlue);
-            } else {
-                overlayItem.setMarker(drawablenormal);
-            }
-            overlay.addItem(overlayItem);
-        }
-        overlay.setOnFocusChangeListener(new SelectedOverlay());
-        //mapView.getOverlays().add(new CustomOverlay());
-        mapView.getOverlays().add(overlay);
-
-        // 重新onDraw一次
-        mapView.invalidate();
-
     }
 
     @Override
@@ -146,12 +167,24 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     //获取点位成功信息记录。
     @Override
     public void onLoginSuccess(List<PlannningData.Pointly> info) {
-
+        data = info;
+        if (data != null && data.size() > 0) {
+            loadData();
+        } else {
+            loadNoData();
+        }
     }
 
     @Override
     public void onLoginFailed() {
-
+        Object s = SharePreferHelp.getValue(planning.id);
+        if (s != null) {
+            data = ((PlannningData.ResultPointData) s).result;
+            //緩存點位
+            loadData();
+        } else {
+            loadNoData();
+        }
     }
 
     @Override

@@ -38,12 +38,12 @@ import rx.schedulers.Schedulers;
 public class SamplingPointListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
-
+        if (loading != null) loading.show();
     }
 
     @Override
     public void onStop(Dialog loading) {
-
+        if (loading != null) loading.dismiss();
     }
 
     public void postPoint(String id, String strTime, final FrameListener<ResultPointData> listener) {
