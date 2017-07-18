@@ -17,6 +17,8 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.PlannningData.Pointly;
+import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
@@ -48,8 +50,8 @@ import java.util.List;
 @ContentBinder(R.layout.activity_sence)
 public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
-    private SamplingPlanning planning;
-    private SamplingKey point;
+    private Scheme planning;
+    private Pointly point;
     @ViewsBinder(R.id.id_user_sence_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_user_locations_name)
@@ -93,8 +95,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     protected void initView(Bundle savedInstanceState) {
         //这句话解决了自动弹出输入按键
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
-        point = (SamplingKey) getIntent().getSerializableExtra("SamplingKey");
+        planning = (Scheme) getIntent().getSerializableExtra("Scheme");
+        point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
         titleView.setTitle("现场采样");
         locationname.setText("现场采样定位：");
     }
@@ -121,7 +123,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             videos.add("add");
         }
 
-        File root = new File(Api.SENCE.concat(point.getId()));
+        File root = new File(Api.SENCE.concat(point.data.id));
         if (root.exists()) {
 
             File[] file = root.listFiles();
@@ -199,7 +201,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 if (position == (images.size() - 1)) {
                     Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
                     intentCamera.putExtra("size", images.size());
-                    intentCamera.putExtra("file", Api.SENCE.concat(point.getId()));
+                    intentCamera.putExtra("file", Api.SENCE.concat(point.data.id));
                     intentCamera.setAction("Sence");
                     intentCamera.putExtra("LOGO", false);//不打印水印
                     startActivityForResult(intentCamera, 1);
@@ -226,7 +228,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                     //跳转到视频录制页面
 
                     //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
-                    File root = new File(Api.SENCE.concat(point.getId()));
+                    File root = new File(Api.SENCE.concat(point.data.id));
                     if (!root.exists()) {
                         root.mkdir();
                     }

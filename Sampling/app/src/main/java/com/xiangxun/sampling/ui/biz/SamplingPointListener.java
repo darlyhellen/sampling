@@ -85,7 +85,7 @@ public class SamplingPointListener implements FramePresenter {
                                @Override
                                public void onNext(ResultPointData data) {
                                    if (data != null) {
-                                       if (data.result != null && data.resCode == 1000) {
+                                       if (data.result != null) {
                                            listener.onSucces(data);
                                        } else {
                                            listener.onFaild(0, data.resDesc);

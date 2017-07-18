@@ -6,6 +6,7 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
+import com.xiangxun.sampling.common.retrofit.paramer.AddPointParamer;
 import com.xiangxun.sampling.ui.biz.AddPointListener;
 import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
 import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
@@ -53,15 +54,15 @@ public class AddPointPresenter {
     public void updataPoint(Scheme planning, PlannningData.Pointly point) {
 
         biz.onStart(loading);
-        biz.updataPostPoint(planning, point, new FrameListener<List<PlannningData.Pointly>>() {
+        biz.updataPostPoint(planning, point.data, new FrameListener<List<PlannningData.Pointly>>() {
             @Override
             public void onSucces(List<PlannningData.Pointly> result) {
-
+                biz.onStop(loading);
             }
 
             @Override
             public void onFaild(int code, String info) {
-
+                biz.onStop(loading);
             }
         });
     }

@@ -112,7 +112,7 @@ public class LoginListener implements FramePresenter {
                                @Override
                                public void onNext(LoginData data) {
                                    if (data != null) {
-                                       if (data.result != null && data.resCode == 1000) {
+                                       if (data.result != null) {
                                            listener.onSucces(data);
                                        } else {
                                            listener.onFaild(0, data.resDesc);

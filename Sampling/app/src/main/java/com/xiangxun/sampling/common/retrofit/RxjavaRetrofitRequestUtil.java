@@ -141,53 +141,22 @@ public class RxjavaRetrofitRequestUtil {
 
     private static <T> Map<String, String> changeTtoMap(T m) {
         HashMap<String, String> map = new HashMap<String, String>();
-        // 获取实体类的所有属性
-        Field[] field = m.getClass().getDeclaredFields();
-        // 遍历所有属性
-        for (int j = 0; j < field.length; j++) {
-            // 获取属性的名字
-            String name = field[j].getName();
-
-            String value = (String) getFieldValueObj(m, name);
-            if (value != null && !value.equals("")) {
-                map.put(name, value);
-            }
-        }
-        return map;
-    }
-
-    /**
-     * 获取对应的属性值
-     *
-     * @param target 对象
-     * @param fname  Filed
-     * @return
-     */
-    private static Object getFieldValueObj(Object target, String fname) { // 获取字段值
-        // 如:username 字段,getUsername()
-        if (target == null || fname == null || "".equals(fname)) {// 如果类型不匹配，直接退出
-            return "";
-        }
-        Class clazz = target.getClass();
-        try { // 先通过getXxx()方法设置类属性值
-            String methodname = "get" + Character.toUpperCase(fname.charAt(0))
-                    + fname.substring(1);
-            Method method = clazz.getDeclaredMethod(methodname); // 获取定义的方法
-            if (!Modifier.isPublic(method.getModifiers())) { // 设置非共有方法权限
-                method.setAccessible(true);
-            }
-            return (Object) method.invoke(target); // 执行方法回调
-        } catch (Exception me) {// 如果get方法不存在，则直接设置类属性值
-            try {
-                Field field = clazz.getDeclaredField(fname); // 获取定义的类属性
-                if (!Modifier.isPublic(field.getModifiers())) { // 设置非共有类属性权限
-                    field.setAccessible(true);
+        try {
+            // 获取实体类的所有属性
+            Field[] fields = m.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                String name = field.getName();
+                field.setAccessible(true); //设置些属性是可以访问的
+                if (!name.contains("Time")) {
+                    Object val = field.get(m);//得到此属性的值
+                    if (val != null) {
+                        map.put(name, String.valueOf(val));
+                    }
                 }
-                return (Object) field.get(target); // 获取类属性值
-            } catch (Exception fe) {
             }
+            return map;
+        } catch (Exception e) {
+            return map;
         }
-        return "";
     }
-
 }

@@ -97,7 +97,7 @@ public class AddPointListener implements FramePresenter {
                                @Override
                                public void onNext(ResultPointData data) {
                                    if (data != null) {
-                                       if (data.result != null && data.resCode == 1000) {
+                                       if (data.result != null) {
                                            listener.onSucces(data.result);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
@@ -112,13 +112,13 @@ public class AddPointListener implements FramePresenter {
 
     }
 
-    public void updataPostPoint(Scheme planning,PlannningData.Pointly point, final FrameListener<List<PlannningData.Pointly>> listener) {
+    public void updataPostPoint(Scheme planning, PlannningData.Point point, final FrameListener<List<PlannningData.Pointly>> listener) {
 
         if (planning == null) {
             listener.onFaild(0, "方案不能为空");
             return;
         }
-        if (point == null){
+        if (point == null) {
             listener.onFaild(0, "点位信息不能为空");
             return;
         }
@@ -130,7 +130,7 @@ public class AddPointListener implements FramePresenter {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"),
                 RxjavaRetrofitRequestUtil.getParamers(point, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .addPoint(body)
+                .updataPoint(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, ResultPointData>() {

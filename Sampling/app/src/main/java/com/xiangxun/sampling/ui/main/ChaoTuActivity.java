@@ -65,7 +65,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         Object ob = SharePreferHelp.getValue(planning.id);
         if (data == null) {
             if (ob != null) {
-                data = (List<PlannningData.Pointly>) ob;
+                data = ((PlannningData.ResultPointData) ob).result;
             }
         }
         //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
