@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
@@ -23,9 +22,8 @@ import android.widget.ViewFlipper;
 
 
 import com.xiangxun.sampling.R;
-import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.retrofit.Api;
 
 import java.io.File;
 import java.io.FileOutputStream;

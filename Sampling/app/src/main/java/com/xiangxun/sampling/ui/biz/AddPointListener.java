@@ -4,26 +4,31 @@ import android.app.Dialog;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
-import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.common.Utils;
+import com.xiangxun.sampling.common.NetUtils;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.ApiUrl;
-import com.xiangxun.sampling.common.http.DcHttpClient;
-import com.xiangxun.vollynet.Response;
-import com.xiangxun.vollynet.VolleyError;
+import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
+import com.xiangxun.sampling.common.retrofit.paramer.AddPointParamer;
+import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import okhttp3.RequestBody;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -40,9 +45,8 @@ public class AddPointListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void addPostPoint(Context context,Scheme planning, String longitude, String latitude, final FrameListener<Point> listener) {
+    public void addPostPoint(Context context, Scheme planning, String longitude, String latitude, final FrameListener<Point> listener) {
 
-        String url = ApiUrl.addPoint(XiangXunApplication.getInstance());
         if (TextUtils.isEmpty(longitude) || TextUtils.isEmpty(longitude)) {
             listener.onFaild(0, "经度不能为空");
             return;
@@ -55,38 +59,53 @@ public class AddPointListener implements FramePresenter {
             listener.onFaild(0, "方案不能为空");
             return;
         }
-        Map<String, String> params = new LinkedHashMap<String, String>();
-        params.put("schemeId", planning.id);
-        params.put("blockId", planning.blockId);
-        params.put("regionId", planning.regionId);
-        params.put("longitude", longitude);
-        params.put("latitude", latitude);
-        params.put("imei", XiangXunApplication.getInstance().getDevId());
-        params.put("account", SystemCfg.getAccount(context));
-        DcHttpClient.getInstance().postWithURL(XiangXunApplication.getInstance(), url, params, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (null != response) {
-                            DLog.json(response.toString());
-                            try {
-                                ResultPointData resultData = Utils.getGson().fromJson(response.toString(), ResultPointData.class);
-                                listener.onSucces(resultData.result);
-                            } catch (JsonSyntaxException e) {
-                                e.printStackTrace();
-                                listener.onFaild(0, "解析异常！");
-                            }
-                        } else {
-                            listener.onFaild(0, "登录失败，请检查网络！");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.onFaild(0, "登录失败，请检查网络！");
-                    }
-                }
 
-        );
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"),
+                RxjavaRetrofitRequestUtil.getParamers(new AddPointParamer(planning.id, planning.blockId, planning.regionId, longitude, latitude), "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .addPoint(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, ResultPointData>() {
+                    @Override
+                    public ResultPointData call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        ResultPointData root = new Gson().fromJson(s, new TypeToken<ResultPointData>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<ResultPointData>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(ResultPointData data) {
+                                   if (data != null) {
+                                       if (data.result != null && data.resCode == 1000) {
+                                           listener.onSucces(data.result);
+                                       } else {
+                                           listener.onFaild(0, data.resDesc);
+                                       }
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
+                                   }
+                               }
+                           }
+
+                );
 
     }
 

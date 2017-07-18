@@ -22,7 +22,7 @@ public class ResultData {
 
 	public static class LoginData {
 		public UserInfos result;
-		public String resCode;
+		public int resCode;
 		public String resDesc;
 	}
 

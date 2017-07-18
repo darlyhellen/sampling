@@ -3,25 +3,33 @@ package com.xiangxun.sampling.ui.biz;
 import android.app.Dialog;
 import android.text.TextUtils;
 
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
+import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.ResultData;
 import com.xiangxun.sampling.bean.ResultData.LoginData;
-import com.xiangxun.sampling.common.Utils;
+import com.xiangxun.sampling.common.NetUtils;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.ApiUrl;
-import com.xiangxun.sampling.common.http.DcHttpClient;
-import com.xiangxun.vollynet.Response;
-import com.xiangxun.vollynet.VolleyError;
+import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
+import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.RequestBody;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -38,7 +46,7 @@ public class LoginListener implements FramePresenter {
 
     }
 
-    public void onLogin(String name, String pass, String deviceId, final FrameListener<LoginData> listener) {
+    public void onLogin(String name, final String pass, String deviceId, final FrameListener<LoginData> listener) {
 
 
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass)) {
@@ -58,37 +66,64 @@ public class LoginListener implements FramePresenter {
             return;
         }
 
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
 
-        String url = ApiUrl.login(XiangXunApplication.getInstance());
-        Map<String, String> params = new LinkedHashMap<String, String>();
-        params.put("account", name);
-        params.put("pwd", pass);
-        params.put("imei", deviceId);
-//        params.put("crc", getCRC(params));
-        DcHttpClient.getInstance().postWithURL(XiangXunApplication.getInstance(), url, params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject object) {
-                if (null != object) {
-                    DLog.json(object.toString());
-                    try {
-                        LoginData loginData = Utils.getGson().fromJson(object.toString(), LoginData.class);
-                        listener.onSucces(loginData);
-                    } catch (JsonSyntaxException e) {
-                        e.printStackTrace();
-                        listener.onFaild(0, "解析异常！");
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new LoginParamer(name, pass, deviceId), "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .postlogin(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, LoginData>() {
+                    @Override
+                    public LoginData call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        LoginData root = new Gson().fromJson(s, new TypeToken<LoginData>() {
+                        }.getType());
+
+                        if (root != null && root.resCode == 1000 && root.result != null) {
+                            ResultData.UserInfos user = root.result;
+                            user.imei = XiangXunApplication.getInstance().getDevId();
+                            SystemCfg.setUserId(XiangXunApplication.getInstance(), null != user.id ? user.id.toString() : "");
+                            SystemCfg.setAccount(XiangXunApplication.getInstance(), null != user.account ? user.account.toString() : "");
+                            SystemCfg.setUserName(XiangXunApplication.getInstance(), null != user.name ? user.name.toString() : "");
+                            SystemCfg.setDepartment(XiangXunApplication.getInstance(), null != user.deptName ? user.deptName.toString() : "");
+                            SystemCfg.setDepartmentID(XiangXunApplication.getInstance(), null != user.deptId ? user.deptId.toString() : "");
+                            SystemCfg.setIMEI(XiangXunApplication.getInstance(), null != user.imei ? user.imei.toString() : "");
+                            SystemCfg.setWhitePwd(XiangXunApplication.getInstance(), pass);
+                        }
+                        return root;
                     }
-                } else {
+                })
+                .subscribe(new Observer<LoginData>() {
+                               @Override
+                               public void onCompleted() {
 
-                    listener.onFaild(0, "登录失败，请检查网络！");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError arg0) {
-                listener.onFaild(0, "登录失败，请检查网络！");
-            }
-        });
+                               }
 
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(LoginData data) {
+                                   if (data != null) {
+                                       if (data.result != null && data.resCode == 1000) {
+                                           listener.onSucces(data);
+                                       } else {
+                                           listener.onFaild(0, data.resDesc);
+                                       }
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
+                                   }
+                               }
+                           }
+
+                );
     }
 
     public interface LoginInterface extends FrameView {
@@ -103,6 +138,4 @@ public class LoginListener implements FramePresenter {
 
         void end();
     }
-
-
 }

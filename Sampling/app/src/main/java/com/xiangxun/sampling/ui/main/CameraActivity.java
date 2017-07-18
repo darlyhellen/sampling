@@ -31,7 +31,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -53,7 +52,6 @@ import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.bean.MDate;
 import com.xiangxun.sampling.common.ImageUtils;
 import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.http.Api;
 
 import java.io.File;
 import java.io.FileNotFoundException;

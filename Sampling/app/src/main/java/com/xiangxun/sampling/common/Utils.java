@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -18,9 +17,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.xiangxun.epms.mobile.util.CRC16Validator;
 import com.xiangxun.epms.mobile.util.DeEncryptUtil;
-import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.GPSInfo;
-import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 
 import java.io.ByteArrayInputStream;

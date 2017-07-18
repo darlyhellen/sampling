@@ -27,12 +27,11 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 import java.io.File;

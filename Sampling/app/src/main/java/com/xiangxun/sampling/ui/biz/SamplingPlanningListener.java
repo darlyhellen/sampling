@@ -2,26 +2,24 @@ package com.xiangxun.sampling.ui.biz;
 
 import android.app.Dialog;
 
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
-import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData.ResultData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.common.SharePreferHelp;
-import com.xiangxun.sampling.common.Utils;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.ApiUrl;
-import com.xiangxun.sampling.common.http.DcHttpClient;
-import com.xiangxun.vollynet.Response;
-import com.xiangxun.vollynet.VolleyError;
+import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -40,34 +38,45 @@ public class SamplingPlanningListener implements FramePresenter {
 
     public void getPlanning(String time, final FrameListener<ResultData> listener) {
 
-        String url = ApiUrl.planning(XiangXunApplication.getInstance());
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("resTime", time);
-        DcHttpClient.getInstance().getWithURL(XiangXunApplication.getInstance(), url, params, new Response.Listener<JSONObject>() {
+
+        //在这里进行数据请求
+        RxjavaRetrofitRequestUtil.getInstance().get().planning(time).
+                subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, ResultData>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        if (null != response) {
-                            DLog.json(response.toString());
-                            try {
-                                ResultData resultData = Utils.getGson().fromJson(response.toString(), ResultData.class);
-                                listener.onSucces(resultData);
-                            } catch (JsonSyntaxException e) {
-                                e.printStackTrace();
-                                listener.onFaild(0, "解析异常！");
+                    public ResultData call(JsonObject jsonObject) {
+                        DLog.json("Func1", jsonObject.toString());
+                        ResultData root = new Gson().fromJson(jsonObject, new TypeToken<ResultData>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<ResultData>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                            ToastApp.showToast(e.getMessage());
+                            listener.onFaild(1, e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ResultData data) {
+                        if (data != null) {
+                            if (data.result != null && data.resCode == 1000) {
+                                listener.onSucces(data);
+                            } else {
+                                listener.onFaild(0, data.resDesc);
                             }
                         } else {
-
-                            listener.onFaild(0, "登录失败，请检查网络！");
+                            listener.onFaild(0, "解析错误");
                         }
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.onFaild(0, "登录失败，请检查网络！");
-                    }
-                }
-
-        );
+                });
 
     }
 

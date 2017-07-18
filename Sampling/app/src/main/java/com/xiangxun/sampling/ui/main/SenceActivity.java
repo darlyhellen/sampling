@@ -23,7 +23,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;

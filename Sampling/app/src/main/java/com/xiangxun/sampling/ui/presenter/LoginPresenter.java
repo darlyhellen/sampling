@@ -93,14 +93,7 @@ public class LoginPresenter {
                 if (resDesc.contains("登录成功")) {
                     ResultData.UserInfos user = data.result;
                     if (user != null) {
-                        user.imei = XiangXunApplication.getInstance().getDevId();
-                        SystemCfg.setUserId(context, null != user.id ? user.id.toString() : "");
-                        SystemCfg.setAccount(context, null != user.account ? user.account.toString() : "");
-                        SystemCfg.setUserName(context, null != user.name ? user.name.toString() : "");
-                        SystemCfg.setDepartment(context, null != user.deptName ? user.deptName.toString() : "");
-                        SystemCfg.setDepartmentID(context, null != user.deptId ? user.deptId.toString() : "");
-                        SystemCfg.setIMEI(context, null != user.imei ? user.imei.toString() : "");
-                        SystemCfg.setWhitePwd(context, main.getPassword());
+
                         main.onLoginSuccess();
                     } else {
                         main.onLoginFailed("登录失败，请检查网络！");

@@ -31,4 +31,12 @@ dependencies {
     compile files('libs/iclient_android_8.1.0.jar')
     compile project(':VideoLib')
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
+
+
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
 }

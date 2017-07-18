@@ -19,7 +19,7 @@ import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ConstantStatus;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.http.Api;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;

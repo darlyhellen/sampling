@@ -1,4 +1,4 @@
-package com.xiangxun.sampling.common.http;
+package com.xiangxun.sampling.common.retrofit;
 
 import android.os.Environment;
 

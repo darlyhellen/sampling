@@ -9,21 +9,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.StrictMode;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 
-
 import com.xiangxun.sampling.BuildConfig;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.http.Api;
-import com.xiangxun.sampling.common.http.DcHttpClient;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.service.MainService;
 import com.xiangxun.video.camera.VCamera;
 
@@ -61,7 +59,6 @@ public class XiangXunApplication extends Application {
         bindService(sintent, conn, Service.BIND_AUTO_CREATE);
         registerReceiver(mReceiver, new IntentFilter(lOCALE_CHANGED));
         // 网络对象初始化
-        DcHttpClient.getInstance().init(getBaseContext());
         ImageLoaderUtil.init(this);
         createFiles();
         if (SystemCfg.getWidth(this) == 0 || SystemCfg.getHeight(this) == 0) {
@@ -192,5 +189,32 @@ public class XiangXunApplication extends Application {
         if (!sence.exists()) {
             sence.mkdir();
         }
+    }
+
+    /**
+     * 返回当前程序版本名
+     */
+    public static String getAppVersionName() {
+        String curVersionName = null;
+        try {
+            PackageManager pm = sApplication.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(sApplication.getPackageName(), 0);
+            curVersionName = pi.versionName;
+        } catch (Exception e) {
+        }
+        return curVersionName;
+    }
+
+    public int getVersionCode() {
+        int version = 0;
+
+        try {
+            PackageInfo e = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
+            version = e.versionCode;
+        } catch (PackageManager.NameNotFoundException var3) {
+            var3.printStackTrace();
+        }
+
+        return version;
     }
 }
