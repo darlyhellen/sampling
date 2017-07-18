@@ -8,17 +8,15 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.PointAdapter;
-import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -49,7 +47,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     private Scheme planning;
     private PointAdapter adapter;
 
-    private List<SamplingKey> data;
+    private List<Pointly> data;
     private boolean isSence;
 
     private SamplingPointPresenter presenter;
@@ -73,15 +71,15 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         Object ob = SharePreferHelp.getValue(planning.id);
         if (data == null) {
             if (ob != null) {
-                data = (List<SamplingKey>) ob;
+                data = (List<Pointly>) ob;
             }
         }
         if (isSence) {
             //现场请情况,剔除掉,已经采集过的地方
-            Iterator<SamplingKey> it = data.iterator();
+            Iterator<Pointly> it = data.iterator();
             while (it.hasNext()) {
-                SamplingKey x = it.next();
-                if (x.getPoint().isSamply()) {
+                Pointly x = it.next();
+                if (x.point.isSamply()) {
                     it.remove();
                 }
             }
@@ -116,10 +114,10 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 DLog.i("onItemClick--" + position);
-                SamplingKey point = (SamplingKey) parent.getItemAtPosition(position);
-                for (SamplingKey po : data) {
-                    if (point.getId().equals(po.getId())) {
-                        po.getPoint().setUserSee(true);
+                Pointly point = (Pointly) parent.getItemAtPosition(position);
+                for (Pointly po : data) {
+                    if (point.point.id.equals(po.point.id)) {
+                        po.point.setUserSee(true);
                         break;
                     }
                 }
@@ -143,7 +141,8 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
 
     //点位解析回调
     @Override
-    public void onLoginSuccess(List<Scheme> info) {
+    public void onLoginSuccess(List<Pointly> info) {
+        data = info;
 
     }
 

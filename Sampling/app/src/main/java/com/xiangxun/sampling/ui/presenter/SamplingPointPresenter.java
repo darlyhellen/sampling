@@ -1,7 +1,7 @@
 package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.base.FrameListener;
-import com.xiangxun.sampling.bean.PlannningData.ResultData;
+import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 
@@ -22,9 +22,9 @@ public class SamplingPointPresenter {
 
 
     public void point(String id, String time) {
-        biz.postPoint(id, time, new FrameListener<ResultData>() {
+        biz.postPoint(id, time, new FrameListener<ResultPointData>() {
             @Override
-            public void onSucces(ResultData result) {
+            public void onSucces(ResultPointData result) {
                 view.onLoginSuccess(result.result);
             }
 

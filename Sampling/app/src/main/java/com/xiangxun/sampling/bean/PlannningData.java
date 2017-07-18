@@ -59,6 +59,8 @@ public class PlannningData {
         public void setUserSee(boolean userSee) {
             this.userSee = userSee;
         }
+
+
     }
 
     public class ResultPointData implements Serializable {
@@ -69,47 +71,74 @@ public class PlannningData {
         //时间戳
         public String resTime;
 
-        public Point result;
+        public List<Pointly> result;
 
+    }
+
+    public class Pointly implements Serializable {
+        public String id;
+        public Point point;
     }
 
     public class Point implements Serializable {
         //点位id
-        private String id;
+        public String id;
         //方案id
-        private String schemeId;
+        public String schemeId;
         //编号
-        private String code;
+        public String code;
         //经度
-        private String longitude;
+        public String longitude;
         //纬度
-        private String latitude;
+        public String latitude;
         //采样范围X
-        private String rangeX;
+        public String rangeX;
         //采样范围Y
-        private String rangeY;
+        public String rangeY;
         //所属区域编号
-        private String areaCode;
+        public String areaCode;
         //是否采样点
-        private Integer isSamplingPoint;
+        public Integer isSamplingPoint;
         //核查状态
-        private Integer checkStatus;
+        public Integer checkStatus;
         //是否发布
-        private Integer isRelease;
+        public Integer isRelease;
         //是否采样
-        private Integer isSampling;
+        public Integer isSampling;
         //创建人
-        private String createId;
+        public String createId;
         //创建时间
-        private String createTime;
+        public String createTime;
         //修改人
-        private String updateId;
+        public String updateId;
         //修改时间
-        private String updateTime;
+        public String updateTime;
         //地块ID
-        private String blockId;
+        public String blockId;
         //采样选址
-        private String regionId;
+        public String regionId;
+
+        //是否已经采样
+        private boolean samply;
+
+        //是否查看过
+        private boolean userSee;
+
+        public boolean isUserSee() {
+            return userSee;
+        }
+
+        public void setUserSee(boolean userSee) {
+            this.userSee = userSee;
+        }
+
+        public boolean isSamply() {
+            return samply;
+        }
+
+        public void setSamply(boolean samply) {
+            this.samply = samply;
+        }
 
     }
 }

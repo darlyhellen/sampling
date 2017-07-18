@@ -11,6 +11,7 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
@@ -23,6 +24,8 @@ import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import okhttp3.RequestBody;
 import rx.Observer;
@@ -45,7 +48,7 @@ public class AddPointListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void addPostPoint(Context context, Scheme planning, String longitude, String latitude, final FrameListener<Point> listener) {
+    public void addPostPoint(Context context, Scheme planning, String longitude, String latitude, final FrameListener<List<PlannningData.Pointly>> listener) {
 
         if (TextUtils.isEmpty(longitude) || TextUtils.isEmpty(longitude)) {
             listener.onFaild(0, "经度不能为空");
@@ -111,7 +114,7 @@ public class AddPointListener implements FramePresenter {
 
     public interface AddPointInterface extends FrameView {
 
-        void onLoginSuccess(Point data);
+        void onLoginSuccess(List<PlannningData.Pointly> data);
 
         void onLoginFailed(String info);
 

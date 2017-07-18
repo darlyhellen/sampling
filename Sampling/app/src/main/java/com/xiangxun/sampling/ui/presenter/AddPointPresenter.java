@@ -3,12 +3,15 @@ package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.ui.biz.AddPointListener;
 import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
 import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
+
+import java.util.List;
 
 /**
  * @author zhangyh2 s 上午10:57:39 TODO 控制器 新增点位对应解决方案.
@@ -31,9 +34,9 @@ public class AddPointPresenter {
 
     public void addPoint(Scheme planning) {
         biz.onStart(loading);
-        biz.addPostPoint((AddNewPointPlanningActivity) view, planning, view.longitude(), view.latitude(), new FrameListener<Point>() {
+        biz.addPostPoint((AddNewPointPlanningActivity) view, planning, view.longitude(), view.latitude(), new FrameListener<List<PlannningData.Pointly>>() {
             @Override
-            public void onSucces(Point result) {
+            public void onSucces(List<PlannningData.Pointly> result) {
                 biz.onStop(loading);
                 view.onLoginSuccess(result);
             }

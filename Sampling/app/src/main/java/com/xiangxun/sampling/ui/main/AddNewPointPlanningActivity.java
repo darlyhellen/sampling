@@ -9,6 +9,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
@@ -20,6 +21,8 @@ import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
 import com.xiangxun.sampling.ui.presenter.AddPointPresenter;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
+
+import java.util.List;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -149,7 +152,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
 
     //网络请求，新增点位接口
     @Override
-    public void onLoginSuccess(Point info) {
+    public void onLoginSuccess(List<PlannningData.Pointly> info) {
 
     }
 

@@ -10,7 +10,8 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
-import com.xiangxun.sampling.bean.PlannningData.ResultData;
+import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
@@ -45,7 +46,7 @@ public class SamplingPointListener implements FramePresenter {
 
     }
 
-    public void postPoint(String id, String strTime, final FrameListener<ResultData> listener) {
+    public void postPoint(String id, String strTime, final FrameListener<ResultPointData> listener) {
 
         if (TextUtils.isEmpty(id) || TextUtils.isEmpty(id)) {
             listener.onFaild(0, "方案id不能为空");
@@ -60,16 +61,16 @@ public class SamplingPointListener implements FramePresenter {
                 .point(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, ResultData>() {
+                .map(new Func1<JsonObject, ResultPointData>() {
                     @Override
-                    public ResultData call(JsonObject s) {
+                    public ResultPointData call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        ResultData root = new Gson().fromJson(s, new TypeToken<ResultData>() {
+                        ResultPointData root = new Gson().fromJson(s, new TypeToken<ResultPointData>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<ResultData>() {
+                .subscribe(new Observer<ResultPointData>() {
                                @Override
                                public void onCompleted() {
 
@@ -82,7 +83,7 @@ public class SamplingPointListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(ResultData data) {
+                               public void onNext(ResultPointData data) {
                                    if (data != null) {
                                        if (data.result != null && data.resCode == 1000) {
                                            listener.onSucces(data);
@@ -102,7 +103,7 @@ public class SamplingPointListener implements FramePresenter {
 
     public interface SamplingPointInterface extends FrameView {
 
-        void onLoginSuccess(List<Scheme> info);
+        void onLoginSuccess(List<PlannningData.Pointly> info);
 
         void onLoginFailed(String info);
 

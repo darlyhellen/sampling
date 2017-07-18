@@ -47,13 +47,11 @@ public class RxInterceptor implements Interceptor {
         DLog.i(account + "--" + imei);
         if (TextUtils.isEmpty(account) && TextUtils.isEmpty(imei)) {
             builder.addHeader("Content-Type", "application/json;charset=UTF-8")
-                    //.addHeader("Accept", "text/json;charset=UTF-8")
                     .addHeader("charset", "utf-8")
                     .addHeader("version", APPSYS_STRING + VersionCode)
                     .build();
         } else {
             builder.addHeader("Content-Type", "application/json;charset=UTF-8")
-                    //.addHeader("Accept", "text/json;charset=UTF-8")
                     .addHeader("charset", "utf-8")
                     .addHeader("account", account)
                     .addHeader("imei", imei)

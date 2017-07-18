@@ -180,7 +180,7 @@ public class SettingFragment extends BaseFunctionList {
                 //进行退出登录操作，清理登录缓存。
                 SystemCfg.loginOut(getActivity());
                 Intent i = new Intent(getActivity(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                 getActivity().startActivity(i);
                 getActivity().onBackPressed();
             }

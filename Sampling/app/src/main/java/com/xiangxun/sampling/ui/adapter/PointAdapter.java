@@ -1,7 +1,6 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +10,8 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
-import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.bean.SamplingPoint;
-import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
-import com.xiangxun.sampling.ui.main.SamplingPointActivity;
+import com.xiangxun.sampling.bean.PlannningData.Pointly;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -29,17 +23,17 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:展现点位信息的适配器
  */
-public class PointAdapter extends ParentAdapter<SamplingKey> implements StickyListHeadersAdapter {
+public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHeadersAdapter {
 
     private boolean isSence;
 
-    public PointAdapter(List<SamplingKey> data, int resID, Context context, boolean isSence) {
+    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
         this.isSence = isSence;
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final SamplingKey s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final Pointly s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -56,19 +50,19 @@ public class PointAdapter extends ParentAdapter<SamplingKey> implements StickyLi
 
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getId());
+            hocker.name.setText(s.point.id);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getPoint().getLatitude()));
+            hocker.dept.setText(String.valueOf(s.point.latitude));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getPoint().getLongitude()));
+            hocker.position.setText(String.valueOf(s.point.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("采样记录");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.getPoint().isUserSee()) {
+            if (s.point.isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
@@ -76,19 +70,19 @@ public class PointAdapter extends ParentAdapter<SamplingKey> implements StickyLi
             hocker.desc.setTextSize(14);
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.getId());
+            hocker.name.setText(s.point.id);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.getPoint().getLatitude()));
+            hocker.dept.setText(String.valueOf(s.point.latitude));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.getPoint().getLongitude()));
+            hocker.position.setText(String.valueOf(s.point.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("点击修改");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.getPoint().isUserSee()) {
+            if (s.point.isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
