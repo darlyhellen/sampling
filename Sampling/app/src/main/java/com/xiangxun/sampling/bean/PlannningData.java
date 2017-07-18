@@ -76,8 +76,8 @@ public class PlannningData {
     }
 
     public class Pointly implements Serializable {
-        public String id;
-        public Point point;
+        public String unique;
+        public Point data;
     }
 
     public class Point implements Serializable {
@@ -88,9 +88,9 @@ public class PlannningData {
         //编号
         public String code;
         //经度
-        public String longitude;
+        public double longitude;
         //纬度
-        public String latitude;
+        public double latitude;
         //采样范围X
         public String rangeX;
         //采样范围Y

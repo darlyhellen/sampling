@@ -50,19 +50,19 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
 
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.point.id);
+            hocker.name.setText(s.data.id);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.point.latitude));
+            hocker.dept.setText(String.valueOf(s.data.latitude));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.point.longitude));
+            hocker.position.setText(String.valueOf(s.data.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("采样记录");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.point.isUserSee()) {
+            if (s.data.isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
@@ -70,19 +70,19 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.desc.setTextSize(14);
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.point.id);
+            hocker.name.setText(s.data.id);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.point.latitude));
+            hocker.dept.setText(String.valueOf(s.data.latitude));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.point.longitude));
+            hocker.position.setText(String.valueOf(s.data.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             hocker.desc.setText("点击修改");
             hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.point.isUserSee()) {
+            if (s.data.isUserSee()) {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
             } else {
                 hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));

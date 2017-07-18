@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
+import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
@@ -22,7 +22,6 @@ import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -71,23 +70,12 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         Object ob = SharePreferHelp.getValue(planning.id);
         if (data == null) {
             if (ob != null) {
-                data = (List<Pointly>) ob;
+                data = ((ResultPointData) ob).result;
             }
-        }
-        if (isSence) {
-            //现场请情况,剔除掉,已经采集过的地方
-            Iterator<Pointly> it = data.iterator();
-            while (it.hasNext()) {
-                Pointly x = it.next();
-                if (x.point.isSamply()) {
-                    it.remove();
-                }
-            }
-            DLog.i(getClass().getSimpleName(), data.size());
         }
         adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence);
         wlist.setAdapter(adapter);
-        presenter.point(planning.id, ob == null ? null : String.valueOf(System.currentTimeMillis()));
+        presenter.point(planning.id, ob == null ? null : ((ResultPointData) ob).resTime);
     }
 
     @Override
@@ -116,8 +104,8 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                 DLog.i("onItemClick--" + position);
                 Pointly point = (Pointly) parent.getItemAtPosition(position);
                 for (Pointly po : data) {
-                    if (point.point.id.equals(po.point.id)) {
-                        po.point.setUserSee(true);
+                    if (point.data.id.equals(po.data.id)) {
+                        po.data.setUserSee(true);
                         break;
                     }
                 }
@@ -143,12 +131,26 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     @Override
     public void onLoginSuccess(List<Pointly> info) {
         data = info;
-
+        if (data != null && data.size() > 0) {
+            wlist.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
+            adapter.setData(data);
+        } else {
+            wlist.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void onLoginFailed(String info) {
-
+    public void onLoginFailed() {
+        Object s = SharePreferHelp.getValue(planning.id);
+        if (s != null) {
+            data = ((ResultPointData) s).result;
+            adapter.setData(data);
+        } else {
+            wlist.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

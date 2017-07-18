@@ -60,14 +60,14 @@ public class SamplingPlanningListener implements FramePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                            ToastApp.showToast(e.getMessage());
-                            listener.onFaild(1, e.getMessage());
+                        ToastApp.showToast(e.getMessage());
+                        listener.onFaild(1, e.getMessage());
                     }
 
                     @Override
                     public void onNext(ResultData data) {
                         if (data != null) {
-                            if (data.result != null && data.resCode == 1000) {
+                            if (data.result != null) {
                                 listener.onSucces(data);
                             } else {
                                 listener.onFaild(0, data.resDesc);

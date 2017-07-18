@@ -35,8 +35,6 @@ public class SamplingPlanningPresenter {
                     SharePreferHelp.putValue("ResultData", result);
                     view.onLoginSuccess(result.result);
                 }
-
-
             }
 
             @Override

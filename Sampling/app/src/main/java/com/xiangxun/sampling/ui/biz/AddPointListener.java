@@ -112,6 +112,66 @@ public class AddPointListener implements FramePresenter {
 
     }
 
+    public void updataPostPoint(Scheme planning,PlannningData.Pointly point, final FrameListener<List<PlannningData.Pointly>> listener) {
+
+        if (planning == null) {
+            listener.onFaild(0, "方案不能为空");
+            return;
+        }
+        if (point == null){
+            listener.onFaild(0, "点位信息不能为空");
+            return;
+        }
+
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"),
+                RxjavaRetrofitRequestUtil.getParamers(point, "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .addPoint(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, ResultPointData>() {
+                    @Override
+                    public ResultPointData call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        ResultPointData root = new Gson().fromJson(s, new TypeToken<ResultPointData>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<ResultPointData>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(ResultPointData data) {
+                                   if (data != null) {
+                                       if (data.result != null && data.resCode == 1000) {
+                                           listener.onSucces(data.result);
+                                       } else {
+                                           listener.onFaild(0, data.resDesc);
+                                       }
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
+                                   }
+                               }
+                           }
+
+                );
+
+    }
+
     public interface AddPointInterface extends FrameView {
 
         void onLoginSuccess(List<PlannningData.Pointly> data);

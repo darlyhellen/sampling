@@ -9,7 +9,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingKey;
@@ -34,7 +34,7 @@ import java.util.List;
 @ContentBinder(R.layout.activity_planning_add)
 public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener, AddPointInterface {
     private Scheme planning;
-    private SamplingKey point;
+    private Pointly point;
 
     @ViewsBinder(R.id.id_add_title)
     private TitleView titleView;
@@ -60,7 +60,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     @Override
     protected void initView(Bundle savedInstanceState) {
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
-        point = (SamplingKey) getIntent().getSerializableExtra("SamplingKey");
+        point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
         presenter = new AddPointPresenter(this);
 
     }
@@ -98,11 +98,11 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             //修改点位
             titleView.setTitle("修改" + planning.name + "点位");
             latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(point.getPoint().getLatitude()), "");
+            latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(point.getPoint().getLongitude()), "");
+            longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
             desc.isEdit(true);
-            desc.setInfo("说明：", point.getPoint().getDesc(), "");
+            desc.setInfo("说明：", " ", "");
         }
     }
 
@@ -119,7 +119,15 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             @Override
             public void onClick(View v) {
                 //提交服务端,进行重新获取.
-                presenter.addPoint(planning);
+                if (point == null) {
+                    //新增点位信息
+                    presenter.addPoint(planning);
+                } else {
+                    //修改点位信息。
+                    point.data.latitude = Double.parseDouble(latitude());
+                    point.data.longitude = Double.parseDouble(longitude());
+                    presenter.updataPoint(planning, point);
+                }
             }
         });
     }
@@ -152,7 +160,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
 
     //网络请求，新增点位接口
     @Override
-    public void onLoginSuccess(List<PlannningData.Pointly> info) {
+    public void onLoginSuccess(List<Pointly> info) {
 
     }
 

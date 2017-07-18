@@ -163,7 +163,7 @@ public class SystemCfg {
      */
     public static String getWhitePwd(Context context) {
         init(context);
-        return mysp.getString("pwd", "123456");
+        return mysp.getString("pwd", "");
     }
 
     /**

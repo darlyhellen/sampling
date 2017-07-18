@@ -2,6 +2,8 @@ package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
+import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 
@@ -21,16 +23,23 @@ public class SamplingPointPresenter {
     }
 
 
-    public void point(String id, String time) {
+    public void point(final String id, String time) {
         biz.postPoint(id, time, new FrameListener<ResultPointData>() {
             @Override
             public void onSucces(ResultPointData result) {
-                view.onLoginSuccess(result.result);
+                if (result.resCode == 2000) {
+                    //使用缓存
+                    view.onLoginFailed();
+                } else if (result.resCode == 1000) {
+                    SharePreferHelp.putValue(id, result);
+                    view.onLoginSuccess(result.result);
+                }
             }
 
             @Override
             public void onFaild(int code, String info) {
-                view.onLoginFailed(info);
+                ToastApp.showToast(info);
+                view.onLoginFailed();
             }
         });
 

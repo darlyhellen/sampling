@@ -105,7 +105,7 @@ public class SamplingPointListener implements FramePresenter {
 
         void onLoginSuccess(List<PlannningData.Pointly> info);
 
-        void onLoginFailed(String info);
+        void onLoginFailed();
 
         void end();
     }

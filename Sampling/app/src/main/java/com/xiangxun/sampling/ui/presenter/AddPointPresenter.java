@@ -49,4 +49,20 @@ public class AddPointPresenter {
         });
 
     }
+
+    public void updataPoint(Scheme planning, PlannningData.Pointly point) {
+
+        biz.onStart(loading);
+        biz.updataPostPoint(planning, point, new FrameListener<List<PlannningData.Pointly>>() {
+            @Override
+            public void onSucces(List<PlannningData.Pointly> result) {
+
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+
+            }
+        });
+    }
 }

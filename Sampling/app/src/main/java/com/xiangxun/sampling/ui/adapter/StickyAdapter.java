@@ -76,7 +76,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
                 public void onClick(View v) {
                     s.setUserSee(true);
                     Intent intent = new Intent(context, ChaoTuActivity.class);
-                    intent.putExtra("SamplingPlanning", s);
+                    intent.putExtra("Scheme", s);
                     context.startActivity(intent);
                     notifyDataSetChanged();
                 }
@@ -106,7 +106,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
                 public void onClick(View v) {
                     s.setUserSee(true);
                     Intent intent = new Intent(context, ChaoTuActivity.class);
-                    intent.putExtra("SamplingPlanning", s);
+                    intent.putExtra("Scheme", s);
                     context.startActivity(intent);
                     notifyDataSetChanged();
                 }
