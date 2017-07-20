@@ -4,6 +4,7 @@ package com.xiangxun.sampling.common.retrofit;
 import android.text.TextUtils;
 
 import com.xiangxun.sampling.BuildConfig;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.common.dlog.DLog;
 
 import java.io.UnsupportedEncodingException;
@@ -143,7 +144,8 @@ public class RxjavaRetrofitRequestUtil {
             for (Field field : fields) {
                 String name = field.getName();
                 field.setAccessible(true); //设置些属性是可以访问的
-                if (!name.contains("Time")) {
+                if (m instanceof PlannningData.Point && name.contains("Time")) {
+                } else {
                     Object val = field.get(m);//得到此属性的值
                     if (val != null) {
                         map.put(name, String.valueOf(val));

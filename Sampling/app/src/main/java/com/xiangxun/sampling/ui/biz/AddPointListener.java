@@ -48,7 +48,7 @@ public class AddPointListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void addPostPoint(Context context, Scheme planning, String longitude, String latitude, final FrameListener<List<PlannningData.Pointly>> listener) {
+    public void addPostPoint(Context context, Scheme planning, String longitude, String latitude, final FrameListener<ResultPointData> listener) {
 
         if (TextUtils.isEmpty(longitude) || TextUtils.isEmpty(longitude)) {
             listener.onFaild(0, "经度不能为空");
@@ -98,7 +98,7 @@ public class AddPointListener implements FramePresenter {
                                public void onNext(ResultPointData data) {
                                    if (data != null) {
                                        if (data.result != null) {
-                                           listener.onSucces(data.result);
+                                           listener.onSucces(data);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
                                        }
@@ -112,7 +112,7 @@ public class AddPointListener implements FramePresenter {
 
     }
 
-    public void updataPostPoint(Scheme planning, PlannningData.Point point, final FrameListener<List<PlannningData.Pointly>> listener) {
+    public void updataPostPoint(Scheme planning, PlannningData.Point point, final FrameListener<ResultPointData> listener) {
 
         if (planning == null) {
             listener.onFaild(0, "方案不能为空");
@@ -158,7 +158,7 @@ public class AddPointListener implements FramePresenter {
                                public void onNext(ResultPointData data) {
                                    if (data != null) {
                                        if (data.result != null && data.resCode == 1000) {
-                                           listener.onSucces(data.result);
+                                           listener.onSucces(data);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
                                        }
@@ -174,7 +174,7 @@ public class AddPointListener implements FramePresenter {
 
     public interface AddPointInterface extends FrameView {
 
-        void onLoginSuccess(List<PlannningData.Pointly> data);
+        void onLoginSuccess();
 
         void onLoginFailed(String info);
 

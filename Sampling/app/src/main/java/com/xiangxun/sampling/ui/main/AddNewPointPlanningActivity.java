@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,9 +11,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
-import com.xiangxun.sampling.bean.PlannningData.Point;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
@@ -160,8 +159,9 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
 
     //网络请求，新增点位接口
     @Override
-    public void onLoginSuccess(List<Pointly> info) {
-
+    public void onLoginSuccess() {
+        setResult(Activity.RESULT_OK);
+        onBackPressed();
     }
 
     @Override

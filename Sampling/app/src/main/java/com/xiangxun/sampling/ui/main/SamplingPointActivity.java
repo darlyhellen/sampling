@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -94,7 +95,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                     //新增点位逻辑页面
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
                     intent.putExtra("Scheme", planning);//新增时将方案传递过去。
-                    startActivity(intent);
+                    startActivityForResult(intent, 1000);
                 }
             });
         }
@@ -121,7 +122,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
                     intent.putExtra("Scheme", planning);
                     intent.putExtra("SamplingKey", point);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1000);
                 }
             }
         });
@@ -130,15 +131,18 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     //点位解析回调
     @Override
     public void onLoginSuccess(List<Pointly> info) {
-        data = info;
-        if (data != null && data.size() > 0) {
+        //缓存已经更新，使用缓存展示
+        Object s = SharePreferHelp.getValue(planning.id);
+        if (s != null) {
+            data = ((ResultPointData) s).result;
+            adapter.setData(data);
             wlist.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            adapter.setData(data);
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
         }
+
     }
 
     @Override
@@ -147,6 +151,8 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         if (s != null) {
             data = ((ResultPointData) s).result;
             adapter.setData(data);
+            wlist.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
@@ -166,6 +172,20 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     @Override
     public void setEnableClick() {
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
+            Object s = SharePreferHelp.getValue(planning.id);
+            if (s != null) {
+                presenter.point(planning.id,  ((ResultPointData) s).resTime);
+            } else {
+                wlist.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

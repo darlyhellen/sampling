@@ -68,8 +68,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         }
         //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
         presenter = new SamplingPointPresenter(this);
-        presenter.point(planning.id, ob == null ? null : String.valueOf(System.currentTimeMillis()));
-
+        presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
     }
 
     @Override
@@ -167,9 +166,14 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     //获取点位成功信息记录。
     @Override
     public void onLoginSuccess(List<PlannningData.Pointly> info) {
-        data = info;
-        if (data != null && data.size() > 0) {
-            loadData();
+        Object s = SharePreferHelp.getValue(planning.id);
+        if (s != null) {
+            data = ((PlannningData.ResultPointData) s).result;
+            if (data != null && data.size() != 0) {
+                loadData();
+            } else {
+                loadNoData();
+            }
         } else {
             loadNoData();
         }
@@ -181,7 +185,11 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         if (s != null) {
             data = ((PlannningData.ResultPointData) s).result;
             //緩存點位
-            loadData();
+            if (data != null && data.size() != 0) {
+                loadData();
+            } else {
+                loadNoData();
+            }
         } else {
             loadNoData();
         }

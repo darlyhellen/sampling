@@ -3,15 +3,20 @@ package com.xiangxun.sampling.ui.presenter;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.main.AddNewPointPlanningActivity;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 import com.xiangxun.sampling.ui.main.SamplingPointActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,7 +47,8 @@ public class SamplingPointPresenter {
                     //使用缓存
                     view.onLoginFailed();
                 } else if (result.resCode == 1000) {
-                    SharePreferHelp.putValue(id, result);
+                    //由于要更新点位系统所以需要将缓存进行更新。
+                    PontCacheHelper.cachePoint(id, result);
                     view.onLoginSuccess(result.result);
                 }
             }

@@ -9,11 +9,11 @@ package com.xiangxun.sampling.common.retrofit.paramer;
  */
 public class SamPointParamer {
     private String schemeId;
-    private String strTime;
+    private String resTime;
 
-    public SamPointParamer(String schemeId, String strTime) {
+    public SamPointParamer(String schemeId, String resTime) {
         this.schemeId = schemeId;
-        this.strTime = strTime;
+        this.resTime = resTime;
     }
 
 }
