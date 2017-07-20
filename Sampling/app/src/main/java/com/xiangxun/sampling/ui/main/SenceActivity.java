@@ -30,6 +30,11 @@ import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
+import com.xiangxun.sampling.ui.biz.SenceListener;
+import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
+import com.xiangxun.sampling.ui.presenter.SencePresenter;
+import com.xiangxun.sampling.widget.dialog.SelectItemDialog;
+import com.xiangxun.sampling.widget.dialog.SelectItemDialog.SelectResultItemClick;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
@@ -48,7 +53,7 @@ import java.util.List;
  * @TODO: 現場情況的展示頁面
  */
 @ContentBinder(R.layout.activity_sence)
-public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener {
+public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectResultItemClick {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private Scheme planning;
     private Pointly point;
@@ -91,6 +96,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private List<String> images;
     private List<String> videos;
 
+    private SelectItemDialog typeDialog;
+
+    private SencePresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         //这句话解决了自动弹出输入按键
@@ -99,12 +108,14 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
         titleView.setTitle("现场采样");
         locationname.setText("现场采样定位：");
+        presenter = new SencePresenter(this);
     }
+
 
     @Override
     protected void loadData() {
         type.isEdit(false);
-        type.setInfo("采样类型:", "请点击选择类型", " ");
+        type.setInfo("采样类型:", " ", "请点击选择类型");
         name.isEdit(true);
         name.setInfo("样品名称:", " ", "请输入样品名称");
         params.isEdit(true);
@@ -193,6 +204,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void initListener() {
+        type.setOnClickListener(this);
         imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -226,7 +238,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (videos.size() - 1)) {
                     //跳转到视频录制页面
-
                     //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
                     File root = new File(Api.SENCE.concat(point.data.id));
                     if (!root.exists()) {
@@ -234,7 +245,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                     }
                     VCamera.setVideoCachePath(root + "/cache/");
                     startActivityForResult(new Intent(SenceActivity.this, WechatRecoderActivity.class), 900);
-                } else {
                 }
             }
         });
@@ -251,7 +261,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         titleView.setRightViewRightTextOneListener("保存", new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastApp.showToast("保存采集点位信息");
+                presenter.sampling(point.data);
             }
         });
     }
@@ -262,7 +272,20 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             case R.id.id_user_sence_location:
                 startLocate();
                 break;
+            case R.id.id_user_sence_type:
+                if (typeDialog == null) {
+                    typeDialog = new SelectItemDialog(SenceActivity.this, new String[]{"土壤", "玉米", "大豆", "空气", "地下水", "地表水"}, "请选择类型");
+                }
+                typeDialog.setSelectResultItemClick(this);
+                typeDialog.show();
+                break;
         }
+    }
+
+    @Override
+    public void resultOnClick(String result) {
+        type.isEdit(false);
+        type.setInfo("采样类型:", result, null);
     }
 
     @Override
@@ -304,6 +327,77 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             images.addAll(images.size() - 1, photos);
             imageAdapter.setData(images);
         }
+    }
+
+    //ui规划
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onLoginSuccess() {
+
+    }
+
+    @Override
+    public void onLoginFailed(String info) {
+
+    }
+
+    @Override
+    public String getaddress() {
+        return address.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getlatitude() {
+        return latitude.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getlongitude() {
+        return longitude.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String gettype() {
+        return type.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getname() {
+        return name.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getparams() {
+        return params.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getproject() {
+        return project.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public String getother() {
+        return other.getValue().getText().toString().trim();
+    }
+
+    @Override
+    public void end() {
+        onBackPressed();
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 
     @Override
@@ -348,8 +442,4 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }

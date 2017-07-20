@@ -92,7 +92,14 @@ public class DetailView extends LinearLayout {
                     edit.setHint(new SpannedString(ss));
                 }
             } else {
-                value.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    value.setText(content);
+                } else {
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    value.setHint(new SpannedString(ss));
+                }
             }
         }
     }
@@ -113,7 +120,14 @@ public class DetailView extends LinearLayout {
                     edit.setHint(new SpannedString(ss));
                 }
             } else {
-                value.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    value.setText(content);
+                } else {
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    value.setHint(new SpannedString(ss));
+                }
             }
         }
     }
@@ -134,7 +148,14 @@ public class DetailView extends LinearLayout {
                     edit.setHint(new SpannedString(ss));
                 }
             } else {
-                value.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    value.setText(content);
+                } else {
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    value.setHint(new SpannedString(ss));
+                }
             }
         }
     }
@@ -155,7 +176,14 @@ public class DetailView extends LinearLayout {
                     edit.setHint(new SpannedString(ss));
                 }
             } else {
-                value.setText(content);
+                if (TextUtils.isEmpty(hit)) {
+                    value.setText(content);
+                } else {
+                    SpannableString ss = new SpannableString(hit);//定义hint的值
+                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    value.setHint(new SpannedString(ss));
+                }
             }
         }
     }

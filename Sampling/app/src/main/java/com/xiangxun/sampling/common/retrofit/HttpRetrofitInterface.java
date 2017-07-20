@@ -51,6 +51,11 @@ public interface HttpRetrofitInterface {
      */
     @POST("/server/land/point/doUpdate")
     Observable<JsonObject> updataPoint(@Body RequestBody body);
+    /**
+     * @TODO:现场采集页面状态修改接口
+     */
+    @POST("/server/land/reg/collect")
+    Observable<JsonObject> senceSamply(@Body RequestBody body);
 
     /**
      * @param status
