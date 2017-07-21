@@ -2,11 +2,14 @@ package com.xiangxun.sampling.ui.biz;
 
 import android.app.Dialog;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -41,13 +44,10 @@ public class SenceListener implements FramePresenter {
             listener.onFaild(0, "传递参数不能为空");
             return;
         }
-
-
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .senceSamply(body)
@@ -79,6 +79,77 @@ public class SenceListener implements FramePresenter {
                            }
 
                 );
+
+    }
+
+    //地块选择列表请求接口
+    public void landType(final FrameListener<SenceLandRegion> listener) {
+        RxjavaRetrofitRequestUtil.getInstance().get().landType()
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, SenceLandRegion>() {
+                    @Override
+                    public SenceLandRegion call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        SenceLandRegion root = new Gson().fromJson(s, new TypeToken<SenceLandRegion>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<SenceLandRegion>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(SenceLandRegion data) {
+                                   listener.onSucces(data);
+                               }
+                           }
+
+                );
+    }
+
+
+    public void region(final FrameListener<SenceLandRegion> listener) {
+        RxjavaRetrofitRequestUtil.getInstance().get().region()
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, SenceLandRegion>() {
+                    @Override
+                    public SenceLandRegion call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        SenceLandRegion root = new Gson().fromJson(s, new TypeToken<SenceLandRegion>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<SenceLandRegion>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(SenceLandRegion data) {
+                                   listener.onSucces(data);
+                               }
+                           }
+
+                );
     }
 
     public interface SenceInterface extends FrameView {
@@ -86,6 +157,8 @@ public class SenceListener implements FramePresenter {
         void onLoginSuccess();
 
         void onLoginFailed(String info);
+
+        void onTypeRegionSuccess(String title, SenceLandRegion result);
 
         //位置名称
         String getaddress();

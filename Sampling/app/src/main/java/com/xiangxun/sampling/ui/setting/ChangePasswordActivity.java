@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -13,6 +14,10 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.Utils;
+import com.xiangxun.sampling.ui.LoginActivity;
+import com.xiangxun.sampling.ui.biz.ChangePassListener;
+import com.xiangxun.sampling.ui.biz.ChangePassListener.ChangePassInterface;
+import com.xiangxun.sampling.ui.presenter.ChangePassPresenter;
 import com.xiangxun.sampling.widget.clearedit.ViewEditText;
 import com.xiangxun.sampling.widget.dialog.ProgressLoadingDialog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
@@ -27,7 +32,7 @@ import com.xiangxun.sampling.widget.header.TitleView;
  * @date 2015-6-10 上午9:52:07
  */
 @ContentBinder(R.layout.activity_change_password)
-public class ChangePasswordActivity extends BaseActivity {
+public class ChangePasswordActivity extends BaseActivity implements ChangePassInterface {
     @ViewsBinder(R.id.tv_comm_title)
     private TitleView titleView;
     @ViewsBinder(R.id.buttonloginok)
@@ -46,9 +51,12 @@ public class ChangePasswordActivity extends BaseActivity {
     private String renewpasswords;
     private ProgressLoadingDialog mDialog;
 
+    private ChangePassPresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle(R.string.modifyPwd);
+        presenter = new ChangePassPresenter(this);
     }
 
     @Override
@@ -82,12 +90,42 @@ public class ChangePasswordActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onLoginSuccess() {
+        //进行退出登录操作，清理登录缓存。
+        SystemCfg.loginOut(this);
+        Intent i = new Intent(this, LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(i);
+        onBackPressed();
+
+    }
+
+    @Override
+    public void onLoginFailed(String info) {
+
+    }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+        btnOk.setClickable(false);
+    }
+
+    @Override
+    public void setEnableClick() {
+        btnOk.setClickable(true);
+    }
+
     private class BtnOkOnClickListener implements OnClickListener {
 
         @Override
         public void onClick(View v) {
             Utils.hideSoftInputFromWindow(ChangePasswordActivity.this);
-
             oldpasswords = oldPassword.getText();
             newpasswords = newPassword.getText();
             renewpasswords = reNewPassword.getText();
@@ -114,29 +152,8 @@ public class ChangePasswordActivity extends BaseActivity {
                 oldPassword.setEditText("");
                 return;
             }
-
-            mDialog.show();
-            new Thread() {
-                public void run() {
-                }
-            }.start();
+            presenter.ChangePass(oldpasswords,
+                    newpasswords);
         }
     }
-
-
-//	@SuppressLint("HandlerLeak")
-//	private Handler handler = new Handler() {
-//		public void handleMessage(android.os.Message msg) {
-//			mDialog.dismiss();
-//			if (msg.what == 0) {
-//				ToastApp.showToast("密码修改成功");
-//				finish();
-//			} else if (msg.what == 1) {
-//				ToastApp.showToast("网络异常");
-//			} else {
-//				ToastApp.showToast("密码修改失败");
-//			}
-//		};
-//	};
-
 }

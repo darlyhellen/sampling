@@ -2,6 +2,7 @@ package com.xiangxun.sampling.common.retrofit;
 
 import android.text.TextUtils;
 
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.common.SharePreferHelp;
@@ -38,6 +39,18 @@ public class PontCacheHelper {
                             }
                         }
                     }
+                }
+                //在这里更新方案缓存。修改方案的点位个数 。
+                Object st = SharePreferHelp.getValue("ResultData");
+                if (st != null) {
+                    PlannningData.ResultData resultsd = (PlannningData.ResultData) st;
+                    for (PlannningData.Scheme sh : resultsd.result) {
+                        if (sh.id.equals(id)) {
+                            sh.quantity += poly.size();
+                            break;
+                        }
+                    }
+                    SharePreferHelp.putValue("ResultData", resultsd);
                 }
                 data.result.addAll(poly);
             } else {

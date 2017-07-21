@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
@@ -20,10 +21,12 @@ import com.xiangxun.sampling.common.ConstantStatus;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.Api;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.ui.LoginActivity;
+import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
@@ -47,7 +50,7 @@ public class SettingFragment extends BaseFunctionList {
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
             new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
             new Function(R.mipmap.set_cleardata, R.string.set_fun3, "清除缓存数据", null),
-            //new Function(R.mipmap.set_font, R.string.set_fun4, "设置拍摄图片大小", ResolutionFontSetActivity.class),
+            new Function(R.mipmap.set_font, R.string.set_fun4, "在WiFi情况下上传采样图片视频", SamplingHistoryActivity.class),
             new Function(R.mipmap.set_update, R.string.set_fun5, "检查更新", null),
             new Function(R.mipmap.set_loginout, R.string.set_out, "", null)
     };
@@ -123,9 +126,10 @@ public class SettingFragment extends BaseFunctionList {
             setFunctions(functionsNoLogin);
         } else {
             setFunctions(functions);
-
             showNew();
         }
+
+        upload();
     }
 
     @Override
@@ -151,8 +155,10 @@ public class SettingFragment extends BaseFunctionList {
                                                                 if (2 == position) {
                                                                     clearDateOnClick();
                                                                 } else if (3 == position) {
-                                                                    CheckUpdate();
+                                                                    startActivity(new Intent(getActivity(), functions[position].getActivityClass()));
                                                                 } else if (4 == position) {
+                                                                    CheckUpdate();
+                                                                } else {
                                                                     loginout();
                                                                 }
                                                             }
@@ -162,6 +168,14 @@ public class SettingFragment extends BaseFunctionList {
             );
         }
     }
+
+    private void upload() {
+        int size = SugarRecord.listAll(SenceSamplingSugar.class).size();
+        if (size != 0) {
+            functions[3].setDescription(" New! " + size);
+        }
+    }
+
 
     private void loginout() {
 
@@ -212,14 +226,6 @@ public class SettingFragment extends BaseFunctionList {
         loadDialog.setTitle("正在处理,请稍后...");
         loadDialog.show();
         //进行缓存数据清空操作，包括数据库数据和文件数据。
-
-
-//        DBManager.getInstance().clearAccidentData();
-//        DBManager.getInstance().clearDangerData();
-//        DBManager.getInstance().clearIllegalData();
-//        DBManager.getInstance().clearChangeData();
-//        DBManager.getInstance().clearEnvFileData();
-
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -265,10 +271,10 @@ public class SettingFragment extends BaseFunctionList {
 
     private void showNew() {
         if (InfoCache.getInstance().isNewVer()) {
-            functions[3].setDescription("New!");
+            functions[4].setDescription("New!");
         } else {
             String version = new StringBuilder(getString(R.string.curr_ver)).append(InfoCache.getInstance().getAppVersionName(getActivity())).toString();
-            functions[3].setDescription(version);
+            functions[4].setDescription(version);
         }
     }
 }

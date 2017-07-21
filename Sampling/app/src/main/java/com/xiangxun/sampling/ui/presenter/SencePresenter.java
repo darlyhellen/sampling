@@ -6,6 +6,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SenceListener;
@@ -57,10 +58,6 @@ public class SencePresenter {
             ToastApp.showToast("待测项目不能为空");
             return;
         }
-        if (TextUtils.isEmpty(main.getother())) {
-            ToastApp.showToast("说明信息不能为空");
-            return;
-        }
         if (TextUtils.isEmpty(main.getaddress())) {
             ToastApp.showToast("地址信息不能为空");
             return;
@@ -77,14 +74,13 @@ public class SencePresenter {
         final SenceSamplingSugar paramer = new SenceSamplingSugar();
         paramer.setPointId(point.id);
         paramer.setSchemeId(point.schemeId);
-        paramer.setAddress(main.getaddress());
+        paramer.setRegion_id(main.getaddress());
         paramer.setLongitude(main.getlongitude());
         paramer.setLatitude(main.getlatitude());
-        paramer.setType(main.gettype());
+        paramer.setSoil_type(main.gettype());
         paramer.setName(main.getname());
-        paramer.setParams(main.getparams());
-        paramer.setProject(main.getproject());
-        paramer.setOther(main.getother());
+        paramer.setDepth(main.getparams());
+        paramer.setTest_item(main.getproject());
         if (wifi) {
             paramer.setImages(main.getImages());
             paramer.setVideos(main.getVideos());
@@ -98,7 +94,6 @@ public class SencePresenter {
                 main.setEnableClick();
                 if (!wifi) {
                     //保存进入数据库，进行下次WIIF上传。
-
                 }
             }
 
@@ -107,6 +102,42 @@ public class SencePresenter {
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 main.onLoginFailed(info);
+            }
+        });
+    }
+
+    //土壤类型请求。
+    public void landType(final String title) {
+        main.setDisableClick();
+        userBiz.landType(new FrameListener<SenceLandRegion>() {
+            @Override
+            public void onSucces(SenceLandRegion result) {
+                main.setEnableClick();
+                main.onTypeRegionSuccess(title, result);
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
+                main.setEnableClick();
+            }
+        });
+    }
+
+    //地区请求
+    public void region(final String title) {
+        main.setDisableClick();
+        userBiz.region(new FrameListener<SenceLandRegion>() {
+            @Override
+            public void onSucces(SenceLandRegion result) {
+                main.setEnableClick();
+                main.onTypeRegionSuccess(title,result);
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
+                main.setEnableClick();
             }
         });
     }

@@ -17,28 +17,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
+import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.Tools;
 
+import java.util.List;
 
 /**
- * @package: com.xiangxun.widget
- * @ClassName: SelectItemDialog.java
- * @Description: 审批意见选择器
- * @author: HanGJ
- * @date: 2015-9-8 上午10:39:48
+ * @TODO：现场采样选择地块和选择采样类型的选择器。
  */
-public class SelectItemDialog extends Dialog {
+public class SelectTypeRegionDialog extends Dialog {
     private Context mContext = null;
     private View mCustomView = null;
-    private String[] clearItems;
+    private List<SenceLandRegion.LandRegion> clearItems;
     private String mTitle = null;
     private TextView mTvCancle = null;
     private TextView mTvPublishSelectTitle = null;
     private ListView mLvPublishTypes = null;
-    private AffairsTypeAdapter adapter;
-    private String result;
+    private AffairsRegionTypeAdapter adapter;
+    private SenceLandRegion.LandRegion result;
 
-    public SelectItemDialog(Context context, String[] clearItems, String title) {
+    public SelectTypeRegionDialog(Context context, List<SenceLandRegion.LandRegion> clearItems, String title) {
         super(context, R.style.PublishDialog);
         this.mContext = context;
         this.clearItems = clearItems;
@@ -69,15 +67,15 @@ public class SelectItemDialog extends Dialog {
         mTvPublishSelectTitle = (TextView) mCustomView.findViewById(R.id.tv_publish_select_dialog_title);
         mTvPublishSelectTitle.setText(mTitle);
         mLvPublishTypes = (ListView) mCustomView.findViewById(R.id.lv_publish_select_dialog);
-        adapter = new AffairsTypeAdapter(mContext, clearItems);
+        adapter = new AffairsRegionTypeAdapter(mContext, clearItems);
         mLvPublishTypes.setAdapter(adapter);
         mLvPublishTypes.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                result = clearItems[0];
+                result = clearItems.get(0);
                 if (selectResultItemClick != null) {
-                    result = clearItems[position];
+                    result = clearItems.get(position);
                     selectResultItemClick.resultOnClick(result, mTitle);
                 }
                 dismiss();
@@ -93,18 +91,18 @@ public class SelectItemDialog extends Dialog {
         });
     }
 
-    public class AffairsTypeAdapter extends BaseAdapter {
-        private String[] clearItems = null;
+    public class AffairsRegionTypeAdapter extends BaseAdapter {
+        private List<SenceLandRegion.LandRegion> clearItems = null;
         private LayoutInflater mInflater = null;
 
-        public AffairsTypeAdapter(Context context, String[] clearItems) {
+        public AffairsRegionTypeAdapter(Context context, List<SenceLandRegion.LandRegion> clearItems) {
             mInflater = LayoutInflater.from(context);
             this.clearItems = clearItems;
         }
 
         @Override
         public int getCount() {
-            return clearItems.length;
+            return clearItems.size();
         }
 
         @Override
@@ -128,7 +126,7 @@ public class SelectItemDialog extends Dialog {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.mTvStyleName.setText(clearItems[position] + "");
+            holder.mTvStyleName.setText(clearItems.get(position).name + "");
             return convertView;
         }
 
@@ -144,7 +142,7 @@ public class SelectItemDialog extends Dialog {
     }
 
     public interface SelectResultItemClick {
-        public void resultOnClick(String result, String title);
+        public void resultOnClick(SenceLandRegion.LandRegion result, String title);
     }
 
 }

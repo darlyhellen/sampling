@@ -130,7 +130,7 @@ public class SetGuide extends BaseActivity implements OnClickListener, SelectRes
     }
 
     @Override
-    public void resultOnClick(String result) {
+    public void resultOnClick(String result, String title) {
         // TODO Auto-generated method stub
         wordRoadText.setText(result);
     }

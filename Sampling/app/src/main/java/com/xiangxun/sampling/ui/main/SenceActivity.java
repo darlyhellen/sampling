@@ -3,7 +3,6 @@ package com.xiangxun.sampling.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -19,6 +18,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
+import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.NetUtils;
@@ -31,8 +31,8 @@ import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
 import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
 import com.xiangxun.sampling.ui.presenter.SencePresenter;
-import com.xiangxun.sampling.widget.dialog.SelectItemDialog;
-import com.xiangxun.sampling.widget.dialog.SelectItemDialog.SelectResultItemClick;
+import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog;
+import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog.SelectResultItemClick;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
@@ -94,7 +94,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private List<String> images;
     private List<String> videos;
 
-    private SelectItemDialog typeDialog;
+    private SelectTypeRegionDialog typeDialog;
 
     private SencePresenter presenter;
 
@@ -113,7 +113,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void loadData() {
         type.isEdit(false);
-        type.setInfo("采样类型:", " ", "请点击选择类型");
+        type.setInfo("土壤类型:", " ", "请点击选择土壤类型");
         name.isEdit(true);
         name.setInfo("样品名称:", " ", "请输入样品名称");
         params.isEdit(true);
@@ -122,6 +122,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         project.setInfo("待测项目:", " ", "请输入待测项目");
         other.isEdit(true);
         other.setInfo("其他說明:", " ", "请输入说明备注信息");
+        address.isEdit(false);
+        address.setInfo("采样地点：", " ", "请点击选择采样地点");
         //初始化图片和视频信息所在位置。
         if (images == null) {
             images = new ArrayList<String>();
@@ -203,6 +205,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void initListener() {
         type.setOnClickListener(this);
+        address.setOnClickListener(this);
         imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -276,19 +279,27 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 startLocate();
                 break;
             case R.id.id_user_sence_type:
-                if (typeDialog == null) {
-                    typeDialog = new SelectItemDialog(SenceActivity.this, new String[]{"土壤", "玉米", "大豆", "空气", "地下水", "地表水"}, "请选择类型");
-                }
-                typeDialog.setSelectResultItemClick(this);
-                typeDialog.show();
+                presenter.landType("请选择土壤类型");
+                break;
+            case R.id.id_user_sence_address:
+                presenter.region("请选择采样地点");
                 break;
         }
     }
 
     @Override
-    public void resultOnClick(String result) {
-        type.isEdit(false);
-        type.setInfo("采样类型:", result, null);
+    public void resultOnClick(SenceLandRegion.LandRegion result, String title) {
+        if ("请选择土壤类型".equals(title)) {
+            type.isEdit(false);
+            type.setInfo("采样类型:", result.name, null);
+            type.setTag(result);
+        }
+        if ("请选择采样地点".equals(title)) {
+            address.isEdit(false);
+            address.setInfo("采样地点:", result.name, null);
+            address.setTag(result);
+        }
+
     }
 
     @Override
@@ -300,13 +311,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
                 longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
-                address.isEdit(true);
-                address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
                 //startChao(amapLocation);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                address.isEdit(true);
-                address.setInfo("地址：", String.valueOf("未知地方"), "");
                 latitude.isEdit(true);
                 latitude.setInfo("经度：", String.valueOf(0), "");
                 longitude.isEdit(true);
@@ -349,8 +356,16 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     }
 
     @Override
+    public void onTypeRegionSuccess(String title, SenceLandRegion result) {
+        typeDialog = new SelectTypeRegionDialog(SenceActivity.this, result.result, title);
+        typeDialog.setSelectResultItemClick(this);
+        typeDialog.show();
+    }
+
+    @Override
     public String getaddress() {
-        return address.getText();
+        SenceLandRegion.LandRegion landRegion = (SenceLandRegion.LandRegion) address.getTag();
+        return landRegion.id;
     }
 
     @Override
@@ -365,7 +380,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String gettype() {
-        return type.getValue().getText().toString().trim();
+        SenceLandRegion.LandRegion landRegion = (SenceLandRegion.LandRegion) type.getTag();
+        return landRegion.code;
     }
 
     @Override
@@ -405,12 +421,14 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void setDisableClick() {
-
+        address.setClickable(false);
+        type.setClickable(false);
     }
 
     @Override
     public void setEnableClick() {
-
+        address.setClickable(true);
+        type.setClickable(true);
     }
 
     @Override

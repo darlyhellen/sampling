@@ -23,8 +23,8 @@ public class SenceSamplingSugar extends SugarRecord {
     @Column(name = "schemeId")
     private String schemeId;
     //位置名称
-    @Column(name = "address")
-    private String address;
+    @Column(name = "region_id")
+    private String region_id;
     //经度
     @Column(name = "longitude")
     private String longitude;
@@ -33,20 +33,18 @@ public class SenceSamplingSugar extends SugarRecord {
     private String latitude;
 
     //采样类型
-    @Column(name = "type")
-    private String type;
+    @Column(name = "soil_type")
+    private String soil_type;
     //样品名称
     @Column(name = "name")
     private String name;
     //样品深度
-    @Column(name = "params")
-    private String params;
+    @Column(name = "depth")
+    private String depth;
     //待测项目
-    @Column(name = "project")
-    private String project;
-    //说明
-    @Column(name = "other")
-    private String other;
+    @Column(name = "test_item")
+
+    private String test_item;
     @Column(name = "images")
     private List<String> images;
     @Column(name = "videos")
@@ -72,12 +70,12 @@ public class SenceSamplingSugar extends SugarRecord {
         this.schemeId = schemeId;
     }
 
-    public String getAddress() {
-        return address;
+    public String getRegion_id() {
+        return region_id;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setRegion_id(String region_id) {
+        this.region_id = region_id;
     }
 
     public String getLongitude() {
@@ -96,12 +94,12 @@ public class SenceSamplingSugar extends SugarRecord {
         this.latitude = latitude;
     }
 
-    public String getType() {
-        return type;
+    public String getSoil_type() {
+        return soil_type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSoil_type(String soil_type) {
+        this.soil_type = soil_type;
     }
 
     public String getName() {
@@ -112,28 +110,20 @@ public class SenceSamplingSugar extends SugarRecord {
         this.name = name;
     }
 
-    public String getParams() {
-        return params;
+    public String getDepth() {
+        return depth;
     }
 
-    public void setParams(String params) {
-        this.params = params;
+    public void setDepth(String depth) {
+        this.depth = depth;
     }
 
-    public String getProject() {
-        return project;
+    public String getTest_item() {
+        return test_item;
     }
 
-    public void setProject(String project) {
-        this.project = project;
-    }
-
-    public String getOther() {
-        return other;
-    }
-
-    public void setOther(String other) {
-        this.other = other;
+    public void setTest_item(String test_item) {
+        this.test_item = test_item;
     }
 
     public List<String> getImages() {

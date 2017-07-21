@@ -120,14 +120,16 @@
                     android:paddingBottom="@dimen/margin_padding4"
                     android:paddingLeft="@dimen/margin_padding10"
                     android:paddingRight="@dimen/margin_padding10"
-                    android:paddingTop="@dimen/margin_padding10" />
+                    android:paddingTop="@dimen/margin_padding10"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/margin_padding10"
                     android:background="@color/index_line"
-                    android:paddingBottom="@dimen/margin_padding4" />
+                    android:paddingBottom="@dimen/margin_padding4"
+                    android:visibility="gone" />
             </LinearLayout>
             <!--定位信息-->
 

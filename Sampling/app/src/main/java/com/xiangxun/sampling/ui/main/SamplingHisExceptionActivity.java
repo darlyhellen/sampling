@@ -17,15 +17,15 @@ import com.xiangxun.sampling.widget.header.TitleView;
  *
  * @TODO:历史地块异常查询各个功能
  */
-@ContentBinder(R.layout.activity_sampling_exception)
+@ContentBinder(R.layout.activity_sampling_planning)
 public class SamplingHisExceptionActivity extends BaseActivity {
-    @ViewsBinder(R.id.id_exception_title)
+    @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
 
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        titleView.setTitle("地块异常上报");
+        titleView.setTitle("历史地块异常");
     }
 
     @Override

@@ -120,7 +120,7 @@ public class ResolutionFontSetActivity extends BaseActivity implements OnClickLi
     }
 
     @Override
-    public void resultOnClick(String result) {
+    public void resultOnClick(String result, String title) {
         if (result.contains("*")) {
             int index = result.indexOf("*");
             String pw = result.substring(0, index);
