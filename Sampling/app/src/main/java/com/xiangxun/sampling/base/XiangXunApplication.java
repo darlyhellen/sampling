@@ -18,6 +18,7 @@ import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 
+import com.orm.SugarContext;
 import com.xiangxun.sampling.BuildConfig;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
@@ -54,7 +55,7 @@ public class XiangXunApplication extends Application {
     public void onCreate() {
         sApplication = this;
         super.onCreate();
-
+        SugarContext.init(this);
         Intent sintent = new Intent(this, MainService.class);
         bindService(sintent, conn, Service.BIND_AUTO_CREATE);
         registerReceiver(mReceiver, new IntentFilter(lOCALE_CHANGED));
@@ -216,5 +217,12 @@ public class XiangXunApplication extends Application {
         }
 
         return version;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        //数据库Sugar关闭
+        SugarContext.terminate();
     }
 }

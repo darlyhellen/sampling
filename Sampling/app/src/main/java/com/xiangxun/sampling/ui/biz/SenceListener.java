@@ -1,27 +1,19 @@
 package com.xiangxun.sampling.ui.biz;
 
 import android.app.Dialog;
-import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
-import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
-import com.xiangxun.sampling.bean.ResultData;
-import com.xiangxun.sampling.bean.ResultData.LoginData;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
-import com.xiangxun.sampling.common.retrofit.paramer.SenceParamer;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import okhttp3.RequestBody;
 import rx.Observer;
@@ -44,11 +36,12 @@ public class SenceListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void upSampling(SenceParamer paramer, final FrameListener<String> listener) {
+    public void upSampling(SenceSamplingSugar paramer, final FrameListener<String> listener) {
         if (paramer == null) {
             listener.onFaild(0, "传递参数不能为空");
             return;
         }
+
 
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
@@ -81,6 +74,7 @@ public class SenceListener implements FramePresenter {
 
                                @Override
                                public void onNext(String data) {
+                                   listener.onSucces(data);
                                }
                            }
 
@@ -116,6 +110,10 @@ public class SenceListener implements FramePresenter {
 
         //其他說明
         String getother();
+
+        List<String> getImages();
+
+        List<String> getVideos();
 
         void end();
     }

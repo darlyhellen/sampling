@@ -161,5 +161,19 @@
             android:value="1717c506496508f8b9ac87edf0fd9579" />
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
+        <service android:name=".service.MainService" />
+        <!--Sugar satyan 数据库框架使用-->
+        <meta-data
+            android:name="DATABASE"
+            android:value="sampling.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="false" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.xiangxun.sampling.db" />
     </application>
 </manifest>

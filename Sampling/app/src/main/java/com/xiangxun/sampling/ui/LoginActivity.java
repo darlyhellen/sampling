@@ -99,8 +99,6 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
             idLoginName.setEnabled(false);
             idLoginPassword.setEnabled(false);
         }
-        Intent mainService = new Intent(this, MainService.class);
-        startService(mainService);
     }
 
     @Override
@@ -167,8 +165,7 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
     public void onLoginSuccess() {
         Intent intent = new Intent(LoginActivity.this, MainFragmentActivity.class);
         startActivity(intent);
-        //XiangXunApplication.getInstance().startPushService();
-        //XiangXunApplication.getInstance().getMainService().clearGPSLimitData();
+        XiangXunApplication.getInstance().getMainService().start();
         LoginActivity.this.finish();
     }
 

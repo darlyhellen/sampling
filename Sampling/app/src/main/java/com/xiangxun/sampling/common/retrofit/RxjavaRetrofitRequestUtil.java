@@ -128,7 +128,7 @@ public class RxjavaRetrofitRequestUtil {
                 encodedParams.append('&');
             }
             encodedParams.deleteCharAt(encodedParams.length() - 1);
-            DLog.i(encodedParams.toString());
+            DLog.json(encodedParams.toString());
             return encodedParams.toString();
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);

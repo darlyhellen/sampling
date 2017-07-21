@@ -19,10 +19,9 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
@@ -30,7 +29,6 @@ import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
-import com.xiangxun.sampling.ui.biz.SenceListener;
 import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
 import com.xiangxun.sampling.ui.presenter.SencePresenter;
 import com.xiangxun.sampling.widget.dialog.SelectItemDialog;
@@ -261,7 +259,12 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         titleView.setRightViewRightTextOneListener("保存", new OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.sampling(point.data);
+                if (NetUtils.isWifi(SenceActivity.this)) {
+                    //整体上传，否则片段上传。
+                    presenter.sampling(point.data, true);
+                } else {
+                    presenter.sampling(point.data, false);
+                }
             }
         });
     }
@@ -347,17 +350,17 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String getaddress() {
-        return address.getValue().getText().toString().trim();
+        return address.getText();
     }
 
     @Override
     public String getlatitude() {
-        return latitude.getValue().getText().toString().trim();
+        return latitude.getText();
     }
 
     @Override
     public String getlongitude() {
-        return longitude.getValue().getText().toString().trim();
+        return longitude.getText();
     }
 
     @Override
@@ -367,22 +370,32 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String getname() {
-        return name.getValue().getText().toString().trim();
+        return name.getText();
     }
 
     @Override
     public String getparams() {
-        return params.getValue().getText().toString().trim();
+        return params.getText();
     }
 
     @Override
     public String getproject() {
-        return project.getValue().getText().toString().trim();
+        return project.getText();
     }
 
     @Override
     public String getother() {
-        return other.getValue().getText().toString().trim();
+        return other.getText();
+    }
+
+    @Override
+    public List<String> getImages() {
+        return images;
+    }
+
+    @Override
+    public List<String> getVideos() {
+        return videos;
     }
 
     @Override
