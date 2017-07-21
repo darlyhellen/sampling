@@ -17,7 +17,6 @@ import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.ChangePassParamer;
 import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
 
 import java.util.regex.Matcher;
@@ -33,7 +32,7 @@ import rx.schedulers.Schedulers;
 /**
  * @author zhangyh2 LoginUser 下午3:42:16 TODO 用户登录获取数据传递给了接口
  */
-public class ChangePassListener implements FramePresenter {
+public class SettingFragmentListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
         if (loading != null) loading.show();
@@ -44,14 +43,13 @@ public class ChangePassListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void ChangePass(String oldpasswords, String newpasswords, final FrameListener<String> listener) {
+    public void loginout(final FrameListener<LoginData> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new ChangePassParamer(newpasswords,oldpasswords), "UTF-8"));
-        RxjavaRetrofitRequestUtil.getInstance().post()
-                .postPass(body)
+        RxjavaRetrofitRequestUtil.getInstance().get()
+                .getloginout()
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, LoginData>() {
@@ -60,6 +58,10 @@ public class ChangePassListener implements FramePresenter {
                         DLog.json("Func1", s.toString());
                         LoginData root = new Gson().fromJson(s, new TypeToken<LoginData>() {
                         }.getType());
+
+                        if (root != null && root.resCode == 1000) {
+                            SystemCfg.loginOut(XiangXunApplication.getInstance());
+                        }
                         return root;
                     }
                 })
@@ -79,7 +81,7 @@ public class ChangePassListener implements FramePresenter {
                                public void onNext(LoginData data) {
                                    if (data != null) {
                                        if (data.resCode == 1000) {
-                                           listener.onSucces(data.resDesc);
+                                           listener.onSucces(data);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
                                        }
@@ -92,12 +94,10 @@ public class ChangePassListener implements FramePresenter {
                 );
     }
 
-    public interface ChangePassInterface extends FrameView {
+    public interface SettingFragmentInterface extends FrameView {
 
         void onLoginSuccess();
 
         void onLoginFailed(String info);
-
-        void end();
     }
 }

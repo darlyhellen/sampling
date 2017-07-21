@@ -28,6 +28,13 @@ public interface HttpRetrofitInterface {
 
     /**
      * @return
+     * @TODO:退出登录接口
+     */
+    @GET("/logout")
+    Observable<JsonObject> getloginout();
+
+    /**
+     * @return
      * @TODO:修改密码接口
      */
     @POST("/server/account/updateP")
@@ -76,6 +83,12 @@ public interface HttpRetrofitInterface {
      */
     @GET("/server/region/queryAll")
     Observable<JsonObject> region();
+
+    /**
+     * @TODO:指标查询接口
+     */
+    @GET("/server/land/analysis/query")
+    Observable<JsonObject> analysis();
 
 //
 //    /**

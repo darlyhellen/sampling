@@ -26,7 +26,7 @@ public class MainService extends Service {
         public void run() {
             List<SenceSamplingSugar> data = SugarRecord.listAll(SenceSamplingSugar.class);
             //调用接口进行数据传输
-            DLog.i(getClass().getSimpleName(), "接口起吊，传递大数据" + data);
+            DLog.i(getClass().getSimpleName(), "查找到WIFI环境，直接传递所有现场采样数据。" + data);
         }
     }
 

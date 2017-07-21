@@ -55,6 +55,18 @@ public class PontCacheHelper {
                 data.result.addAll(poly);
             } else {
                 data.result = result.result;
+                //在这里更新方案缓存。修改方案的点位个数 。
+                Object st = SharePreferHelp.getValue("ResultData");
+                if (st != null) {
+                    PlannningData.ResultData resultsd = (PlannningData.ResultData) st;
+                    for (PlannningData.Scheme sh : resultsd.result) {
+                        if (sh.id.equals(id)) {
+                            sh.quantity += result.result.size();
+                            break;
+                        }
+                    }
+                    SharePreferHelp.putValue("ResultData", resultsd);
+                }
             }
             //缓存最近更新的时间戳
             if (!TextUtils.isEmpty(result.resTime)) {

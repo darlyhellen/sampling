@@ -43,8 +43,9 @@ public class SenceSamplingSugar extends SugarRecord {
     private String depth;
     //待测项目
     @Column(name = "test_item")
-
     private String test_item;
+    @Column(name = "missionId")
+    private String missionId;
     @Column(name = "images")
     private List<String> images;
     @Column(name = "videos")
@@ -124,6 +125,14 @@ public class SenceSamplingSugar extends SugarRecord {
 
     public void setTest_item(String test_item) {
         this.test_item = test_item;
+    }
+
+    public String getMissionId() {
+        return missionId;
+    }
+
+    public void setMissionId(String missionId) {
+        this.missionId = missionId;
     }
 
     public List<String> getImages() {

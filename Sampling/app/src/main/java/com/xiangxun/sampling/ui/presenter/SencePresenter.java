@@ -34,7 +34,7 @@ public class SencePresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sampling(PlannningData.Point point, final boolean wifi) {
+    public void sampling(PlannningData.Scheme planning, PlannningData.Point point, final boolean wifi) {
 
         if (point == null || TextUtils.isEmpty(point.id) || TextUtils.isEmpty(point.schemeId)) {
             ToastApp.showToast("点位信息传递错误");
@@ -81,6 +81,7 @@ public class SencePresenter {
         paramer.setName(main.getname());
         paramer.setDepth(main.getparams());
         paramer.setTest_item(main.getproject());
+        paramer.setMissionId(planning.missionId);
         if (wifi) {
             paramer.setImages(main.getImages());
             paramer.setVideos(main.getVideos());
@@ -131,7 +132,7 @@ public class SencePresenter {
             @Override
             public void onSucces(SenceLandRegion result) {
                 main.setEnableClick();
-                main.onTypeRegionSuccess(title,result);
+                main.onTypeRegionSuccess(title, result);
             }
 
             @Override

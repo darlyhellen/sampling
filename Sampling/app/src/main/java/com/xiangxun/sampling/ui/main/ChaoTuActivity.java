@@ -54,6 +54,24 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        LayerView baseLayerView = new LayerView(this);
+
+        baseLayerView.setURL(url);
+        CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
+        crs.wkid = 4326;
+        baseLayerView.setCRS(crs);
+        mapView.addLayer(baseLayerView);
+        // 启用内置放大缩小控件
+        mapView.setBuiltInZoomControls(true);
+        mapView.setClickable(true);
+        mapView.getController().setZoom(10);
+        mapView.post(new Runnable() {
+            public void run() {
+                initHeight();
+            }
+        });
+
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         if (planning == null) {
             titleView.setTitle("点位分布");
@@ -74,24 +92,8 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     @Override
     protected void loadData() {
         if (data != null) {
-            LayerView baseLayerView = new LayerView(this);
             center = new Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
-            baseLayerView.setURL(DEFAULT_URL);
-            CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
-            crs.wkid = 4326;
-            baseLayerView.setCRS(crs);
-            mapView.addLayer(baseLayerView);
             mapView.getController().setCenter(center);
-
-            // 启用内置放大缩小控件
-            mapView.setBuiltInZoomControls(true);
-            mapView.setClickable(true);
-            mapView.getController().setZoom(10);
-            mapView.post(new Runnable() {
-                public void run() {
-                    initHeight();
-                }
-            });
             Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
             Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);

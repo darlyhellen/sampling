@@ -264,9 +264,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             public void onClick(View v) {
                 if (NetUtils.isWifi(SenceActivity.this)) {
                     //整体上传，否则片段上传。
-                    presenter.sampling(point.data, true);
+                    presenter.sampling(planning, point.data, true);
                 } else {
-                    presenter.sampling(point.data, false);
+                    presenter.sampling(planning, point.data, false);
                 }
             }
         });

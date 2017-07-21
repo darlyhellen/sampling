@@ -9,20 +9,20 @@ package com.xiangxun.sampling.common.retrofit.paramer;
  */
 public class ChangePassParamer {
 
-    private String oldp;
+    private String oldP;
     private String newP;
 
     public ChangePassParamer(String newP, String oldp) {
         this.newP = newP;
-        this.oldp = oldp;
+        this.oldP = oldp;
     }
 
     public String getOldp() {
-        return oldp;
+        return oldP;
     }
 
     public void setOldp(String oldp) {
-        this.oldp = oldp;
+        this.oldP = oldp;
     }
 
     public String getNewP() {

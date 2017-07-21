@@ -26,7 +26,10 @@ import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.ui.LoginActivity;
+import com.xiangxun.sampling.ui.biz.SettingFragmentListener;
+import com.xiangxun.sampling.ui.biz.SettingFragmentListener.SettingFragmentInterface;
 import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
+import com.xiangxun.sampling.ui.presenter.SettingFragmentPresenter;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
@@ -34,7 +37,7 @@ import com.xiangxun.sampling.widget.dialog.UpdateDialog;
 import java.io.File;
 
 
-public class SettingFragment extends BaseFunctionList {
+public class SettingFragment extends BaseFunctionList implements SettingFragmentInterface {
     private int isNoLoginFlag;
     private View mParentView = null;
     private ListView functionListView;
@@ -45,6 +48,8 @@ public class SettingFragment extends BaseFunctionList {
      * 更新版本提示框
      */
     private UpdateDialog updateDialog;// 更新版本提示框
+
+    private SettingFragmentPresenter presenter;
 
     private Function[] functions = {
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
@@ -107,6 +112,7 @@ public class SettingFragment extends BaseFunctionList {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isNoLoginFlag = getActivity().getIntent().getIntExtra("isFlag", 0);
+        presenter = new SettingFragmentPresenter(this);
         initView();
         initData();
         initListener();
@@ -192,11 +198,7 @@ public class SettingFragment extends BaseFunctionList {
             public void onClick(View v) {
                 msgDialog.dismiss();
                 //进行退出登录操作，清理登录缓存。
-                SystemCfg.loginOut(getActivity());
-                Intent i = new Intent(getActivity(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                getActivity().startActivity(i);
-                getActivity().onBackPressed();
+                presenter.loginout();
             }
         });
         msgDialog.show();
@@ -276,5 +278,28 @@ public class SettingFragment extends BaseFunctionList {
             String version = new StringBuilder(getString(R.string.curr_ver)).append(InfoCache.getInstance().getAppVersionName(getActivity())).toString();
             functions[4].setDescription(version);
         }
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        Intent i = new Intent(getActivity(), LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        getActivity().startActivity(i);
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onLoginFailed(String info) {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 }

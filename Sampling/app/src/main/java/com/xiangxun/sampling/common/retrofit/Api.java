@@ -36,6 +36,12 @@ public class Api {
      */
     public static String password = "123456yng";
 
+    public static final int LISTSTATEFIRST = 0x204;
+
+    public static final int LISTSTATEREFRESH = 0x205;
+
+    public static final int LISTSTATELOADMORE = 0x206;
+
     public static String getSipIp() {
         return SystemCfg.getServerIP(XiangXunApplication.getInstance());
     }

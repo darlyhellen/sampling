@@ -25,7 +25,7 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_padding10"
-        android:background="@drawable/btn_selecter_login"
+        android:background="@drawable/btn_selecter_changepwd"
         android:text="@string/ok"
         android:textColor="@drawable/textcolor_selector"
         android:textSize="@dimen/textSize16" />
