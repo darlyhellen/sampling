@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.ui.biz;
 
 import android.app.Dialog;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -41,13 +42,17 @@ public class TargetListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void analysis(SenceSamplingSugar paramer, final FrameListener<SimplingTargetResult> listener) {
+    public void analysis(String address, final FrameListener<SimplingTargetResult> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
+        if (TextUtils.isEmpty(address)){
+            listener.onFaild(0, "采样地址不能为空");
+            return;
+        }
         RxjavaRetrofitRequestUtil.getInstance().get()
-                .analysis()
+                .analysis(address)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, SimplingTargetResult>() {

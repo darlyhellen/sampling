@@ -32,6 +32,8 @@ public class PlannningData {
         public String blockId;
         //采样样品
         public String sampleCode;
+        //采样类型
+        public String sampleName;
         //方案编号
         public String code;
         //方案名称

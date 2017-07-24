@@ -30,10 +30,10 @@ public class TargetPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void analysis() {
+    public void analysis(String address) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.analysis(null, new FrameListener<SimplingTargetResult>() {
+        userBiz.analysis(address, new FrameListener<SimplingTargetResult>() {
             @Override
             public void onSucces(SimplingTargetResult data) {
                 userBiz.onStop(loading);

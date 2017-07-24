@@ -3,6 +3,7 @@ package com.xiangxun.sampling.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -51,7 +52,7 @@ import java.util.List;
  * @TODO: 現場情況的展示頁面
  */
 @ContentBinder(R.layout.activity_sence)
-public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectResultItemClick {
+public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private Scheme planning;
     private Pointly point;
@@ -113,7 +114,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void loadData() {
         type.isEdit(false);
-        type.setInfo("土壤类型:", " ", "请点击选择土壤类型");
+        type.setInfo("采样类型:", planning.sampleName, "");
         name.isEdit(true);
         name.setInfo("样品名称:", " ", "请输入样品名称");
         params.isEdit(true);
@@ -123,7 +124,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         other.isEdit(true);
         other.setInfo("其他說明:", " ", "请输入说明备注信息");
         address.isEdit(false);
-        address.setInfo("采样地点：", " ", "请点击选择采样地点");
+        address.setInfo("采样地点：", " ", " ");
         //初始化图片和视频信息所在位置。
         if (images == null) {
             images = new ArrayList<String>();
@@ -204,8 +205,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void initListener() {
-        type.setOnClickListener(this);
-        address.setOnClickListener(this);
         imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -278,28 +277,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             case R.id.id_user_sence_location:
                 startLocate();
                 break;
-            case R.id.id_user_sence_type:
-                presenter.landType("请选择土壤类型");
-                break;
-            case R.id.id_user_sence_address:
-                presenter.region("请选择采样地点");
-                break;
         }
-    }
-
-    @Override
-    public void resultOnClick(SenceLandRegion.LandRegion result, String title) {
-        if ("请选择土壤类型".equals(title)) {
-            type.isEdit(false);
-            type.setInfo("采样类型:", result.name, null);
-            type.setTag(result);
-        }
-        if ("请选择采样地点".equals(title)) {
-            address.isEdit(false);
-            address.setInfo("采样地点:", result.name, null);
-            address.setTag(result);
-        }
-
     }
 
     @Override
@@ -311,13 +289,22 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
                 longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
-                //startChao(amapLocation);
+                address.isEdit(false);
+                if (TextUtils.isEmpty(amapLocation.getAddress())) {
+                    startLocate();
+                } else {
+                    address.setInfo("位置：", String.valueOf(amapLocation.getAddress()), "");
+                    //当获取了正确位置信息时。
+                }
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 latitude.isEdit(true);
                 latitude.setInfo("经度：", String.valueOf(0), "");
                 longitude.isEdit(true);
                 longitude.setInfo("纬度：", String.valueOf(0), "");
+                address.isEdit(false);
+                address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
+                startLocate();
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();
@@ -357,15 +344,11 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void onTypeRegionSuccess(String title, SenceLandRegion result) {
-        typeDialog = new SelectTypeRegionDialog(SenceActivity.this, result.result, title);
-        typeDialog.setSelectResultItemClick(this);
-        typeDialog.show();
     }
 
     @Override
     public String getaddress() {
-        SenceLandRegion.LandRegion landRegion = (SenceLandRegion.LandRegion) address.getTag();
-        return landRegion.id;
+        return address.getValue().getText().toString().trim();
     }
 
     @Override
@@ -380,8 +363,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String gettype() {
-        SenceLandRegion.LandRegion landRegion = (SenceLandRegion.LandRegion) type.getTag();
-        return landRegion.code;
+        return type.getValue().getText().toString().trim();
     }
 
     @Override

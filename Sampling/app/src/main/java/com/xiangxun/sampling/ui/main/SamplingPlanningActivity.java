@@ -13,7 +13,6 @@ import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
-import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;

@@ -50,7 +50,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
 
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.data.id);
+            hocker.name.setText(s.data.code);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
             hocker.dept.setText(String.valueOf(s.data.latitude));
@@ -70,7 +70,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.desc.setTextSize(14);
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.data.id);
+            hocker.name.setText(s.data.code);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
             hocker.dept.setText(String.valueOf(s.data.latitude));

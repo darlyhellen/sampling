@@ -132,7 +132,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
         }
         if (isSence) {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("计划名称");
+            hocker.name.setText("任务名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
             hocker.dept.setText("采样样品");

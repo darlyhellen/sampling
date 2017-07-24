@@ -88,7 +88,7 @@ public interface HttpRetrofitInterface {
      * @TODO:指标查询接口
      */
     @GET("/server/land/analysis/query")
-    Observable<JsonObject> analysis();
+    Observable<JsonObject> analysis(@Query("regionId") String regionId);
 
 //
 //    /**

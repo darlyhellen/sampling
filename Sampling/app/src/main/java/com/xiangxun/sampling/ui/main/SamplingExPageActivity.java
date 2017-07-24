@@ -203,16 +203,20 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
                 longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
-                address.isEdit(true);
-                address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
-                //startChao(amapLocation);
+                if (TextUtils.isEmpty(amapLocation.getAddress())) {
+                    startLocate();
+                } else {
+                    address.isEdit(false);
+                    address.setInfo("位置：", String.valueOf(amapLocation.getAddress()), "");
+                }
+                DLog.i(amapLocation);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 address.isEdit(true);
                 address.setInfo("地址：", String.valueOf("未知地方"), "");
                 latitude.isEdit(true);
                 latitude.setInfo("经度：", String.valueOf(0), "");
-                longitude.isEdit(true);
+                longitude.isEdit(false);
                 longitude.setInfo("纬度：", String.valueOf(0), "");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }

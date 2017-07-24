@@ -27,16 +27,11 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:现场采集页面，适配器效果，存放图片和视频文件。
  */
-public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> {
+public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> implements StickyListHeadersAdapter {
 
 
     public SamplingTargetAdapter(List<SimplingTarget> data, int resID, Context context) {
         super(data, resID, context);
-    }
-
-    @Override
-    public int getCount() {
-        return data.size() > 3 ? 3 : data.size();
     }
 
     @Override
@@ -57,6 +52,42 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> {
         hocker.name.setText(info.code);
         hocker.dept.setText(info.ph);
         return view;
+    }
+
+    @Override
+    public View getHeaderView(int i, View view, ViewGroup viewGroup) {
+        ViewHocker hocker = null;
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(resID, viewGroup, false);
+            hocker = new ViewHocker();
+            hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
+            hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
+            hocker.position = (TextView) view.findViewById(R.id.id_item_planning_place);
+            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_other);
+            hocker.bg = (LinearLayout) view.findViewById(R.id.id_item_planning_linear);
+            view.setTag(hocker);
+        } else {
+            hocker = (ViewHocker) view.getTag();
+        }
+        hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        hocker.name.setText("计划名称");
+        hocker.name.setTextColor(context.getResources().getColor(R.color.white));
+        hocker.name.setTextSize(16);
+        hocker.dept.setText("采样样品");
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
+        hocker.dept.setTextSize(16);
+        hocker.position.setText("采样选址");
+        hocker.position.setTextColor(context.getResources().getColor(R.color.white));
+        hocker.position.setTextSize(16);
+        hocker.desc.setText("");
+        hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+        hocker.desc.setTextSize(16);
+        return view;
+    }
+
+    @Override
+    public long getHeaderId(int i) {
+        return 0;
     }
 
     class ViewHocker {

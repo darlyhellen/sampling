@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
+import com.supermap.android.commons.EventStatus;
 import com.supermap.android.maps.CoordinateReferenceSystem;
 import com.supermap.android.maps.DefaultItemizedOverlay;
 import com.supermap.android.maps.ItemizedOverlay;
@@ -17,6 +18,12 @@ import com.supermap.android.maps.MapView;
 import com.supermap.android.maps.Overlay;
 import com.supermap.android.maps.OverlayItem;
 import com.supermap.android.maps.Point2D;
+import com.supermap.android.maps.query.FilterParameter;
+import com.supermap.android.maps.query.QueryByBoundsParameters;
+import com.supermap.android.maps.query.QueryByBoundsService;
+import com.supermap.android.maps.query.QueryEventListener;
+import com.supermap.android.maps.query.QueryResult;
+import com.supermap.services.components.commontypes.Rectangle2D;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData;
@@ -40,7 +47,8 @@ import java.util.List;
 @ContentBinder(R.layout.activity_chaotu)
 public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface {
     private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
-    String url = "http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China";
+    //String url = "http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China";
+    String url = "http://10.10.15.201:8090/iserver/services/map-etkqimage/rest/maps/etkq@etkqimg";
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -87,6 +95,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
         presenter = new SamplingPointPresenter(this);
         presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
+        boundsQuery();
     }
 
     @Override
@@ -164,6 +173,29 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         //标题栏的高度
         return contentViewTop - statusBarHight;
     }
+
+    //范围查询
+    private void boundsQuery() {
+        QueryByBoundsParameters p = new QueryByBoundsParameters();
+        // left, bottom, right, top 必设范围
+        p.bounds = new Rectangle2D(104.4561321, 38.111231, 105.4561321, 39.111231);
+        p.expectCount = 2;// 期望返回的条数
+        FilterParameter fp = new FilterParameter();
+        fp.name = "Capitals@World.1";// 必设参数，图层名称格式：数据集名称@数据源别名
+        p.filterParameters = new FilterParameter[]{fp};
+        QueryByBoundsService qs = new QueryByBoundsService(url);
+        qs.process(p, new MyQueryEventListener());
+    }
+
+    public class MyQueryEventListener extends QueryEventListener {
+        @Override
+        public void onQueryStatusChanged(Object sourceObject, EventStatus status) {
+            if (sourceObject instanceof QueryResult && status.equals(EventStatus.PROCESS_COMPLETE)) {
+                QueryResult qr = (QueryResult) sourceObject;
+            }
+        }
+    }
+
 
     //获取点位成功信息记录。
     @Override
