@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +44,30 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> impleme
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
             hocker.position = (TextView) view.findViewById(R.id.id_item_planning_place);
-            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_other);
+            hocker.iv = (ImageView) view.findViewById(R.id.id_item_planning_other);
             hocker.bg = (LinearLayout) view.findViewById(R.id.id_item_planning_linear);
             view.setTag(hocker);
         } else {
             hocker = (ViewHocker) view.getTag();
         }
+        hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
         hocker.name.setText(info.code);
-        hocker.dept.setText(info.ph);
+        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setTextSize(14);
+        hocker.dept.setText(String.valueOf("ph:\n" + "cadmium:\n" + "availableCadmium:"));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setTextSize(14);
+        hocker.position.setText(String.valueOf(info.ph + "\n" + info.cadmium + "\n" + info.availableCadmium));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setTextSize(14);
+        switch (info.status) {
+            case 0:
+                hocker.iv.setImageResource(R.mipmap.key_clear);
+                break;
+            case 1:
+                hocker.iv.setImageResource(R.mipmap.key_end);
+                break;
+        }
         return view;
     }
 
@@ -58,28 +75,28 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> impleme
     public View getHeaderView(int i, View view, ViewGroup viewGroup) {
         ViewHocker hocker = null;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(resID, viewGroup, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_planning_header, viewGroup, false);
             hocker = new ViewHocker();
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
             hocker.position = (TextView) view.findViewById(R.id.id_item_planning_place);
-            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_other);
+            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_tvs);
             hocker.bg = (LinearLayout) view.findViewById(R.id.id_item_planning_linear);
             view.setTag(hocker);
         } else {
             hocker = (ViewHocker) view.getTag();
         }
         hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-        hocker.name.setText("计划名称");
+        hocker.name.setText("样品");
         hocker.name.setTextColor(context.getResources().getColor(R.color.white));
         hocker.name.setTextSize(16);
-        hocker.dept.setText("采样样品");
+        hocker.dept.setText("指标");
         hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
         hocker.dept.setTextSize(16);
-        hocker.position.setText("采样选址");
+        hocker.position.setText("值（mg/kg）");
         hocker.position.setTextColor(context.getResources().getColor(R.color.white));
         hocker.position.setTextSize(16);
-        hocker.desc.setText("");
+        hocker.desc.setText("是否超标");
         hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
         hocker.desc.setTextSize(16);
         return view;
@@ -96,5 +113,7 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> impleme
         TextView dept;
         TextView position;
         TextView desc;
+        ImageView iv;
+
     }
 }

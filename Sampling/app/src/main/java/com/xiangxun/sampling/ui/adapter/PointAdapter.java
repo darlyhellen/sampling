@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
             hocker.position = (TextView) view.findViewById(R.id.id_item_planning_place);
-            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_other);
+            hocker.iv = (ImageView) view.findViewById(R.id.id_item_planning_other);
             hocker.bg = (LinearLayout) view.findViewById(R.id.id_item_planning_linear);
             view.setTag(hocker);
         } else {
@@ -49,25 +50,19 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
         }
 
         if (isSence) {
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.data.code);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.data.latitude));
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.data.longitude));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.position.setTextSize(14);
-            hocker.desc.setText("采样记录");
-            hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-            hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.data.isUserSee()) {
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
-            } else {
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
+            if (s.data.isSampling == 0) {
+                //未采样进行展示 ,已采集不进行展示
+                hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+                hocker.name.setText(s.data.code);
+                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextSize(14);
+                hocker.dept.setText(String.valueOf(s.data.latitude));
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextSize(14);
+                hocker.position.setText(String.valueOf(s.data.longitude));
+                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextSize(14);
             }
-            hocker.desc.setTextSize(14);
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
             hocker.name.setText(s.data.code);
@@ -79,15 +74,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.position.setText(String.valueOf(s.data.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
-            hocker.desc.setText("点击修改");
-            hocker.desc.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-            hocker.desc.getPaint().setAntiAlias(true);//抗锯齿
-            if (s.data.isUserSee()) {
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.gray));
-            } else {
-                hocker.desc.setTextColor(context.getResources().getColor(R.color.blue));
-            }
-            hocker.desc.setTextSize(14);
+            hocker.iv.setImageResource(R.mipmap.ic_main_more_press);
         }
         return view;
     }
@@ -96,12 +83,12 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
     public View getHeaderView(int i, View view, ViewGroup viewGroup) {
         ViewHocker hocker = null;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(resID, null);
+            view = LayoutInflater.from(context).inflate(R.layout.item_planning_header, null);
             hocker = new ViewHocker();
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
             hocker.position = (TextView) view.findViewById(R.id.id_item_planning_place);
-            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_other);
+            hocker.desc = (TextView) view.findViewById(R.id.id_item_planning_tvs);
             hocker.bg = (LinearLayout) view.findViewById(R.id.id_item_planning_linear);
             view.setTag(hocker);
         } else {
@@ -119,9 +106,6 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.position.setText("纬度");
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
-            hocker.desc.setText("");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.desc.setTextSize(16);
         } else {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
             hocker.name.setText("点位编号");
@@ -133,9 +117,6 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.position.setText("纬度");
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
-            hocker.desc.setText("");
-            hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
-            hocker.desc.setTextSize(16);
         }
         return view;
     }
@@ -151,5 +132,6 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
         TextView dept;
         TextView position;
         TextView desc;
+        ImageView iv;
     }
 }

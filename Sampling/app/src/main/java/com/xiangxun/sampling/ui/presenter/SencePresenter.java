@@ -8,6 +8,7 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SenceListener;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -34,7 +35,7 @@ public class SencePresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sampling(PlannningData.Scheme planning, PlannningData.Point point, final boolean wifi) {
+    public void sampling(final PlannningData.Scheme planning, PlannningData.Point point, final boolean wifi) {
 
         if (point == null || TextUtils.isEmpty(point.id) || TextUtils.isEmpty(point.schemeId)) {
             ToastApp.showToast("点位信息传递错误");
@@ -70,7 +71,6 @@ public class SencePresenter {
             ToastApp.showToast("纬度不能为空");
             return;
         }
-
         final SenceSamplingSugar paramer = new SenceSamplingSugar();
         paramer.setPointId(point.id);
         paramer.setSchemeId(point.schemeId);
@@ -88,14 +88,17 @@ public class SencePresenter {
         }
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.upSampling(paramer, new FrameListener<String>() {
+        userBiz.upSampling(paramer, new FrameListener<PlannningData.ResultPointData>() {
             @Override
-            public void onSucces(String data) {
+            public void onSucces(PlannningData.ResultPointData data) {
+                PontCacheHelper.cachePoint(planning.id, data);
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 if (!wifi) {
                     //保存进入数据库，进行下次WIIF上传。
+                    // paramer.save();
                 }
+                main.onLoginSuccess();
             }
 
             @Override

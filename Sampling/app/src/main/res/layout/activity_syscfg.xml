@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/sence_bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -13,20 +13,52 @@
         android:layout_height="wrap_content"
         android:visibility="visible" />
 
-    <com.xiangxun.sampling.widget.clearedit.ViewEditTextEx
-        android:id="@+id/edt_server"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_comm_title" />
+        android:layout_marginTop="@dimen/margin_padding10"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_padding10">
+
+        <com.xiangxun.sampling.widget.groupview.DetailView
+            android:id="@+id/edt_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:paddingLeft="@dimen/margin_padding10"
+            android:paddingRight="@dimen/margin_padding10"
+            android:paddingTop="@dimen/margin_padding10" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/margin_padding10"
+            android:background="@color/index_line"
+            android:paddingBottom="@dimen/margin_padding4" />
+
+        <com.xiangxun.sampling.widget.groupview.DetailView
+            android:id="@+id/edt_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:paddingLeft="@dimen/margin_padding10"
+            android:paddingRight="@dimen/margin_padding10"
+            android:paddingTop="@dimen/margin_padding10" />
+
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/syscfgset"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_padding10"
         android:background="@drawable/btn_selecter_changepwd"
         android:text="@string/ok"
-        android:textColor="@drawable/textcolor_selector"
-        android:textSize="@dimen/textSize16" />
-</RelativeLayout>
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize20" />
+</LinearLayout>

@@ -26,6 +26,7 @@ import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
+import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
@@ -334,7 +335,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void onLoginSuccess() {
-
+        setResult(Activity.RESULT_OK);
+        onBackPressed();
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.xiangxun.sampling.ui.setting;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,7 +12,7 @@ import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
-import com.xiangxun.sampling.widget.clearedit.ViewEditTextEx;
+import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 
@@ -26,7 +26,9 @@ public class SystemSettingActivity extends BaseActivity {
     @ViewsBinder(R.id.syscfgset)
     private Button btnset;
     @ViewsBinder(R.id.edt_server)
-    private ViewEditTextEx server;
+    private DetailView server;
+    @ViewsBinder(R.id.edt_port)
+    private DetailView port;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -35,12 +37,18 @@ public class SystemSettingActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        server.setTextViewText("管理平台地址");
-        server.setEditTextOneHint("请输入管理平台IP");
-        server.setEditTextTwoHint("请输入管理平台Port");
-        server.setEditTextOneText(SystemCfg.getServerIP(this));
-        server.setEditTextTwoText(SystemCfg.getServerPort(this));
-        server.setEditTextTwoInputMode(InputType.TYPE_CLASS_NUMBER);
+        server.isEdit(true);
+        if (TextUtils.isEmpty(SystemCfg.getServerIP(this))) {
+            server.setInfo("服务地址：", " ", "请输入管理平台IP");
+        } else {
+            server.setInfo("服务地址：", SystemCfg.getServerIP(this), null);
+        }
+        port.isEdit(true);
+        if (TextUtils.isEmpty(SystemCfg.getServerPort(this))) {
+            port.setInfo("服务地址：", " ", "请输入管理平台Port");
+        } else {
+            port.setInfo("服务地址：", SystemCfg.getServerPort(this), null);
+        }
     }
 
     @Override
@@ -59,8 +67,8 @@ public class SystemSettingActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
-            SystemCfg.setServerIP(SystemSettingActivity.this, server.getEditTextOneText().toString());
-            SystemCfg.setServerPort(SystemSettingActivity.this, server.getEditTextTwoText().toString());
+            SystemCfg.setServerIP(SystemSettingActivity.this, server.getText());
+            SystemCfg.setServerPort(SystemSettingActivity.this, port.getText());
             setResult(Activity.RESULT_OK);
             onBackPressed();
         }

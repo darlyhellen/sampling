@@ -9,6 +9,7 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
@@ -39,7 +40,7 @@ public class SenceListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void upSampling(SenceSamplingSugar paramer, final FrameListener<String> listener) {
+    public void upSampling(SenceSamplingSugar paramer, final FrameListener<PlannningData.ResultPointData> listener) {
         if (paramer == null) {
             listener.onFaild(0, "传递参数不能为空");
             return;
@@ -53,14 +54,16 @@ public class SenceListener implements FramePresenter {
                 .senceSamply(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, String>() {
+                .map(new Func1<JsonObject, PlannningData.ResultPointData>() {
                     @Override
-                    public String call(JsonObject s) {
+                    public PlannningData.ResultPointData call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        return s.toString();
+                        PlannningData.ResultPointData root = new Gson().fromJson(s, new TypeToken<PlannningData.ResultPointData>() {
+                        }.getType());
+                        return root;
                     }
                 })
-                .subscribe(new Observer<String>() {
+                .subscribe(new Observer<PlannningData.ResultPointData>() {
                                @Override
                                public void onCompleted() {
 
@@ -73,8 +76,12 @@ public class SenceListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(String data) {
-                                   listener.onSucces(data);
+                               public void onNext(PlannningData.ResultPointData data) {
+                                   if (data != null && data.resCode == 1000) {
+                                       listener.onSucces(data);
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
+                                   }
                                }
                            }
 

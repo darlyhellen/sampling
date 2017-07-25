@@ -44,10 +44,13 @@ public class SenceSamplingSugar extends SugarRecord {
     //待测项目
     @Column(name = "test_item")
     private String test_item;
+    //任务ID
     @Column(name = "missionId")
     private String missionId;
+    //图片信息
     @Column(name = "images")
     private List<String> images;
+    //视频信息
     @Column(name = "videos")
     private List<String> videos;
 

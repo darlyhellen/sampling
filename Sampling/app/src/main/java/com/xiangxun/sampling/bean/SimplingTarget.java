@@ -10,7 +10,7 @@ package com.xiangxun.sampling.bean;
 public class SimplingTarget {
     public String id;
     public String createTime;
-    public String status;
+    public int status;
     public String cadmium;
     public String code;
     public String availableCadmium;

@@ -117,7 +117,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                     Intent intent = new Intent(SamplingPointActivity.this, SenceActivity.class);
                     intent.putExtra("Scheme", planning);
                     intent.putExtra("SamplingKey", point);
-                    startActivity(intent);
+                    startActivityForResult(intent, 1000);
                 } else {
                     Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
                     intent.putExtra("Scheme", planning);
@@ -180,7 +180,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
             Object s = SharePreferHelp.getValue(planning.id);
             if (s != null) {
-                presenter.point(planning.id,  ((ResultPointData) s).resTime);
+                presenter.point(planning.id, ((ResultPointData) s).resTime);
             } else {
                 wlist.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
