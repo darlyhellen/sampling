@@ -12,16 +12,12 @@ import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
-import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
 import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 
 import java.util.List;
 
@@ -101,13 +97,63 @@ public class SamplingPointListener implements FramePresenter {
 
     }
 
+    public void upSampling(SenceSamplingSugar paramer, final FrameListener<PlannningData.ResultPointData> listener) {
+        if (paramer == null) {
+            listener.onFaild(0, "传递参数不能为空");
+            return;
+        }
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .senceSamply(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, PlannningData.ResultPointData>() {
+                    @Override
+                    public PlannningData.ResultPointData call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        PlannningData.ResultPointData root = new Gson().fromJson(s, new TypeToken<PlannningData.ResultPointData>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<PlannningData.ResultPointData>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   ToastApp.showToast(e.getMessage());
+                                   listener.onFaild(1, e.getMessage());
+                               }
+
+                               @Override
+                               public void onNext(PlannningData.ResultPointData data) {
+                                   if (data != null && data.resCode == 1000) {
+                                       listener.onSucces(data);
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
+                                   }
+                               }
+                           }
+
+                );
+
+    }
+
     public interface SamplingPointInterface extends FrameView {
 
         void onLoginSuccess(List<PlannningData.Pointly> info);
 
         void onLoginFailed();
 
-        void end();
+        void onItemImageClick(SenceSamplingSugar point);
+
     }
 
 

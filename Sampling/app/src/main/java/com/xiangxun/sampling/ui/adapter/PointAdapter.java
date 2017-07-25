@@ -1,7 +1,6 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,10 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
+import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
+import com.xiangxun.sampling.ui.biz.SamplingPointListener;
+import com.xiangxun.sampling.widget.dialog.MsgDialog;
 
 import java.util.List;
 
@@ -28,8 +31,13 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
 
     private boolean isSence;
 
-    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence) {
+    private MsgDialog msgDialog;
+
+    private SamplingPointListener.SamplingPointInterface main;
+
+    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence,SamplingPointListener.SamplingPointInterface main) {
         super(data, resID, context);
+        this.main = main;
         this.isSence = isSence;
     }
 
@@ -62,6 +70,36 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                 hocker.position.setText(String.valueOf(s.data.longitude));
                 hocker.position.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.position.setTextSize(14);
+                final SenceSamplingSugar sugar = (SenceSamplingSugar) SharePreferHelp.getValue("sugar" + s.data.id);
+                if (sugar != null) {
+                    //这个点位已经有了草稿，可以进行提交
+                    hocker.iv.setImageResource(R.mipmap.lighton);
+                    hocker.iv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //进行提示弹窗，询问用户是否确认修改上传状态。
+                            msgDialog = new MsgDialog(context);
+                            msgDialog.setTiele("是否确认上传状态信息？");
+                            msgDialog.setButLeftListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    msgDialog.dismiss();
+                                }
+                            });
+                            msgDialog.setButRightListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    msgDialog.dismiss();
+                                    main.onItemImageClick(sugar);
+                                }
+                            });
+                            msgDialog.show();
+                        }
+                    });
+                } else {
+                    //这个点位还没有进行草稿保存。无法提交
+                    hocker.iv.setImageResource(R.mipmap.lightoff);
+                }
             }
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));

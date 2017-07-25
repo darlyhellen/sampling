@@ -4,6 +4,7 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @TODO:现场采样页面生成的数据库，表，通过这张表进行大数据上传操作
  */
 @Table(name = "S_SENCE_SAMPLING")
-public class SenceSamplingSugar extends SugarRecord {
+public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
     //点位id
     @Column(name = "pointId")
@@ -31,17 +32,19 @@ public class SenceSamplingSugar extends SugarRecord {
     //纬度
     @Column(name = "latitude")
     private String latitude;
-
-    //采样类型
+    //样品类型编码
     @Column(name = "soil_type")
     private String soil_type;
+    //样品类型名称
+    @Column(name = "soil_name")
+    private String soil_name;
     //样品名称
     @Column(name = "name")
     private String name;
     //样品深度
     @Column(name = "depth")
     private String depth;
-    //待测项目
+    //采样类型
     @Column(name = "test_item")
     private String test_item;
     //任务ID
@@ -104,6 +107,15 @@ public class SenceSamplingSugar extends SugarRecord {
 
     public void setSoil_type(String soil_type) {
         this.soil_type = soil_type;
+    }
+
+
+    public String getSoil_name() {
+        return soil_name;
+    }
+
+    public void setSoil_name(String soil_name) {
+        this.soil_name = soil_name;
     }
 
     public String getName() {

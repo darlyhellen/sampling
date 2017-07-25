@@ -15,7 +15,6 @@ import android.widget.ListView;
 
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
-import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.common.ConstantStatus;
 import com.xiangxun.sampling.common.NetUtils;
@@ -26,9 +25,8 @@ import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.ui.LoginActivity;
-import com.xiangxun.sampling.ui.biz.SettingFragmentListener;
 import com.xiangxun.sampling.ui.biz.SettingFragmentListener.SettingFragmentInterface;
-import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
+import com.xiangxun.sampling.ui.main.SamplingDbActivity;
 import com.xiangxun.sampling.ui.presenter.SettingFragmentPresenter;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
@@ -55,7 +53,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
             new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
             new Function(R.mipmap.set_cleardata, R.string.set_fun3, "清除缓存数据", null),
-            new Function(R.mipmap.set_font, R.string.set_fun4, "在WiFi情况下上传采样图片视频", SamplingHistoryActivity.class),
+            new Function(R.mipmap.set_font, R.string.set_fun4, "在WiFi情况下上传采样图片视频", SamplingDbActivity.class),
             new Function(R.mipmap.set_update, R.string.set_fun5, "检查更新", null),
             new Function(R.mipmap.set_loginout, R.string.set_out, "", null)
     };

@@ -212,18 +212,6 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     }
 
     @Override
-    protected void onStart() {
-        DLog.d(getClass().getSimpleName(), "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        DLog.d(getClass().getSimpleName(), "onRestart()");
-        super.onRestart();
-    }
-
-    @Override
     protected void onResume() {
         DLog.d(getClass().getSimpleName(), "onResume()");
         if (mlocationClient != null && !mlocationClient.isStarted()) {
@@ -241,16 +229,5 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
         super.onPause();
     }
 
-    @Override
-    protected void onStop() {
-        DLog.d(getClass().getSimpleName(), "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DLog.d(getClass().getSimpleName(), "onDestroy()");
-        super.onDestroy();
-    }
 
 }

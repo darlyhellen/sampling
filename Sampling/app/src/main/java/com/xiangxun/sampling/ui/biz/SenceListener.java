@@ -177,7 +177,7 @@ public class SenceListener implements FramePresenter {
         String getlongitude();
 
         //采样类型
-        String gettype();
+        SenceLandRegion.LandRegion gettype();
 
         //样品名称
         String getname();

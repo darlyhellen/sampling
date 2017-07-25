@@ -17,6 +17,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.PointAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
@@ -74,7 +75,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                 data = ((ResultPointData) ob).result;
             }
         }
-        adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence);
+        adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence, this);
         wlist.setAdapter(adapter);
         presenter.point(planning.id, ob == null ? null : ((ResultPointData) ob).resTime);
     }
@@ -160,8 +161,9 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     }
 
     @Override
-    public void end() {
-
+    public void onItemImageClick(SenceSamplingSugar point) {
+        //点击item里面的图片。进行调用
+        presenter.sampling(point);
     }
 
     @Override
@@ -188,40 +190,5 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         }
     }
 
-    @Override
-    protected void onStart() {
-        DLog.d(getClass().getSimpleName(), "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        DLog.d(getClass().getSimpleName(), "onRestart()");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        DLog.d(getClass().getSimpleName(), "onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        DLog.d(getClass().getSimpleName(), "onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        DLog.d(getClass().getSimpleName(), "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DLog.d(getClass().getSimpleName(), "onDestroy()");
-        super.onDestroy();
-    }
 
 }

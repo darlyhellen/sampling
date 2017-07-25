@@ -31,6 +31,7 @@ import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -230,7 +231,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     }
 
     @Override
-    public void end() {
+    public void onItemImageClick(SenceSamplingSugar point) {
 
     }
 

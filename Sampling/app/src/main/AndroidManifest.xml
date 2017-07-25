@@ -124,6 +124,9 @@
             android:name=".ui.main.GroundChooseActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SamplingDbActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.SenceActivity"
             android:screenOrientation="portrait" />
         <activity

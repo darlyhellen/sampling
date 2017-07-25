@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,19 +23,19 @@ import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
-import com.xiangxun.sampling.common.NetUtils;
+import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
-import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
+import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
 import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
 import com.xiangxun.sampling.ui.presenter.SencePresenter;
+import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog;
-import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog.SelectResultItemClick;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
@@ -53,7 +54,7 @@ import java.util.List;
  * @TODO: 現場情況的展示頁面
  */
 @ContentBinder(R.layout.activity_sence)
-public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface {
+public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectTypeRegionDialog.SelectResultItemClick {
     private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private Scheme planning;
     private Pointly point;
@@ -79,6 +80,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private DetailView other;
     @ViewsBinder(R.id.id_user_sence_location)
     private ImageView loca;
+    @ViewsBinder(R.id.id_user_sence_video_submit)
+    private Button submit;
 
 
     //声明mLocationOption对象
@@ -96,16 +99,21 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private List<String> images;
     private List<String> videos;
 
-    private SelectTypeRegionDialog typeDialog;
-
     private SencePresenter presenter;
+
+    //进行草稿保存状态。草稿状态存在。则进行原始数据展示。
+    private SenceSamplingSugar sugar;
+    private MsgDialog msgDialog;
+    private SelectTypeRegionDialog typeDialog;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         //这句话解决了自动弹出输入按键
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
+        sugar = (SenceSamplingSugar) SharePreferHelp.getValue("sugar" + point.data.id);
         titleView.setTitle("现场采样");
         locationname.setText("现场采样定位：");
         presenter = new SencePresenter(this);
@@ -114,51 +122,81 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void loadData() {
-        type.isEdit(false);
-        type.setInfo("采样类型:", planning.sampleName, "");
-        name.isEdit(true);
-        name.setInfo("样品名称:", " ", "请输入样品名称");
-        params.isEdit(true);
-        params.setInfo("样品深度:", " ", "请输入样品深度");
-        project.isEdit(true);
-        project.setInfo("待测项目:", " ", "请输入待测项目");
-        other.isEdit(true);
-        other.setInfo("其他說明:", " ", "请输入说明备注信息");
-        address.isEdit(false);
-        address.setInfo("采样地点：", " ", " ");
-        //初始化图片和视频信息所在位置。
-        if (images == null) {
-            images = new ArrayList<String>();
-            images.add("add");
-        }
-        if (videos == null) {
-            videos = new ArrayList<String>();
-            videos.add("add");
-        }
 
-        File root = new File(Api.SENCE.concat(point.data.id));
-        if (root.exists()) {
+        if (sugar != null) {
+            //已经有草稿状态。直接进行全参数设置
+            type.isEdit(false);
+            type.setInfo("采样类型:", planning.sampleName, "");
+            name.isEdit(true);
+            name.setInfo("样品名称:", sugar.getName(), null);
+            params.isEdit(true);
+            params.setInfo("样品深度:", sugar.getDepth(), null);
+            project.isEdit(false);
+            project.setInfo("土壤类型:", sugar.getSoil_name(), null);
+            other.isEdit(true);
+            other.setInfo("其他說明:", "", null);
+            address.isEdit(false);
+            address.setInfo("采样地点：", sugar.getRegion_id(), null);
+            latitude.isEdit(true);
+            latitude.setInfo("经度：", sugar.getLatitude(), null);
+            longitude.isEdit(true);
+            longitude.setInfo("纬度：", sugar.getLongitude(), null);
+            //初始化图片和视频信息所在位置。
+            images = sugar.getImages();
+            videos = sugar.getVideos();
+            imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
+            imageGrid.setAdapter(imageAdapter);
+            videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
+            videoGrid.setAdapter(videoAdapter);
+        } else {
+            //土壤采样
+            type.isEdit(false);
+            type.setInfo("采样类型:", planning.sampleName, "");
+            name.isEdit(true);
+            name.setInfo("样品名称:", " ", "请输入样品名称");
+            params.isEdit(true);
+            params.setInfo("样品深度:", " ", "请输入样品深度");
+            project.isEdit(false);
+            project.setInfo("土壤类型:", " ", "请选择土壤类型");
+            other.isEdit(true);
+            other.setInfo("其他說明:", "", null);
+            address.isEdit(false);
+            address.setInfo("采样地点：", " ", " ");
 
-            File[] file = root.listFiles();
-            if (file != null) {
-                for (int i = 0; i < file.length; i++) {
-                    DLog.i(file[i].getPath() + "---->" + file[i].getAbsolutePath());
-                    if (file[i].getAbsolutePath().endsWith(".mp4")) {
-                        videos.add(videos.size() - 1, file[i].getAbsolutePath());
-                    }
-                    if (file[i].getAbsolutePath().endsWith(".jpg")) {
-                        images.add(images.size() - 1, file[i].getAbsolutePath());
+            //初始化图片和视频信息所在位置。
+            if (images == null) {
+                images = new ArrayList<String>();
+                images.add("add");
+            }
+            if (videos == null) {
+                videos = new ArrayList<String>();
+                videos.add("add");
+            }
+
+            File root = new File(Api.SENCE.concat(point.data.id));
+            if (root.exists()) {
+
+                File[] file = root.listFiles();
+                if (file != null) {
+                    for (int i = 0; i < file.length; i++) {
+                        DLog.i(file[i].getPath() + "---->" + file[i].getAbsolutePath());
+                        if (file[i].getAbsolutePath().endsWith(".mp4")) {
+                            videos.add(videos.size() - 1, file[i].getAbsolutePath());
+                        }
+                        if (file[i].getAbsolutePath().endsWith(".jpg")) {
+                            images.add(images.size() - 1, file[i].getAbsolutePath());
+                        }
                     }
                 }
             }
-        }
 
-        imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
-        imageGrid.setAdapter(imageAdapter);
-        videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
-        videoGrid.setAdapter(videoAdapter);
-        //啟動定位
-        startLocate();
+            imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
+            imageGrid.setAdapter(imageAdapter);
+            videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
+            videoGrid.setAdapter(videoAdapter);
+            //啟動定位
+            startLocate();
+        }
     }
 
     //点击删除图片
@@ -206,6 +244,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     protected void initListener() {
+        project.setOnClickListener(this);
+        submit.setOnClickListener(this);
         imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -260,14 +300,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             }
         });
         titleView.setRightViewRightTextOneListener("保存", new OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if (NetUtils.isWifi(SenceActivity.this)) {
-                    //整体上传，否则片段上传。
-                    presenter.sampling(planning, point.data, true);
-                } else {
-                    presenter.sampling(planning, point.data, false);
-                }
+                presenter.save(planning, point.data);
             }
         });
     }
@@ -275,10 +311,38 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.id_user_sence_project:
+                //进行土壤类型请求
+                presenter.landType("请选择土壤类型");
+                break;
             case R.id.id_user_sence_location:
                 startLocate();
                 break;
+            case R.id.id_user_sence_video_submit:
+                //进行提示弹窗，询问用户是否确认修改上传状态。
+                if (presenter.isave()) {
+                    msgDialog = new MsgDialog(this);
+                    msgDialog.setTiele("是否确认上传状态信息？");
+                    msgDialog.setButLeftListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            msgDialog.dismiss();
+                        }
+                    });
+                    msgDialog.setButRightListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            msgDialog.dismiss();
+                            presenter.sampling(planning, point.data);
+                        }
+                    });
+                    msgDialog.show();
+                } else {
+                    ToastApp.showToast("请先保存采样状态");
+                }
+                break;
         }
+
     }
 
     @Override
@@ -294,7 +358,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 if (TextUtils.isEmpty(amapLocation.getAddress())) {
                     startLocate();
                 } else {
-                    address.setInfo("位置：", String.valueOf(amapLocation.getAddress()), "");
+                    address.setInfo("位置：", String.valueOf(amapLocation.getProvince() + amapLocation.getCity() + amapLocation.getDistrict()), "");
                     //当获取了正确位置信息时。
                 }
             } else {
@@ -327,6 +391,16 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         }
     }
 
+    @Override
+    public void resultOnClick(SenceLandRegion.LandRegion result, String title) {
+        if ("请选择土壤类型".equals(title)) {
+            project.isEdit(false);
+            project.setInfo("土壤类型:", result.name, null);
+            project.setTag(result);
+        }
+    }
+
+
     //ui规划
     @Override
     public void onBackPressed() {
@@ -346,6 +420,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public void onTypeRegionSuccess(String title, SenceLandRegion result) {
+        typeDialog = new SelectTypeRegionDialog(SenceActivity.this, result.result, title);
+        typeDialog.setSelectResultItemClick(this);
+        typeDialog.show();
     }
 
     @Override
@@ -364,8 +441,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     }
 
     @Override
-    public String gettype() {
-        return type.getValue().getText().toString().trim();
+    public SenceLandRegion.LandRegion gettype() {
+        return (SenceLandRegion.LandRegion) project.getTag();
     }
 
     @Override
@@ -380,7 +457,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String getproject() {
-        return project.getText();
+        return type.getText();
     }
 
     @Override
@@ -415,17 +492,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         type.setClickable(true);
     }
 
-    @Override
-    protected void onStart() {
-        DLog.d(getClass().getSimpleName(), "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        DLog.d(getClass().getSimpleName(), "onRestart()");
-        super.onRestart();
-    }
 
     @Override
     protected void onResume() {
@@ -445,16 +511,5 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         super.onPause();
     }
 
-    @Override
-    protected void onStop() {
-        DLog.d(getClass().getSimpleName(), "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DLog.d(getClass().getSimpleName(), "onDestroy()");
-        super.onDestroy();
-    }
 
 }

@@ -103,13 +103,13 @@ public class PlannningData {
         //所属区域编号
         public String areaCode;
         //是否采样点
-        public Integer isSamplingPoint;
+        public int isSamplingPoint;
         //核查状态
-        public Integer checkStatus;
+        public int checkStatus;
         //是否发布
-        public Integer isRelease;
+        public int isRelease;
         //是否采样
-        public Integer isSampling;
+        public int isSampling;
         //创建人
         public String createId;
         //创建时间

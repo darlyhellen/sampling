@@ -30,7 +30,13 @@ public class PontCacheHelper {
                     for (int i = 0; i < data.result.size(); i++) {
                         if (po.unique.equals(data.result.get(i).unique)) {
                             //当返回的数据和缓存数据有相同的是，就是修改点位。
-                            data.result.get(i).data = po.data;
+                            if (data.result.get(i).data.isSampling == po.data.isSampling) {
+                                data.result.get(i).data = po.data;
+                            } else {
+                                //说明已经采样过的点，进行剔除。
+                                data.result.get(i).data = null;
+                            }
+
                             isUpdate = true;
                         } else {
                             //点位新增

@@ -138,40 +138,4 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
 
     }
 
-    @Override
-    protected void onStart() {
-        DLog.d(getClass().getSimpleName(), "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        DLog.d(getClass().getSimpleName(), "onRestart()");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        DLog.d(getClass().getSimpleName(), "onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        DLog.d(getClass().getSimpleName(), "onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        DLog.d(getClass().getSimpleName(), "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DLog.d(getClass().getSimpleName(), "onDestroy()");
-        super.onDestroy();
-    }
-
 }

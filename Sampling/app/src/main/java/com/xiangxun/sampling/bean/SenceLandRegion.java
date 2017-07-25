@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class SenceLandRegion {
     public String resDesc;
     public List<LandRegion> result;
 
-    public class LandRegion {
+    public class LandRegion implements Serializable {
         public String id;
         public String pid;
         public String sort;

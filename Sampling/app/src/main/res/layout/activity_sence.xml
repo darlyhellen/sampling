@@ -82,14 +82,26 @@
                     android:background="@color/index_line"
                     android:paddingBottom="@dimen/margin_padding4" />
 
-                <com.xiangxun.sampling.widget.groupview.DetailView
-                    android:id="@+id/id_user_sence_project"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/margin_padding4"
-                    android:paddingLeft="@dimen/margin_padding10"
-                    android:paddingRight="@dimen/margin_padding10"
-                    android:paddingTop="@dimen/margin_padding10" />
+                    android:layout_height="wrap_content">
+
+                    <com.xiangxun.sampling.widget.groupview.DetailView
+                        android:id="@+id/id_user_sence_project"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/margin_padding4"
+                        android:paddingLeft="@dimen/margin_padding10"
+                        android:paddingRight="@dimen/margin_padding10"
+                        android:paddingTop="@dimen/margin_padding10" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:src="@mipmap/icon_pull"
+                        android:layout_alignParentRight="true" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -209,6 +221,19 @@
                     android:listSelector="@color/transparent"
                     android:numColumns="2" />
             </LinearLayout>
+
+
+            <Button
+                android:id="@+id/id_user_sence_video_submit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/margin_padding10"
+                android:background="@drawable/btn_selecter_changepwd"
+                android:text="@string/ok"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize20"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 
