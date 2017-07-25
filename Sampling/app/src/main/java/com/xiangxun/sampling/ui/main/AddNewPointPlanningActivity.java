@@ -31,7 +31,7 @@ import java.util.List;
  * @TODO: 新增修改计划中的点位信息。
  */
 @ContentBinder(R.layout.activity_planning_add)
-public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener, AddPointInterface {
+public class AddNewPointPlanningActivity extends BaseActivity implements AMapLocationListener, AddPointInterface, View.OnClickListener {
     private Scheme planning;
     private Pointly point;
 
@@ -43,6 +43,8 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     private DetailView dept;
     @ViewsBinder(R.id.id_add_projectposition)
     private DetailView position;
+    @ViewsBinder(R.id.id_add_type)
+    private DetailView type;
     @ViewsBinder(R.id.id_add_latitude)
     private DetailView latitude;
     @ViewsBinder(R.id.id_add_longitude)
@@ -72,6 +74,8 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
         dept.setInfo("实施机构：", planning.dept, "");
         position.isEdit(false);
         position.setInfo("采样选址：", planning.regionName, "");
+        type.isEdit(false);
+        type.setInfo("采样类型：", planning.sampleName, "");
         if (point == null) {
             //新增点位
             titleView.setTitle("新增" + planning.name + "点位");
@@ -92,31 +96,44 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
             //启动定位
             mlocationClient.startLocation();
+            titleView.setRightViewRightTextOneListener("保存", this);
 
         } else {
             //修改点位
-            titleView.setTitle("修改" + planning.name + "点位");
-            latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
-            longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
-            desc.isEdit(true);
-            desc.setInfo("说明：", " ", "");
+            desc.isEdit(false);
+            if (point.data.isSampling == 1) {
+                desc.setInfo("是否已采样：", "是", "");
+                titleView.setTitle("修改" + planning.name + "点位");
+                latitude.isEdit(false);
+                latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
+                longitude.isEdit(false);
+                longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
+            } else {
+                desc.setInfo("是否已采样：", "否", "");
+                titleView.setTitle("修改" + planning.name + "点位");
+                latitude.isEdit(true);
+                latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
+                longitude.isEdit(true);
+                longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
+                titleView.setRightViewRightTextOneListener("修改", this);
+            }
         }
     }
 
     @Override
     protected void initListener() {
-        titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new View.OnClickListener() {
+        titleView.setLeftBackOneListener(R.mipmap.ic_back_title, this);
 
-            @Override
-            public void onClick(View arg0) {
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.title_view_back_img:
                 onBackPressed();
-            }
-        });
-        titleView.setRightViewRightTextOneListener("保存", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.title_view_ok:
                 //提交服务端,进行重新获取.
                 if (point == null) {
                     //新增点位信息
@@ -127,8 +144,8 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
                     point.data.longitude = Double.parseDouble(longitude());
                     presenter.updataPoint(planning, point);
                 }
-            }
-        });
+                break;
+        }
     }
 
 
