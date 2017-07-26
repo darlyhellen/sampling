@@ -68,15 +68,9 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         baseLayerView.setCRS(crs);
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(true);
-        mapView.setClickable(true);
+        mapView.setBuiltInZoomControls(false);
+        mapView.setClickable(false);
         mapView.getController().setZoom(10);
-        mapView.post(new Runnable() {
-            public void run() {
-                initHeight();
-            }
-        });
-
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         if (planning == null) {
             titleView.setTitle("点位分布");
@@ -134,13 +128,8 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
         // 启用内置放大缩小控件
         mapView.setBuiltInZoomControls(false);
-        mapView.setClickable(true);
+        mapView.setClickable(false);
         mapView.getController().setZoom(10);
-        mapView.post(new Runnable() {
-            public void run() {
-                initHeight();
-            }
-        });
     }
 
     @Override
@@ -152,23 +141,6 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
                 onBackPressed();
             }
         });
-    }
-
-    /**
-     * 计算标题栏的高度
-     *
-     * @return
-     */
-    private int initHeight() {
-        Rect rect = new Rect();
-        Window window = getWindow();
-        mapView.getWindowVisibleDisplayFrame(rect);
-        //状态栏的高度
-        int statusBarHight = rect.top;
-        //标题栏跟状态栏的总体高度
-        int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-        //标题栏的高度
-        return contentViewTop - statusBarHight;
     }
 
     //范围查询

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.HisExceptionPageInfo;
 import com.xiangxun.sampling.bean.SimplingTarget;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
@@ -74,6 +75,7 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
 
     @Override
     protected void loadData() {
+        images = new ArrayList<String>();
         imageAdapter = new ImageAdapter(images, R.layout.item_main_detail_image_adapter, this);
         gridView.setAdapter(imageAdapter);
     }
@@ -118,8 +120,29 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
     }
 
     @Override
-    public void onDateSuccess(List<SimplingTarget> result) {
-        
+    public void onDateSuccess(HisExceptionPageInfo.HisExceptionPage result) {
+
+        if (result != null) {
+            address.isEdit(false);
+            address.setInfo("位置：", result.regionName, null);
+            latitude.isEdit(false);
+            latitude.setInfo("经度：", result.regionName, null);
+            longitude.isEdit(false);
+            longitude.setInfo("纬度：", result.regionName, null);
+            //类型
+            select.setText(result.regionName);
+            //地块信息
+            land.setText(result.regionName);
+            declare.setText(result.describe);
+            for (HisExceptionPageInfo.FileList lis : result.fileList) {
+                images.add(lis.filePath);
+            }
+            if (images != null) {
+                imageAdapter.setData(images);
+            }
+        }
+
+
     }
 
     @Override

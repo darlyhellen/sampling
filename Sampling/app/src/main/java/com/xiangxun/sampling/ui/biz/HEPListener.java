@@ -9,6 +9,7 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.HisExceptionPageInfo;
 import com.xiangxun.sampling.bean.SimplingTarget;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.common.NetUtils;
@@ -42,7 +43,7 @@ public class HEPListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void getHEP(String id, final FrameListener<SimplingTargetResult> listener) {
+    public void getHEP(String id, final FrameListener<HisExceptionPageInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
@@ -54,16 +55,16 @@ public class HEPListener implements FramePresenter {
                 .hisshow(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, SimplingTargetResult>() {
+                .map(new Func1<JsonObject, HisExceptionPageInfo>() {
                     @Override
-                    public SimplingTargetResult call(JsonObject s) {
+                    public HisExceptionPageInfo call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        SimplingTargetResult root = new Gson().fromJson(s, new TypeToken<SimplingTargetResult>() {
+                        HisExceptionPageInfo root = new Gson().fromJson(s, new TypeToken<HisExceptionPageInfo>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<SimplingTargetResult>() {
+                .subscribe(new Observer<HisExceptionPageInfo>() {
                                @Override
                                public void onCompleted() {
 
@@ -76,7 +77,7 @@ public class HEPListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(SimplingTargetResult data) {
+                               public void onNext(HisExceptionPageInfo data) {
                                    if (data.resCode == 1000 && data.result != null) {
                                        listener.onSucces(data);
                                    } else {
@@ -90,7 +91,7 @@ public class HEPListener implements FramePresenter {
 
     public interface HEPInterface extends FrameView {
 
-        void onDateSuccess(List<SimplingTarget> result);
+        void onDateSuccess(HisExceptionPageInfo.HisExceptionPage result);
 
         void onDateFailed(String info);
     }

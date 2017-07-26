@@ -2,6 +2,7 @@ package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
+import com.xiangxun.sampling.bean.HisExceptionPageInfo;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.ui.biz.HEPListener;
 import com.xiangxun.sampling.ui.main.SamplingHisExceptionPageActivity;
@@ -32,9 +33,9 @@ public class HEPPresenter {
     public void getExc(String regionId) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.getHEP(regionId, new FrameListener<SimplingTargetResult>() {
+        userBiz.getHEP(regionId, new FrameListener<HisExceptionPageInfo>() {
             @Override
-            public void onSucces(SimplingTargetResult data) {
+            public void onSucces(HisExceptionPageInfo data) {
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 main.onDateSuccess(data.result);

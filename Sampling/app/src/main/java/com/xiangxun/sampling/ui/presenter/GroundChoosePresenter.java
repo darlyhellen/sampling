@@ -32,19 +32,16 @@ public class GroundChoosePresenter {
      */
     public void block() {
         userBiz.onStart(loading);
-        main.setDisableClick();
         userBiz.getBlock(new FrameListener<GroundTypeInfo>() {
             @Override
             public void onSucces(GroundTypeInfo data) {
                 userBiz.onStop(loading);
-                main.setEnableClick();
                 main.onDateSuccess(data.result);
             }
 
             @Override
             public void onFaild(int code, String info) {
                 userBiz.onStop(loading);
-                main.setEnableClick();
                 main.onDateFailed(info);
             }
         });

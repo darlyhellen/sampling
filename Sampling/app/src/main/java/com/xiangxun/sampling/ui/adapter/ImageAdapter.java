@@ -48,16 +48,16 @@ public class ImageAdapter extends ParentAdapter<String> {
             hocker = (ViewHocker) view.getTag();
         }
         hocker.close.setVisibility(View.GONE);
-        if (parent.getChildCount() == position) { // 里面就是正常的position
-            if (position == (data.size() - 1)) {
-                hocker.photo.setImageResource(R.drawable.add_publish_image);
-                hocker.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-            } else {
-                hocker.desc.setText("");
-                ImageLoaderUtil.getInstance().loadImageNor(info, hocker.photo);
-            }
-        }
+        //if (parent.getChildCount() == position) { // 里面就是正常的position
+//        if (position == (data.size() - 1)) {
+//            hocker.photo.setImageResource(R.drawable.add_publish_image);
+//            hocker.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//
+//        } else {
+        hocker.desc.setText("");
+        ImageLoaderUtil.getInstance().loadImageNor(info, hocker.photo);
+//        }
+        // }
 
 
         return view;
