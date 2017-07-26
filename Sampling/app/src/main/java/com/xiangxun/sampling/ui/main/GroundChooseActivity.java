@@ -67,8 +67,8 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         baseLayerView.setCRS(crs);
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(false);
-        mapView.setClickable(false);
+        mapView.setBuiltInZoomControls(true);
+        mapView.setClickable(true);
         mapView.getController().setZoom(10);
         titleView.setTitle("选择地块");
         presenter = new GroundChoosePresenter(this);
@@ -106,7 +106,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
             mapView.getController().setCenter(center);
 
             // 启用内置放大缩小控件
-            mapView.setBuiltInZoomControls(false);
+            mapView.setBuiltInZoomControls(true);
             mapView.setClickable(true);
             mapView.getController().setZoom(10);
         }

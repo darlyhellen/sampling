@@ -44,7 +44,7 @@ public class ExceptionPagePresenter {
      * 上传异常地块信息
      */
     public void addException() {
-        userBiz.onStart(loading);
+
         if (TextUtils.isEmpty(main.getLatitude())) {
             ToastApp.showToast("经度不能为空");
             return;
@@ -75,13 +75,17 @@ public class ExceptionPagePresenter {
             if (main.getImages() != null && main.getImages().size() > 1) {
                 main.getImages().remove(main.getImages().size() - 1);
                 for (String arg : main.getImages()) {
-                    ob.put(arg.substring(arg.lastIndexOf("/"), arg.length()), BitmapChangeUtil.convertIconToString(BitmapFactory.decodeFile(arg)));
+                    //将图片文件变为字符串传递
+                    ob.put(arg.substring(arg.lastIndexOf("/") + 1, arg.length()), BitmapChangeUtil.convertIconToString(BitmapFactory.decodeFile(arg)));
+                    //将图片文件变为字节流传递
+                    ob.put(arg.substring(arg.lastIndexOf("/") + 1, arg.length()), BitmapChangeUtil.getByetsFromFile(arg));
                 }
             }
         } catch (JSONException e) {
 
         }
         paramer.setImages(ob.toString());
+        userBiz.onStart(loading);
         userBiz.addException(paramer, new FrameListener<HisExceptionInfo>() {
             @Override
             public void onSucces(HisExceptionInfo data) {

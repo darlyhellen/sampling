@@ -4,7 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/6/6.
@@ -48,5 +53,39 @@ public class BitmapChangeUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+
+    /**
+     * @param file//文件位置
+     * @return
+     */
+    public static byte[] getByetsFromFile(String file) {
+
+        FileInputStream is = null;
+        // 获取文件大小
+        long length = file.length();
+        // 创建一个数据来保存文件数据
+        byte[] fileData = new byte[(int) length];
+
+        try {
+
+            is = new FileInputStream(new File(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        int bytesRead = 0;
+        // 读取数据到byte数组中
+        while (bytesRead != fileData.length) {
+            try {
+                bytesRead += is.read(fileData, bytesRead, fileData.length - bytesRead);
+                if (is != null)
+                    is.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return fileData;
     }
 }
