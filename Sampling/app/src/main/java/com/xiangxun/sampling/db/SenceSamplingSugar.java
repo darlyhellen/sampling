@@ -56,10 +56,8 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     private String test_item;
 
     //图片信息
-    @Column(name = "images")
     private List<String> images;
     //视频信息
-    @Column(name = "videos")
     private List<String> videos;
 
 

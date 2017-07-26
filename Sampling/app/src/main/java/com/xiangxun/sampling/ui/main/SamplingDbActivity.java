@@ -1,7 +1,9 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.orm.SugarRecord;
@@ -14,6 +16,7 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.SamplingDBAdapter;
 import com.xiangxun.sampling.widget.header.TitleView;
+import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
 import java.util.List;
 
@@ -66,6 +69,18 @@ public class SamplingDbActivity extends BaseActivity {
             @Override
             public void onClick(View arg0) {
                 onBackPressed();
+            }
+        });
+        wlist.setOnItemClickListener(new ItemClickListenter() {
+            @Override
+            public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
+                SenceSamplingSugar sugar = (SenceSamplingSugar) parent.getItemAtPosition(position);
+                if (sugar != null) {
+                    Intent intent = new Intent(SamplingDbActivity.this, SenceOptionActivity.class);
+                    intent.putExtra("SenceSamplingSugar", sugar);
+                    startActivity(intent);
+
+                }
             }
         });
     }

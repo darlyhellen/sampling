@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.widget.groupview;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -191,6 +192,10 @@ public class DetailView extends LinearLayout {
 
     public void setEditTextInputMode(int type) {
         edit.setInputType(type);
+    }
+
+    public void setEditTextMaxLin(int len) {
+        edit.setFilters(new InputFilter[]{new InputFilter.LengthFilter(len)});
     }
 
     public String getText() {

@@ -128,8 +128,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             type.isEdit(false);
             type.setInfo("采样类型:", planning.sampleName, "");
             name.isEdit(true);
+            name.setEditTextMaxLin(100);
             name.setInfo("样品名称:", sugar.getName(), null);
             params.isEdit(true);
+            params.setEditTextMaxLin(10);
             params.setInfo("样品深度:", sugar.getDepth(), null);
             project.isEdit(false);
             project.setInfo("土壤类型:", sugar.getSoil_name(), null);
@@ -154,8 +156,10 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             type.isEdit(false);
             type.setInfo("采样类型:", planning.sampleName, "");
             name.isEdit(true);
+            name.setEditTextMaxLin(100);
             name.setInfo("样品名称:", " ", "请输入样品名称");
             params.isEdit(true);
+            params.setEditTextMaxLin(10);
             params.setInfo("样品深度:", " ", "请输入样品深度");
             project.isEdit(false);
             project.setInfo("土壤类型:", " ", "请选择土壤类型");
@@ -476,7 +480,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
     @Override
     public String getproject() {
-        return type.getText();
+        return type.getValue().getText().toString().trim();
     }
 
     @Override

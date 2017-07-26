@@ -133,6 +133,9 @@
             android:name=".ui.main.SenceActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SenceOptionActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.ShowImageViewActivity"
             android:screenOrientation="portrait" />
         <activity

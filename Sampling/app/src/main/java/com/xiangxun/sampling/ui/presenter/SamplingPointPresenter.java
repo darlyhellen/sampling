@@ -12,6 +12,7 @@ import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
+import com.xiangxun.sampling.db.MediaSugar;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
@@ -126,6 +127,28 @@ public class SamplingPointPresenter {
                 if (data != null) {
                     if (data.size() == 1) {
                         point.setSamplingId(data.get(0).id);
+                    }
+                }
+                //图片信息建表
+                if (point.getImages() != null && point.getImages().size() > 1) {
+                    point.getImages().remove(point.getImages().size() - 1);
+                    for (String image : point.getImages()) {
+                        MediaSugar sugar = new MediaSugar();
+                        sugar.setSamplingId(point.getSamplingId());
+                        sugar.setUrl(image);
+                        sugar.setType("image");
+                        sugar.save();
+                    }
+                }
+                //视频信息建表
+                if (point.getVideos() != null && point.getVideos().size() > 1) {
+                    point.getVideos().remove(point.getVideos().size() - 1);
+                    for (String image : point.getVideos()) {
+                        MediaSugar sugar = new MediaSugar();
+                        sugar.setSamplingId(point.getSamplingId());
+                        sugar.setUrl(image);
+                        sugar.setType("video");
+                        sugar.save();
                     }
                 }
                 point.save();

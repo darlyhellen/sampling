@@ -34,7 +34,6 @@ public class VideoAdapter extends ParentAdapter<String> implements OnPreparedLis
     @Override
     public void onCompletion(MediaPlayer mp) {
 
-
     }
 
     @Override
@@ -54,10 +53,6 @@ public class VideoAdapter extends ParentAdapter<String> implements OnPreparedLis
         super(data, resID, context);
     }
 
-    @Override
-    public int getCount() {
-        return data.size() > 2 ? 2 : data.size();
-    }
 
     @Override
     public View HockView(final int position, View view, ViewGroup parent, int resID, Context context, String info) {
@@ -76,31 +71,20 @@ public class VideoAdapter extends ParentAdapter<String> implements OnPreparedLis
             hocker = (ViewHocker) view.getTag();
         }
         hocker.close.setVisibility(View.GONE);
-        if (parent.getChildCount() == position) { // 里面就是正常的position
-            if (position == (data.size() - 1)) {
-                hocker.videoView.setVisibility(View.GONE);
-                hocker.image.setVisibility(View.VISIBLE);
-                hocker.image.setImageResource(R.drawable.add_publish_image);
-                hocker.image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            } else {
-                mediaco = new MediaController(context);
-                mediaco.setVisibility(View.INVISIBLE);
-                hocker.videoView.setVisibility(View.VISIBLE);
-                hocker.image.setVisibility(View.GONE);
-                hocker.desc.setText("");
-                hocker.videoView.setVideoPath(info);
-                hocker.videoView.setMediaController(mediaco);
-                hocker.videoView.setOnPreparedListener(this);
-                hocker.videoView.setOnErrorListener(this);
-                hocker.videoView.setOnCompletionListener(this);
-                mediaco.setMediaPlayer(hocker.videoView);
-                //让VideiView获取焦点
-                hocker.videoView.requestFocus();
-                hocker.videoView.start();
-            }
-        }
-
-
+        mediaco = new MediaController(context);
+        mediaco.setVisibility(View.INVISIBLE);
+        hocker.videoView.setVisibility(View.VISIBLE);
+        hocker.image.setVisibility(View.GONE);
+        hocker.desc.setText("");
+        hocker.videoView.setVideoPath(info);
+        hocker.videoView.setMediaController(mediaco);
+        hocker.videoView.setOnPreparedListener(this);
+        hocker.videoView.setOnErrorListener(this);
+        hocker.videoView.setOnCompletionListener(this);
+        mediaco.setMediaPlayer(hocker.videoView);
+        //让VideiView获取焦点
+        hocker.videoView.requestFocus();
+        hocker.videoView.start();
         return view;
     }
 
