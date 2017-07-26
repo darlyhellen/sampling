@@ -127,8 +127,9 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                 } else {
                     //请求列表
                     presenter.analysis(amapLocation.getAddress(), null);
+                    DLog.i(amapLocation.getAddress());
                 }
-                DLog.i(amapLocation);
+
             } else {
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }

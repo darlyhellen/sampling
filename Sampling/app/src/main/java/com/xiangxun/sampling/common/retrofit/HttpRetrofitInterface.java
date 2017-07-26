@@ -90,6 +90,18 @@ public interface HttpRetrofitInterface {
     @POST("/server/land/analysis/query")
     Observable<JsonObject> analysis(@Body RequestBody body);
 
+    /**
+     * @TODO:地块异常列表展示
+     */
+    @POST("/server/land/error/queryAll")
+    Observable<JsonObject> hisexc(@Body RequestBody body);
+
+    /**
+     * @TODO:地块分组接口
+     */
+    @POST("/server/block/query")
+    Observable<JsonObject> block(@Body RequestBody body);
+
 //
 //    /**
 //     * @param status

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -60,17 +61,24 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     @ViewsBinder(R.id.id_user_locations_name)
     private TextView locationname;
 
-
-    @ViewsBinder(R.id.id_exception_map)
-    private ImageView map;
+    //类型
+    @ViewsBinder(R.id.id_exception_chos_type)
+    private RelativeLayout type;
     @ViewsBinder(R.id.id_exception_select)
     private TextView select;
+    //地块信息
+    @ViewsBinder(R.id.id_exception_chos_land)
+    private RelativeLayout chosLand;
+    @ViewsBinder(R.id.id_exception_land)
+    private TextView land;
     @ViewsBinder(R.id.id_exception__declare)
     private EditText declare;
     @ViewsBinder(R.id.id_exception_gird)
     private WholeGridView gridView;
     private List<String> images;
     private SenceImageAdapter imageAdapter;
+
+    private String landid;
 
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
@@ -83,7 +91,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         iShow = getIntent().getBooleanExtra("EXCEPTION", false);
         titleView.setTitle("地块异常上报");
         locationname.setText("异常定位：");
-        select.setHint("点击选择异常类型");
     }
 
     @Override
@@ -138,8 +145,11 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     @Override
     protected void initListener() {
+        //两个选择
+        type.setOnClickListener(this);
+        chosLand.setOnClickListener(this);
+
         titleView.setRightViewRightTextOneListener("保存", this);
-        map.setOnClickListener(this);
         loca.setOnClickListener(this);
         titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new OnClickListener() {
 
@@ -185,10 +195,14 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             case R.id.title_view_ok:
                 ToastApp.showToast("点击保存");
                 break;
-            case R.id.id_exception_map:
+            case R.id.id_exception_chos_land:
+                ToastApp.showToast("地块");
+                //跳转到地块选择
                 Intent intent = new Intent(this, GroundChooseActivity.class);
-                intent.putExtra("SamplingPlanning", StaticListener.findData().get(0));
                 startActivityForResult(intent, 900);
+                break;
+            case R.id.id_exception_chos_type:
+                ToastApp.showToast("类型");
                 break;
         }
     }
@@ -239,8 +253,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 900 && resultCode == Activity.RESULT_OK) {
-            String rul = data.getStringExtra("URL");
-            ImageLoader.getInstance().displayImage("file://" + rul, map);
+            DLog.i(data);
+            land.setText(data.getStringExtra("name"));
+            landid = data.getStringExtra("id");
         }
     }
 

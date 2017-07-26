@@ -2,10 +2,7 @@ package com.xiangxun.sampling.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -25,17 +22,18 @@ import com.supermap.android.maps.OverlayItem;
 import com.supermap.android.maps.Point2D;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.GroundTypeInfo;
+import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.bean.SamplingKey;
-import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.retrofit.Api;
+import com.xiangxun.sampling.ui.biz.GroundChooseListener.GroundChooseInterface;
+import com.xiangxun.sampling.ui.presenter.GroundChoosePresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/7.
@@ -45,87 +43,29 @@ import java.io.FileOutputStream;
  * @TODO: 使用超图地图进行地块区域选择。 返回截图文件。
  */
 @ContentBinder(R.layout.activity_chaotu)
-public class GroundChooseActivity extends BaseActivity implements OnClickListener {
+public class GroundChooseActivity extends BaseActivity implements OnClickListener, GroundChooseInterface {
     private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     String url = "http://10.10.15.201:8090/iserver/services/map-etkqimage/rest/maps/etkq@etkqimg";
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
     protected MapView mapView;
-    private SamplingPlanning planning;
 
     private Point2D center;
 
+    private GroundChoosePresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
-        LayerView baseLayerView = new LayerView(this);
-        planning = (SamplingPlanning) getIntent().getSerializableExtra("SamplingPlanning");
-        if (planning == null) {
-            titleView.setTitle("选择地块");
-            return;
-        }
-        titleView.setTitle(planning.getTitle() + "选择地块");
-        center = new Point2D(planning.getPoints().get(0).getPoint().getLongitude(), planning.getPoints().get(0).getPoint().getLatitude());
-        baseLayerView.setURL(url);
-        CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
-        crs.wkid = 4326;
-        baseLayerView.setCRS(crs);
-        mapView.addLayer(baseLayerView);
-        mapView.getController().setCenter(center);
-
-        // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(true);
-        mapView.setClickable(true);
-        mapView.getController().setZoom(12);
-        mapView.post(new Runnable() {
-            public void run() {
-                initHeight();
-            }
-        });
+        titleView.setTitle("选择地块");
+        presenter = new GroundChoosePresenter(this);
+        presenter.block();
     }
 
     @Override
     protected void loadData() {
 
-        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
-        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
-        DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-        for (SamplingKey point : planning.getPoints()) {
-            Point2D poind = new Point2D(point.getPoint().getLongitude(), point.getPoint().getLatitude());
-            OverlayItem overlayItem = new OverlayItem(poind, point.getPoint().getDesc(), point.getId());
-            if (point.getPoint().isSamply()) {
-                overlayItem.setMarker(drawableBlue);
-            } else {
-                overlayItem.setMarker(drawablenormal);
-            }
-            overlay.addItem(overlayItem);
-        }
-        overlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
-            @Override
-            public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
-                DLog.i(overlayItem);
-                handler.sendEmptyMessage(0);
-            }
-        });
-        overlay.setOnFocusChangeListener(new SelectedOverlay());
-        //mapView.getOverlays().add(new CustomOverlay());
-        mapView.getOverlays().add(overlay);
-
-        // 重新onDraw一次
-        mapView.invalidate();
-
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            File f = saveCustomViewBitmap(mapView);
-            Intent intent = new Intent();
-            intent.putExtra("URL", f == null ? null : f.getAbsolutePath());
-            setResult(Activity.RESULT_OK, intent);
-            onBackPressed();
-        }
-    };
 
     @Override
     protected void initListener() {
@@ -161,9 +101,83 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         switch (v.getId()) {
             case R.id.title_view_ok:
                 ToastApp.showToast("点击确认");
-
                 break;
         }
+    }
+
+    @Override
+    public void onDateSuccess(List<GroundTypeInfo.Ground> result) {
+        if (result != null && result.size() > 0) {
+            LayerView baseLayerView = new LayerView(this);
+            center = new Point2D(result.get(0).longitude, result.get(0).latitude);
+            baseLayerView.setURL(url);
+            CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
+            crs.wkid = 4326;
+            baseLayerView.setCRS(crs);
+            mapView.addLayer(baseLayerView);
+            mapView.getController().setCenter(center);
+
+            // 启用内置放大缩小控件
+            mapView.setBuiltInZoomControls(true);
+            mapView.setClickable(true);
+            mapView.getController().setZoom(12);
+            mapView.post(new Runnable() {
+                public void run() {
+                    initHeight();
+                }
+            });
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
+            final DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
+            for (GroundTypeInfo.Ground point : result) {
+                Point2D poind = new Point2D(point.longitude, point.latitude);
+                OverlayItem overlayItem = new OverlayItem(poind, point.name, point.id);
+                overlayItem.setMarker(drawableBlue);
+                overlay.addItem(overlayItem);
+            }
+            overlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
+                @Override
+                public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
+                    DLog.i(overlayItem);
+                    Message m = new Message();
+                    m.obj = overlayItem;
+                    handler.sendMessage(m);
+                }
+            });
+            overlay.setOnFocusChangeListener(new SelectedOverlay());
+            //mapView.getOverlays().add(new CustomOverlay());
+            mapView.getOverlays().add(overlay);
+
+            // 重新onDraw一次
+            mapView.invalidate();
+        }
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            OverlayItem item = (OverlayItem) msg.obj;
+            Intent intent = new Intent();
+            intent.putExtra("name", item.getTitle());
+            intent.putExtra("id", item.getSnippet());
+            setResult(Activity.RESULT_OK, intent);
+            onBackPressed();
+        }
+    };
+
+    @Override
+    public void onDateFailed(String info) {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 
     /**
@@ -189,13 +203,6 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         @Override
         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
             super.draw(canvas, mapView, shadow);
-            Paint paint = new Paint();
-            Point point = mapView.getProjection().toPixels(center, null);
-            paint.setTextSize(24);
-            paint.setStrokeWidth(0.8f);
-            paint.setARGB(255, 255, 0, 0);
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-            canvas.drawText(planning.getTitle(), point.x, point.y, paint);
         }
     }
 
@@ -206,29 +213,6 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
             mapView.destroy();
         }
         super.onBackPressed();
-    }
-
-    //保存自定义view的截图
-    private File saveCustomViewBitmap(View view) {
-        //获取自定义view图片的大小
-        Bitmap temBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        //使用Canvas，调用自定义view控件的onDraw方法，绘制图片
-        Canvas canvas = new Canvas(temBitmap);
-        view.draw(canvas);
-        //输出到sd卡
-        File file = new File(Api.Root.concat(planning.getId()).concat(".png"));
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileOutputStream foStream = new FileOutputStream(file);
-            temBitmap.compress(Bitmap.CompressFormat.PNG, 100, foStream);
-            foStream.flush();
-            foStream.close();
-            return file;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
 
