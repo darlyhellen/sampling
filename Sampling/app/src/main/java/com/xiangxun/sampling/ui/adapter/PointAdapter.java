@@ -35,7 +35,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
 
     private SamplingPointListener.SamplingPointInterface main;
 
-    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence,SamplingPointListener.SamplingPointInterface main) {
+    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence, SamplingPointListener.SamplingPointInterface main) {
         super(data, resID, context);
         this.main = main;
         this.isSence = isSence;
@@ -60,6 +60,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
         if (isSence) {
             if (s.data.isSampling == 0) {
                 //未采样进行展示 ,已采集不进行展示
+                view.setVisibility(View.VISIBLE);
                 hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
                 hocker.name.setText(s.data.code);
                 hocker.name.setTextColor(context.getResources().getColor(R.color.black));
@@ -90,7 +91,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                                 @Override
                                 public void onClick(View v) {
                                     msgDialog.dismiss();
-                                    main.onItemImageClick(sugar);
+                                    main.onItemImageClick(sugar, s.data);
                                 }
                             });
                             msgDialog.show();
@@ -100,8 +101,12 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                     //这个点位还没有进行草稿保存。无法提交
                     hocker.iv.setImageResource(R.mipmap.lightoff);
                 }
+            } else {
+                view.setVisibility(View.GONE);
             }
         } else {
+
+            view.setVisibility(View.VISIBLE);
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
             hocker.name.setText(s.data.code);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
@@ -112,7 +117,12 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.position.setText(String.valueOf(s.data.longitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
-            hocker.iv.setImageResource(R.mipmap.ic_main_more_press);
+            if (s.data.isSampling == 0) {
+                hocker.iv.setImageResource(R.mipmap.ic_point_mark);
+                hocker.iv.setVisibility(View.VISIBLE);
+            } else {
+                hocker.iv.setVisibility(View.INVISIBLE);
+            }
         }
         return view;
     }

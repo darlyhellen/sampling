@@ -126,7 +126,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                     startLocate();
                 } else {
                     //请求列表
-                    presenter.analysis(amapLocation.getAddress());
+                    presenter.analysis(amapLocation.getAddress(), null);
                 }
                 DLog.i(amapLocation);
             } else {

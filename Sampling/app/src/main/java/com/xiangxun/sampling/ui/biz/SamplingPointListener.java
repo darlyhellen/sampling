@@ -12,6 +12,7 @@ import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
+import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -97,7 +98,7 @@ public class SamplingPointListener implements FramePresenter {
 
     }
 
-    public void upSampling(SenceSamplingSugar paramer, final FrameListener<PlannningData.ResultPointData> listener) {
+    public void upSampling(SenceSamplingSugar paramer, final FrameListener<List<SenceInfo.SenceObj>> listener) {
         if (paramer == null) {
             listener.onFaild(0, "传递参数不能为空");
             return;
@@ -111,16 +112,16 @@ public class SamplingPointListener implements FramePresenter {
                 .senceSamply(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, PlannningData.ResultPointData>() {
+                .map(new Func1<JsonObject, SenceInfo>() {
                     @Override
-                    public PlannningData.ResultPointData call(JsonObject s) {
+                    public SenceInfo call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        PlannningData.ResultPointData root = new Gson().fromJson(s, new TypeToken<PlannningData.ResultPointData>() {
+                        SenceInfo root = new Gson().fromJson(s, new TypeToken<SenceInfo>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<PlannningData.ResultPointData>() {
+                .subscribe(new Observer<SenceInfo>() {
                                @Override
                                public void onCompleted() {
 
@@ -133,9 +134,9 @@ public class SamplingPointListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(PlannningData.ResultPointData data) {
+                               public void onNext(SenceInfo data) {
                                    if (data != null && data.resCode == 1000) {
-                                       listener.onSucces(data);
+                                       listener.onSucces(data.result);
                                    } else {
                                        listener.onFaild(0, "解析错误");
                                    }
@@ -152,7 +153,11 @@ public class SamplingPointListener implements FramePresenter {
 
         void onLoginFailed();
 
-        void onItemImageClick(SenceSamplingSugar point);
+        void onUpSuccess();
+
+        void onUpFailed();
+
+        void onItemImageClick(SenceSamplingSugar point, PlannningData.Point dats);
 
     }
 

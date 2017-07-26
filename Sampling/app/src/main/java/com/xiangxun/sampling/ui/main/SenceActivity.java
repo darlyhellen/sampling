@@ -133,6 +133,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             params.setInfo("样品深度:", sugar.getDepth(), null);
             project.isEdit(false);
             project.setInfo("土壤类型:", sugar.getSoil_name(), null);
+            project.setTag(sugar.getResult());
             other.isEdit(true);
             other.setInfo("其他說明:", "", null);
             address.isEdit(false);
@@ -303,7 +304,25 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
             @Override
             public void onClick(View v) {
-                presenter.save(planning, point.data);
+                SenceSamplingSugar paramer = new SenceSamplingSugar();
+                paramer.setPointId(point.data.id);
+                paramer.setSchemeId(point.data.schemeId);
+                paramer.setRegion_id(getaddress());
+                paramer.setLongitude(getlongitude());
+                paramer.setLatitude(getlatitude());
+                paramer.setResult(gettype());
+                paramer.setSoil_type(gettype().code);
+                paramer.setSoil_name(gettype().name);
+                paramer.setName(getname());
+                paramer.setDepth(getparams());
+                paramer.setTest_item(getproject());
+                paramer.setMissionId(planning.missionId);
+                paramer.setImages(getImages());
+                paramer.setVideos(getVideos());
+                SharePreferHelp.putValue("sugar" + point.data.id, paramer);
+                ToastApp.showToast("本地保存成功");
+                setResult(Activity.RESULT_OK);
+                onBackPressed();
             }
         });
     }

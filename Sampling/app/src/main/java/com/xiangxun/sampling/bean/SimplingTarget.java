@@ -9,12 +9,11 @@ package com.xiangxun.sampling.bean;
  */
 public class SimplingTarget {
     public String id;
-    public String createTime;
     public int status;
-    public String cadmium;
     public String code;
-    public String availableCadmium;
-    public String ph;
-    public String regId;
-    public String createId;
+    public String name;
+    public String type_name;
+    public String analy_value;
+    public String analy_name;
+
 }

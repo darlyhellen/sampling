@@ -146,24 +146,4 @@ public class SencePresenter {
     public boolean isave() {
         return isave;
     }
-
-    public void save(PlannningData.Scheme planning, PlannningData.Point point) {
-        SenceSamplingSugar paramer = new SenceSamplingSugar();
-        paramer.setPointId(point.id);
-        paramer.setSchemeId(point.schemeId);
-        paramer.setRegion_id(main.getaddress());
-        paramer.setLongitude(main.getlongitude());
-        paramer.setLatitude(main.getlatitude());
-        paramer.setSoil_type(main.gettype().code);
-        paramer.setSoil_name(main.gettype().name);
-        paramer.setName(main.getname());
-        paramer.setDepth(main.getparams());
-        paramer.setTest_item(main.getproject());
-        paramer.setMissionId(planning.missionId);
-        paramer.setImages(main.getImages());
-        paramer.setVideos(main.getVideos());
-        SharePreferHelp.putValue("sugar" + point.id, paramer);
-        isave = true;
-        ToastApp.showToast("本地保存成功");
-    }
 }

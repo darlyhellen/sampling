@@ -3,6 +3,7 @@ package com.xiangxun.sampling.db;
 import com.orm.SugarRecord;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
+import com.xiangxun.sampling.bean.SenceLandRegion;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,12 +18,18 @@ import java.util.List;
 @Table(name = "S_SENCE_SAMPLING")
 public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
+    //上传成功后获取的现场采样id
+    @Column(name = "samplingId")
+    private String samplingId;
     //点位id
     @Column(name = "pointId")
     private String pointId;
     //方案id
     @Column(name = "schemeId")
     private String schemeId;
+    //任务ID
+    @Column(name = "missionId")
+    private String missionId;
     //位置名称
     @Column(name = "region_id")
     private String region_id;
@@ -47,9 +54,7 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //采样类型
     @Column(name = "test_item")
     private String test_item;
-    //任务ID
-    @Column(name = "missionId")
-    private String missionId;
+
     //图片信息
     @Column(name = "images")
     private List<String> images;
@@ -58,7 +63,18 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     private List<String> videos;
 
 
+    private SenceLandRegion.LandRegion result;
+
+
     public SenceSamplingSugar() {
+    }
+
+    public String getSamplingId() {
+        return samplingId;
+    }
+
+    public void setSamplingId(String samplingId) {
+        this.samplingId = samplingId;
     }
 
     public String getPointId() {
@@ -164,5 +180,14 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
     public void setVideos(List<String> videos) {
         this.videos = videos;
+    }
+
+
+    public SenceLandRegion.LandRegion getResult() {
+        return result;
+    }
+
+    public void setResult(SenceLandRegion.LandRegion result) {
+        this.result = result;
     }
 }

@@ -17,6 +17,8 @@ import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
+import com.xiangxun.sampling.common.retrofit.paramer.AnaylistParamer;
+import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 
 import java.util.List;
@@ -42,17 +44,16 @@ public class TargetListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void analysis(String address, final FrameListener<SimplingTargetResult> listener) {
+    public void analysis(String address, String regionId, final FrameListener<SimplingTargetResult> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        if (TextUtils.isEmpty(address)){
-            listener.onFaild(0, "采样地址不能为空");
-            return;
-        }
-        RxjavaRetrofitRequestUtil.getInstance().get()
-                .analysis(address)
+
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer(address, regionId), "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .analysis(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, SimplingTargetResult>() {

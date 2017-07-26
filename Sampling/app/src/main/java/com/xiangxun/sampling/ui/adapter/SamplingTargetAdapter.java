@@ -51,13 +51,13 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> impleme
             hocker = (ViewHocker) view.getTag();
         }
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-        hocker.name.setText(info.code);
+        hocker.name.setText(info.type_name);
         hocker.name.setTextColor(context.getResources().getColor(R.color.black));
         hocker.name.setTextSize(14);
-        hocker.dept.setText(String.valueOf("ph:\n" + "cadmium:\n" + "availableCadmium:"));
+        hocker.dept.setText(String.valueOf(info.analy_name + ":"));
         hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
         hocker.dept.setTextSize(14);
-        hocker.position.setText(String.valueOf(info.ph + "\n" + info.cadmium + "\n" + info.availableCadmium));
+        hocker.position.setText(String.valueOf(info.analy_value));
         hocker.position.setTextColor(context.getResources().getColor(R.color.black));
         hocker.position.setTextSize(14);
         switch (info.status) {

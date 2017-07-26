@@ -6,8 +6,10 @@ import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.common.dlog.DLog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -82,5 +84,24 @@ public class PontCacheHelper {
         } else {
             SharePreferHelp.putValue(id, result);
         }
+    }
+
+    public static void update(String id, PlannningData.Point result) {
+        Object s = SharePreferHelp.getValue(id);
+        if (s != null) {
+            ResultPointData data = (ResultPointData) s;
+            if (data.result != null && data.result.size() != 0) {
+                Iterator it = data.result.iterator();
+                while (it.hasNext()) {
+                    Pointly poly = (Pointly) it.next();
+                    if (poly.data.id.equals(result.id)) {
+                        poly.data.isSampling = 1;
+                    }
+                }
+            }
+            //缓存最近更新的时间戳
+            SharePreferHelp.putValue(id, data);
+        }
+        DLog.i("点位缓存更新完成");
     }
 }

@@ -2,11 +2,13 @@ package com.xiangxun.sampling.ui.presenter;
 
 import android.text.TextUtils;
 
+import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
+import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
@@ -69,8 +71,8 @@ public class SamplingPointPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sampling(SenceSamplingSugar point) {
-        if (point == null ) {
+    public void sampling(final SenceSamplingSugar point, final PlannningData.Point dats) {
+        if (point == null) {
             ToastApp.showToast("点位信息传递错误");
             return;
         }
@@ -116,17 +118,26 @@ public class SamplingPointPresenter {
             return;
         }
         biz.onStart(loading);
-        biz.upSampling(point, new FrameListener<PlannningData.ResultPointData>() {
+        biz.upSampling(point, new FrameListener<List<SenceInfo.SenceObj>>() {
             @Override
-            public void onSucces(PlannningData.ResultPointData data) {
+            public void onSucces(List<SenceInfo.SenceObj> data) {
                 biz.onStop(loading);
-                //保存进入数据库，进行下次WIIF上传。
-                // paramer.save();
+                //将返回的数据和传递的数据进行合并并保存进数据库。
+                if (data != null) {
+                    if (data.size() == 1) {
+                        point.setSamplingId(data.get(0).id);
+                    }
+                }
+                point.save();
+                //将对应的缓存点位进行剔除操作。
+                PontCacheHelper.update(point.getSchemeId(), dats);
+                view.onUpSuccess();
             }
 
             @Override
             public void onFaild(int code, String info) {
                 biz.onStop(loading);
+                view.onUpFailed();
             }
         });
     }

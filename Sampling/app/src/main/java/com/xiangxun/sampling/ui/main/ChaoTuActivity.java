@@ -231,7 +231,17 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     }
 
     @Override
-    public void onItemImageClick(SenceSamplingSugar point) {
+    public void onUpSuccess() {
+        
+    }
+
+    @Override
+    public void onUpFailed() {
+
+    }
+
+    @Override
+    public void onItemImageClick(SenceSamplingSugar point, PlannningData.Point dats) {
 
     }
 

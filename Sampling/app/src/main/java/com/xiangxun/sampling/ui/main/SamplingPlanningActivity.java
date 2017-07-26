@@ -116,10 +116,19 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
         Object s = SharePreferHelp.getValue("ResultData");
         if (s != null) {
             data = ((ResultData) s).result;
-            adapter.setData(data);
+            if (data!=null&&data.size()>0) {
+                adapter.setData(data);
+                wlist.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+            }else {
+                wlist.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText("没有任务信息");
+            }
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
+            textView.setText("没有任务信息");
         }
     }
 

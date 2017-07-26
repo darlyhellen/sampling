@@ -10,17 +10,8 @@ import java.util.List;
  * @TODO:
  */
 public class SimplingTargetResult {
-    public TargetData result;
+    public List<SimplingTarget> result;
     public int resCode;
     public String resDesc;
-
-    public class TargetData {
-        public int avaCount;
-        public int pageSize;
-        public int totalPageCount;
-        public int totalSize;
-        public int start;
-        public int currentPageNo;
-        public List<SimplingTarget> data;
-    }
+    public String resId;
 }

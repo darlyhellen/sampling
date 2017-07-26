@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
@@ -136,12 +137,19 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         Object s = SharePreferHelp.getValue(planning.id);
         if (s != null) {
             data = ((ResultPointData) s).result;
-            adapter.setData(data);
-            wlist.setVisibility(View.VISIBLE);
-            textView.setVisibility(View.GONE);
+            if (data != null && data.size() > 0) {
+                adapter.setData(data);
+                wlist.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+            } else {
+                wlist.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText("未查找到点位信息");
+            }
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
+            textView.setText("未查找到点位信息");
         }
 
     }
@@ -151,19 +159,37 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
         Object s = SharePreferHelp.getValue(planning.id);
         if (s != null) {
             data = ((ResultPointData) s).result;
-            adapter.setData(data);
-            wlist.setVisibility(View.VISIBLE);
-            textView.setVisibility(View.GONE);
+            if (data != null && data.size() > 0) {
+                adapter.setData(data);
+                wlist.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+            } else {
+                wlist.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText("未查找到点位信息");
+            }
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
+            textView.setText("未查找到点位信息");
         }
     }
 
     @Override
-    public void onItemImageClick(SenceSamplingSugar point) {
+    public void onUpSuccess() {
+        //点位信息上传成功,刷新列表
+        onLoginFailed();
+    }
+
+    @Override
+    public void onUpFailed() {
+        //点位信息上传失败
+    }
+
+    @Override
+    public void onItemImageClick(SenceSamplingSugar point, PlannningData.Point dats) {
         //点击item里面的图片。进行调用
-        presenter.sampling(point);
+        presenter.sampling(point, dats);
     }
 
     @Override
