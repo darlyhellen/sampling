@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.HisExceptionInfo.HisException;
+import com.xiangxun.sampling.bean.Index;
 import com.xiangxun.sampling.bean.SimplingTarget;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
@@ -72,6 +74,12 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 //点击跳转到地块详情页面，只是展示效果。不能进行任何操作
+                HisException e = (HisException) parent.getItemAtPosition(position);
+                if (e != null) {
+                    Intent intent = new Intent(SamplingHisExceptionActivity.this, SamplingHisExceptionPageActivity.class);
+                    intent.putExtra("id", e.id);
+                    startActivity(intent);
+                }
             }
         });
     }

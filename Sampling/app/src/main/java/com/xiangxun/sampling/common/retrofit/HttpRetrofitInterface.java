@@ -97,6 +97,12 @@ public interface HttpRetrofitInterface {
     Observable<JsonObject> hisexc(@Body RequestBody body);
 
     /**
+     * @TODO:地块异常列表点击查看详情信息
+     */
+    @POST("/server/land/error/showView")
+    Observable<JsonObject> hisshow(@Body RequestBody body);
+
+    /**
      * @TODO:地块分组接口
      */
     @POST("/server/block/query")

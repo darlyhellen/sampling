@@ -109,6 +109,9 @@
             android:name=".ui.main.SamplingHisExceptionActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.SamplingHisExceptionPageActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.SamplingExPageActivity"
             android:screenOrientation="portrait" />
         <activity

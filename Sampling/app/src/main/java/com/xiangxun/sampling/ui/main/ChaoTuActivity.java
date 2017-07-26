@@ -47,9 +47,7 @@ import java.util.List;
  */
 @ContentBinder(R.layout.activity_chaotu)
 public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface {
-    private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
-    //String url = "http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China";
-    String url = "http://10.10.15.201:8090/iserver/services/map-etkqimage/rest/maps/etkq@etkqimg";
+    private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -63,10 +61,8 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
         LayerView baseLayerView = new LayerView(this);
-
-        baseLayerView.setURL(url);
+        baseLayerView.setURL(DEFAULT_URL);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
@@ -137,7 +133,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         mapView.getController().setCenter(center);
 
         // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(true);
+        mapView.setBuiltInZoomControls(false);
         mapView.setClickable(true);
         mapView.getController().setZoom(10);
         mapView.post(new Runnable() {
@@ -184,7 +180,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         FilterParameter fp = new FilterParameter();
         fp.name = "Capitals@World.1";// 必设参数，图层名称格式：数据集名称@数据源别名
         p.filterParameters = new FilterParameter[]{fp};
-        QueryByBoundsService qs = new QueryByBoundsService(url);
+        QueryByBoundsService qs = new QueryByBoundsService(DEFAULT_URL);
         qs.process(p, new MyQueryEventListener());
     }
 
@@ -232,7 +228,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     public void onUpSuccess() {
-        
+
     }
 
     @Override

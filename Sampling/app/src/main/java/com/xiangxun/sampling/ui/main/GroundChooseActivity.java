@@ -24,6 +24,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.GroundTypeInfo;
 import com.xiangxun.sampling.bean.HisExceptionInfo;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SamplingKey;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
@@ -44,8 +45,7 @@ import java.util.List;
  */
 @ContentBinder(R.layout.activity_chaotu)
 public class GroundChooseActivity extends BaseActivity implements OnClickListener, GroundChooseInterface {
-    private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
-    String url = "http://10.10.15.201:8090/iserver/services/map-etkqimage/rest/maps/etkq@etkqimg";
+    String url = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";//2是影像地图。没有是行政地图
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -53,10 +53,28 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     private Point2D center;
 
+    private List<GroundTypeInfo.Ground> data;
+
     private GroundChoosePresenter presenter;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        LayerView baseLayerView = new LayerView(this);
+
+        baseLayerView.setURL(url);
+        CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
+        crs.wkid = 4326;
+        baseLayerView.setCRS(crs);
+        mapView.addLayer(baseLayerView);
+        // 启用内置放大缩小控件
+        mapView.setBuiltInZoomControls(false);
+        mapView.setClickable(true);
+        mapView.getController().setZoom(10);
+        mapView.post(new Runnable() {
+            public void run() {
+                initHeight();
+            }
+        });
         titleView.setTitle("选择地块");
         presenter = new GroundChoosePresenter(this);
         presenter.block();
@@ -64,7 +82,46 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     @Override
     protected void loadData() {
+        if (data != null) {
+            center = new Point2D(data.get(0).longitude, data.get(0).latitude);
+            mapView.getController().setCenter(center);
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
+            DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
+            for (GroundTypeInfo.Ground point : data) {
+                Point2D poind = new Point2D(point.longitude, point.latitude);
+                OverlayItem overlayItem = new OverlayItem(poind, point.name, point.id);
+                overlayItem.setMarker(drawableBlue);
+                overlay.addItem(overlayItem);
+            }
+            overlay.setOnFocusChangeListener(new SelectedOverlay());
+            //mapView.getOverlays().add(new CustomOverlay());
+            mapView.getOverlays().add(overlay);
 
+            // 重新onDraw一次
+            mapView.invalidate();
+        }
+    }
+
+    private void loadNoData() {
+        LayerView baseLayerView = new LayerView(this);
+        center = new Point2D(38.111231, 104.4561321);
+        baseLayerView.setURL(url);
+        CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
+        crs.wkid = 4326;
+        baseLayerView.setCRS(crs);
+        mapView.addLayer(baseLayerView);
+        mapView.getController().setCenter(center);
+
+        // 启用内置放大缩小控件
+        mapView.setBuiltInZoomControls(false);
+        mapView.setClickable(true);
+        mapView.getController().setZoom(10);
+        mapView.post(new Runnable() {
+            public void run() {
+                initHeight();
+            }
+        });
     }
 
     @Override
@@ -107,49 +164,11 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     @Override
     public void onDateSuccess(List<GroundTypeInfo.Ground> result) {
-        if (result != null && result.size() > 0) {
-            LayerView baseLayerView = new LayerView(this);
-            center = new Point2D(result.get(0).longitude, result.get(0).latitude);
-            baseLayerView.setURL(url);
-            CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
-            crs.wkid = 4326;
-            baseLayerView.setCRS(crs);
-            mapView.addLayer(baseLayerView);
-            mapView.getController().setCenter(center);
-
-            // 启用内置放大缩小控件
-            mapView.setBuiltInZoomControls(true);
-            mapView.setClickable(true);
-            mapView.getController().setZoom(12);
-            mapView.post(new Runnable() {
-                public void run() {
-                    initHeight();
-                }
-            });
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
-            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
-            final DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-            for (GroundTypeInfo.Ground point : result) {
-                Point2D poind = new Point2D(point.longitude, point.latitude);
-                OverlayItem overlayItem = new OverlayItem(poind, point.name, point.id);
-                overlayItem.setMarker(drawableBlue);
-                overlay.addItem(overlayItem);
-            }
-            overlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
-                @Override
-                public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
-                    DLog.i(overlayItem);
-                    Message m = new Message();
-                    m.obj = overlayItem;
-                    handler.sendMessage(m);
-                }
-            });
-            overlay.setOnFocusChangeListener(new SelectedOverlay());
-            //mapView.getOverlays().add(new CustomOverlay());
-            mapView.getOverlays().add(overlay);
-
-            // 重新onDraw一次
-            mapView.invalidate();
+        data = result;
+        if (data != null && data.size() > 0) {
+            loadData();
+        } else {
+            loadNoData();
         }
     }
 

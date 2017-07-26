@@ -196,7 +196,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 ToastApp.showToast("点击保存");
                 break;
             case R.id.id_exception_chos_land:
-                ToastApp.showToast("地块");
                 //跳转到地块选择
                 Intent intent = new Intent(this, GroundChooseActivity.class);
                 startActivityForResult(intent, 900);

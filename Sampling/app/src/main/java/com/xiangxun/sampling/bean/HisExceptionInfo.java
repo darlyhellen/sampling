@@ -18,12 +18,12 @@ public class HisExceptionInfo {
 
 
     public class HisException {
-        public String id;
-        public String createTime;
-        public String landBlockId;
-        public String landBlockName;
-        public String errorTime;
-        public String createId;
-        public String describe;
+        public String id = "";
+        public String createTime = "";
+        public String landBlockId = "";
+        public String landBlockName = "";
+        public String errorTime = "";
+        public String createId = "";
+        public String describe = "";
     }
 }

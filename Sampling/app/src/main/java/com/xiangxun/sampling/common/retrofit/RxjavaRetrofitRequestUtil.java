@@ -136,6 +136,30 @@ public class RxjavaRetrofitRequestUtil {
 
     }
 
+    public static String getParamers(Map<String, String> params, String paramsEncoding) {
+        if (TextUtils.isEmpty(paramsEncoding)) {
+            paramsEncoding = "UTF-8";
+        }
+        StringBuilder encodedParams = new StringBuilder();
+        try {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
+                encodedParams.append('=');
+                if (!TextUtils.isEmpty(entry.getValue())) {
+                    encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
+                }
+                encodedParams.append('&');
+            }
+            encodedParams.deleteCharAt(encodedParams.length() - 1);
+            DLog.json(encodedParams.toString());
+            return encodedParams.toString();
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
+        }
+
+    }
+
+
     private static <T> Map<String, String> changeTtoMap(T m) {
         HashMap<String, String> map = new HashMap<String, String>();
         try {
