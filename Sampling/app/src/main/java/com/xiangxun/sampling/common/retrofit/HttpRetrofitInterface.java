@@ -91,6 +91,12 @@ public interface HttpRetrofitInterface {
     Observable<JsonObject> analysis(@Body RequestBody body);
 
     /**
+     * @TODO:地块异常新增功能接口
+     */
+    @POST("/server/land/error/doAdd")
+    Observable<JsonObject> addexc(@Body RequestBody body);
+
+    /**
      * @TODO:地块异常列表展示
      */
     @POST("/server/land/error/queryAll")

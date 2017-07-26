@@ -99,6 +99,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 
     private boolean logo;
 
+    private boolean TESTPHONE = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -585,7 +587,11 @@ public class CameraActivity extends Activity implements OnClickListener {
                 }
                 try {
                     callbackTimes = 0;
-                    camera.autoFocus(new TPcallback());
+                    if (TESTPHONE) {
+                        camera.takePicture(new shutterCallback(), null, picture);//使用电脑虚拟机进行拍照
+                    } else {
+                        camera.autoFocus(new TPcallback());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

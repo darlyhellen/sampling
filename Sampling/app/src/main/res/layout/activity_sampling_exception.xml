@@ -81,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_padding10"
                 android:background="@color/white"
-                android:padding="@dimen/margin_padding10">
+                android:padding="@dimen/margin_padding10"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

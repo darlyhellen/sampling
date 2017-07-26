@@ -21,6 +21,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
@@ -29,6 +30,9 @@ import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
+import com.xiangxun.sampling.ui.biz.ExceptionPageListener;
+import com.xiangxun.sampling.ui.biz.ExceptionPageListener.ExceptionPageInterface;
+import com.xiangxun.sampling.ui.presenter.ExceptionPagePresenter;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
@@ -45,7 +49,7 @@ import java.util.List;
  * @TODO:新增地块异常页面，包括定位，图片等功能上传。
  */
 @ContentBinder(R.layout.activity_sampling_exception)
-public class SamplingExPageActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener {
+public class SamplingExPageActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, ExceptionPageInterface {
 
     private boolean iShow;//是否是展示页面，true为展示页面，false为编辑页面,异常模块进来属于新增编辑,历史异常进来属于展示页面.
     @ViewsBinder(R.id.id_exception_title)
@@ -80,6 +84,8 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     private String landid;
 
+    private ExceptionPagePresenter presenter;
+
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationClient mlocationClient = null;
@@ -91,6 +97,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         iShow = getIntent().getBooleanExtra("EXCEPTION", false);
         titleView.setTitle("地块异常上报");
         locationname.setText("异常定位：");
+        presenter = new ExceptionPagePresenter(this);
     }
 
     @Override
@@ -193,7 +200,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 startLocate();
                 break;
             case R.id.title_view_ok:
-                ToastApp.showToast("点击保存");
+                presenter.addException();
                 break;
             case R.id.id_exception_chos_land:
                 //跳转到地块选择
@@ -256,7 +263,57 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             land.setText(data.getStringExtra("name"));
             landid = data.getStringExtra("id");
         }
+        if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+            List<String> photos = (List<String>) data.getSerializableExtra("camera_picture");
+            images.addAll(images.size() - 1, photos);
+            imageAdapter.setData(images);
+        }
     }
 
 
+    @Override
+    public void onDateSuccess(List<HisExceptionInfo.HisException> result) {
+        ToastApp.showToast("上传成功");
+        onBackPressed();
+    }
+
+    @Override
+    public void onDateFailed(String info) {
+
+    }
+
+    @Override
+    public String getLatitude() {
+        return latitude.getText();
+    }
+
+    @Override
+    public String getLongitude() {
+        return longitude.getText();
+    }
+
+    @Override
+    public String getLandid() {
+        return landid;
+    }
+
+    @Override
+    public String getDeclare() {
+        return declare.getText().toString().trim();
+    }
+
+    @Override
+    public List<String> getImages() {
+        return images;
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
+    }
 }
