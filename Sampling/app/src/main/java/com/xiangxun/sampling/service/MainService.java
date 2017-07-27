@@ -12,21 +12,53 @@ import com.orm.SugarContext;
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.db.MediaSugar;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
+import com.xiangxun.sampling.ui.biz.SamplingDBListener;
+import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
+import com.xiangxun.sampling.ui.presenter.SamplingDBPresenter;
 
 import java.util.List;
 
 
-public class MainService extends Service {
+public class MainService extends Service implements SamplingDBInterface {
     private Thread tSendData;
 
     private mService mBinder = new mService();
 
+    private SamplingDBPresenter presenter;
+
+    @Override
+    public void onUpSuccess() {
+
+    }
+
+    @Override
+    public void onUpFailed() {
+
+    }
+
+    @Override
+    public void onItemImageClick(String id, String pointId) {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
+    }
+
     public class SendThread implements Runnable {
         public void run() {
-            List<SenceSamplingSugar> data = SugarRecord.listAll(SenceSamplingSugar.class);
+            List<MediaSugar> data = SugarRecord.listAll(MediaSugar.class);
             //调用接口进行数据传输
             DLog.i(getClass().getSimpleName(), "查找到WIFI环境，直接传递所有现场采样数据。" + data);
+            presenter.serviceUpAll();
         }
     }
 
@@ -47,6 +79,7 @@ public class MainService extends Service {
     }
 
     public void start() {
+        presenter = new SamplingDBPresenter(this);
         if (tSendData != null && tSendData.isAlive()) {
             tSendData.interrupt();
             tSendData = null;

@@ -94,16 +94,16 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         if (data != null) {
             center = new Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
             mapView.getController().setCenter(center);
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_location);
             Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
             for (PlannningData.Pointly point : data) {
                 Point2D poind = new Point2D(point.data.longitude, point.data.latitude);
                 OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
-                if (point.data.isSamply()) {
-                    overlayItem.setMarker(drawableBlue);
-                } else {
+                if (point.data.isSampling != 0) {
                     overlayItem.setMarker(drawablenormal);
+                } else {
+                    overlayItem.setMarker(drawableBlue);
                 }
                 overlay.addItem(overlayItem);
             }

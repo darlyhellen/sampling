@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
-import com.xiangxun.sampling.bean.PlannningData.Pointly;
-import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
+import com.xiangxun.sampling.ui.biz.SamplingDBListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 
@@ -32,8 +31,11 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
 
     private MsgDialog msgDialog;
 
-    public SamplingDBAdapter(List<SenceSamplingSugar> data, int resID, Context context) {
+    private SamplingDBListener.SamplingDBInterface main;
+
+    public SamplingDBAdapter(List<SenceSamplingSugar> data, int resID, Context context, SamplingDBListener.SamplingDBInterface main) {
         super(data, resID, context);
+        this.main = main;
     }
 
     @Override
@@ -81,7 +83,7 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
                     @Override
                     public void onClick(View v) {
                         msgDialog.dismiss();
-                        //main.onItemImageClick(s);
+                        main.onItemImageClick(s.getSamplingId(),s.getPointId());
                     }
                 });
                 msgDialog.show();

@@ -119,6 +119,18 @@ public interface HttpRetrofitInterface {
     @POST("/server/block/query")
     Observable<JsonObject> block(@Body RequestBody body);
 
+    /**
+     * @TODO:历史采样列表接口
+     */
+    @POST("/server/land/sheme/query")
+    Observable<JsonObject> hisence(@Body RequestBody body);
+
+    /**
+     * @TODO:现场采样后续图片和视频上传接口
+     */
+    @POST("/server/land/reg/uploud")
+    Observable<JsonObject> allupload(@Body RequestBody body);
+
 //
 //    /**
 //     * @param status

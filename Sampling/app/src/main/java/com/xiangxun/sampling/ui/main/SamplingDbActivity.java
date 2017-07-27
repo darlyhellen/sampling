@@ -9,12 +9,12 @@ import android.widget.TextView;
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
-import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.SamplingDBAdapter;
+import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
+import com.xiangxun.sampling.ui.presenter.SamplingDBPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
@@ -30,7 +30,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:保存在本地的数据库信息，进行展示
  */
 @ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingDbActivity extends BaseActivity {
+public class SamplingDbActivity extends BaseActivity implements SamplingDBInterface {
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_planning_wlist)
@@ -42,15 +42,18 @@ public class SamplingDbActivity extends BaseActivity {
 
     private SamplingDBAdapter adapter;
 
+    private SamplingDBPresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle("我的采样");
         data = SugarRecord.listAll(SenceSamplingSugar.class);
+        presenter = new SamplingDBPresenter(this);
     }
 
     @Override
     protected void loadData() {
-        adapter = new SamplingDBAdapter(data, R.layout.item_planning_list, this);
+        adapter = new SamplingDBAdapter(data, R.layout.item_planning_list, this, this);
         if (data != null && data.size() != 0) {
             wlist.setAdapter(adapter);
             wlist.setVisibility(View.VISIBLE);
@@ -85,4 +88,29 @@ public class SamplingDbActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onUpSuccess() {
+        data = SugarRecord.listAll(SenceSamplingSugar.class);
+        adapter.setData(data);
+    }
+
+    @Override
+    public void onUpFailed() {
+
+    }
+
+    @Override
+    public void onItemImageClick(String id, String pointId) {
+        presenter.upAll(id,pointId);
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
+    }
 }
