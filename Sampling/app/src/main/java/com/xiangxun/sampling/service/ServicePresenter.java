@@ -1,4 +1,4 @@
-package com.xiangxun.sampling.ui.presenter;
+package com.xiangxun.sampling.service;
 
 import android.text.TextUtils;
 
@@ -26,67 +26,44 @@ import okhttp3.RequestBody;
 /**
  * @author zhangyh2 s 上午10:57:39 TODO 控制器 本地数据库展示
  */
-public class SamplingDBPresenter {
+public class ServicePresenter {
 
-    private String TAG = getClass().getSimpleName();
     private SamplingDBListener biz;
-    private SamplingDBInterface view;
-    private LoadDialog loading;
 
-    public SamplingDBPresenter(SamplingDBInterface view) {
-        this.view = view;
+    public ServicePresenter() {
         this.biz = new SamplingDBListener();
-        loading = new LoadDialog((BaseActivity) view);
-        loading.setTitle(R.string.st_loading);
     }
 
-
-    public void upAll(final String id, final String pointId) {
-        if (TextUtils.isEmpty(id)) {
-            ToastApp.showToast("上传id不能为空");
-            return;
-        }
-        final List<SenceSamplingSugar> sence = SugarRecord.find(SenceSamplingSugar.class, "samplingId = ?", id);
-        final List<MediaSugar> sugar = SugarRecord.find(MediaSugar.class, "samplingId = ?", id);
+    public void serviceUpAll() {
+        final List<MediaSugar> sugar = SugarRecord.listAll(MediaSugar.class);
         //构建body
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (sugar != null) {
-            for (MediaSugar media : sugar) {
-                File file = new File(media.getUrl());
-                if ("image".equals(media.getType())) {
-                    builder.addFormDataPart(media.getType(), id + "@" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                }
-                if ("video".equals(media.getType())) {
-                    builder.addFormDataPart(media.getType(), id + "@" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
-                }
+        for (MediaSugar media : sugar) {
+            File file = new File(media.getUrl());
+            if ("image".equals(media.getType())) {
+                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+            }
+            if ("video".equals(media.getType())) {
+                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
             }
         }
         RequestBody body = builder.build();
-        biz.onStart(loading);
         biz.upAll(body, new FrameListener<ResultPointData>() {
             @Override
             public void onSucces(ResultPointData result) {
-                biz.onStop(loading);
                 //上传成功后，删除本地数据库信息
-                for (MediaSugar media : sugar) {
-                    media.delete();
-                }
-                for (SenceSamplingSugar media : sence) {
-                    media.delete();
-                }
-                RecursionDeleteFile(new File(Api.SENCE.concat(pointId)));
-                view.onUpSuccess();
+                SugarRecord.deleteAll(MediaSugar.class);
+                SugarRecord.deleteAll(SenceSamplingSugar.class);
+                //删除文件信息
+                RecursionDeleteFile(new File(Api.VIDEO));
+                ToastApp.showToast("全部信息上传完成");
             }
 
             @Override
             public void onFaild(int code, String info) {
-                biz.onStop(loading);
-                ToastApp.showToast(info);
-                view.onUpFailed();
             }
         });
     }
-
 
     /**
      * @param file TODO：删除文件夹下所有文件。

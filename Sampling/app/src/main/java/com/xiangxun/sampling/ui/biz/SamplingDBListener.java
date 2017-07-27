@@ -17,9 +17,7 @@ import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
 import com.xiangxun.sampling.db.MediaSugar;
-import com.xiangxun.sampling.db.SenceSamplingSugar;
 
 import java.io.File;
 import java.util.List;
@@ -52,9 +50,8 @@ public class SamplingDBListener implements FramePresenter {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .point(body)
+                .allupload(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, ResultPointData>() {

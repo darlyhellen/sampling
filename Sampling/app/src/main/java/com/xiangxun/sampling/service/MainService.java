@@ -1,57 +1,25 @@
 package com.xiangxun.sampling.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.orm.SugarContext;
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.db.MediaSugar;
-import com.xiangxun.sampling.db.SenceSamplingSugar;
-import com.xiangxun.sampling.ui.biz.SamplingDBListener;
-import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingDBPresenter;
 
 import java.util.List;
 
 
-public class MainService extends Service implements SamplingDBInterface {
+public class MainService extends Service {
     private Thread tSendData;
 
     private mService mBinder = new mService();
 
-    private SamplingDBPresenter presenter;
-
-    @Override
-    public void onUpSuccess() {
-
-    }
-
-    @Override
-    public void onUpFailed() {
-
-    }
-
-    @Override
-    public void onItemImageClick(String id, String pointId) {
-
-    }
-
-    @Override
-    public void setDisableClick() {
-
-    }
-
-    @Override
-    public void setEnableClick() {
-
-    }
+    private ServicePresenter presenter;
 
     public class SendThread implements Runnable {
         public void run() {
@@ -79,7 +47,7 @@ public class MainService extends Service implements SamplingDBInterface {
     }
 
     public void start() {
-        presenter = new SamplingDBPresenter(this);
+        presenter = new ServicePresenter();
         if (tSendData != null && tSendData.isAlive()) {
             tSendData.interrupt();
             tSendData = null;

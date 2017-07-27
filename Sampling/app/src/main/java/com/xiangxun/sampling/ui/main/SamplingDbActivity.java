@@ -11,10 +11,12 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.SamplingDBAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingDBPresenter;
+import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
@@ -99,9 +101,33 @@ public class SamplingDbActivity extends BaseActivity implements SamplingDBInterf
 
     }
 
+    private MsgDialog msgDialog;
+
     @Override
-    public void onItemImageClick(String id, String pointId) {
-        presenter.upAll(id,pointId);
+    public void onItemImageClick(final String id, final String pointId) {
+        //判断是否WiFi环境。否则给用户提示。
+        if (NetUtils.isWifi(this)) {
+            presenter.upAll(id, pointId);
+        } else {
+            msgDialog = new MsgDialog(this);
+            msgDialog.setTiele("您当前不是WIFI环境,是否确认使用流量上传视频图片文件？");
+            msgDialog.setButLeftListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    msgDialog.dismiss();
+                }
+            });
+            msgDialog.setButRightListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    msgDialog.dismiss();
+                    presenter.upAll(id, pointId);
+                }
+            });
+            msgDialog.show();
+        }
+
+
     }
 
     @Override
