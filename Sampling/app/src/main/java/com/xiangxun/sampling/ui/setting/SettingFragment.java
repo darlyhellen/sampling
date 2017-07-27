@@ -248,15 +248,17 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
             return;
         }
         if (file.isDirectory()) {
-            File[] childFile = file.listFiles();
-            if (childFile == null || childFile.length == 0) {
+            if (!file.getAbsolutePath().contains("video")) {
+                File[] childFile = file.listFiles();
+                if (childFile == null || childFile.length == 0) {
+                    file.delete();
+                    return;
+                }
+                for (File f : childFile) {
+                    RecursionDeleteFile(f);
+                }
                 file.delete();
-                return;
             }
-            for (File f : childFile) {
-                RecursionDeleteFile(f);
-            }
-            file.delete();
         }
     }
 

@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/6/6.
@@ -29,8 +31,28 @@ public class BitmapChangeUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] appicon = baos.toByteArray();// 转为byte数组
-        return Base64.encodeToString(appicon, Base64.DEFAULT);
+        return Arrays.toString(appicon);//Base64.encodeToString(appicon, Base64.DEFAULT);
 
+    }
+
+
+    public static String bytesToHex(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();// 转为byte数组
+        StringBuffer md5str = new StringBuffer();
+        for (int i = 0; i < bytes.length; ++i) {
+            int digital = bytes[i];
+
+            if (digital < 0)
+                digital += 256;
+
+            if (digital < 16)
+                md5str.append("0");
+
+            md5str.append(Integer.toHexString(digital));
+        }
+        return md5str.toString().toUpperCase();
     }
 
     /**

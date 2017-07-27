@@ -1,25 +1,20 @@
 package com.xiangxun.sampling.ui.presenter;
 
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.image.BitmapChangeUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.ExceptionPageParamer;
 import com.xiangxun.sampling.ui.biz.ExceptionPageListener;
 import com.xiangxun.sampling.ui.main.SamplingExPageActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.File;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 /**
@@ -65,38 +60,32 @@ public class ExceptionPagePresenter {
             ToastApp.showToast("说明信息不能为空");
             return;
         }
-        ExceptionPageParamer paramer = new ExceptionPageParamer();
-        paramer.setLatitude(main.getLatitude());
-        paramer.setLongitude(main.getLongitude());
-        paramer.setLandid(main.getLandid());
-        paramer.setDeclare(main.getDeclare());
-        JSONObject ob = new JSONObject();
-        try {
-            if (main.getImages() != null && main.getImages().size() > 1) {
-                main.getImages().remove(main.getImages().size() - 1);
-                for (String arg : main.getImages()) {
-                    //将图片文件变为字符串传递
-                    ob.put(arg.substring(arg.lastIndexOf("/") + 1, arg.length()), BitmapChangeUtil.convertIconToString(BitmapFactory.decodeFile(arg)));
-                    //将图片文件变为字节流传递
-                    ob.put(arg.substring(arg.lastIndexOf("/") + 1, arg.length()), BitmapChangeUtil.getByetsFromFile(arg));
-                }
-            }
-        } catch (JSONException e) {
+        //构建body
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("latitude", main.getLatitude())
+                .addFormDataPart("longitude", main.getLongitude())
+                .addFormDataPart("landBlockId", main.getLandid())
+                .addFormDataPart("describe", main.getDeclare());
 
+        if (main.getImages() != null && main.getImages().size() > 1) {
+            main.getImages().remove(main.getImages().size() - 1);
+            for (String arg : main.getImages()) {
+                File file = new File(arg);
+                builder.addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+            }
         }
-        paramer.setImages(ob.toString());
+        RequestBody requestBody = builder.build();
         userBiz.onStart(loading);
-        userBiz.addException(paramer, new FrameListener<HisExceptionInfo>() {
+        userBiz.addException(requestBody, new FrameListener<HisExceptionInfo>() {
             @Override
             public void onSucces(HisExceptionInfo data) {
                 userBiz.onStop(loading);
-                main.setEnableClick();
                 main.onDateSuccess(data.result);
             }
 
             @Override
             public void onFaild(int code, String info) {
-                main.setEnableClick();
+                userBiz.onStop(loading);
                 main.onDateFailed(info);
             }
         });

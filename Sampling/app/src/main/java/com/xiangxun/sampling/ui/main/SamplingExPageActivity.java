@@ -18,7 +18,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.HisExceptionInfo;
@@ -27,12 +26,13 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
-import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
-import com.xiangxun.sampling.ui.biz.ExceptionPageListener;
 import com.xiangxun.sampling.ui.biz.ExceptionPageListener.ExceptionPageInterface;
 import com.xiangxun.sampling.ui.presenter.ExceptionPagePresenter;
+import com.xiangxun.sampling.widget.MaxLengthWatcher;
+import com.xiangxun.sampling.widget.MaxLengthWatcher.MaxLengthUiListener;
+import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
@@ -49,7 +49,7 @@ import java.util.List;
  * @TODO:新增地块异常页面，包括定位，图片等功能上传。
  */
 @ContentBinder(R.layout.activity_sampling_exception)
-public class SamplingExPageActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, ExceptionPageInterface {
+public class SamplingExPageActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, ExceptionPageInterface, MaxLengthUiListener {
 
     private boolean iShow;//是否是展示页面，true为展示页面，false为编辑页面,异常模块进来属于新增编辑,历史异常进来属于展示页面.
     @ViewsBinder(R.id.id_exception_title)
@@ -77,6 +77,8 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     private TextView land;
     @ViewsBinder(R.id.id_exception__declare)
     private EditText declare;
+    @ViewsBinder(R.id.id_order_equip_declare_num)
+    private TextView declare_num;
     @ViewsBinder(R.id.id_exception_gird)
     private WholeGridView gridView;
     private List<String> images;
@@ -86,6 +88,8 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     private ExceptionPagePresenter presenter;
 
+    private MsgDialog msgDialog;
+
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationClient mlocationClient = null;
@@ -94,7 +98,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     protected void initView(Bundle savedInstanceState) {
         //这句话解决了自动弹出输入按键
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        iShow = getIntent().getBooleanExtra("EXCEPTION", false);
         titleView.setTitle("地块异常上报");
         locationname.setText("异常定位：");
         presenter = new ExceptionPagePresenter(this);
@@ -107,17 +110,15 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             images = new ArrayList<String>();
             images.add("add");
         }
-        if (iShow) {
-            File root = new File(Api.SENCE.concat("123"));
-            if (root.exists()) {
-
-                File[] file = root.listFiles();
-                if (file != null) {
-                    for (int i = 0; i < file.length; i++) {
-                        DLog.i(file[i].getPath() + "---->" + file[i].getAbsolutePath());
-                        if (file[i].getAbsolutePath().endsWith(".jpg")) {
-                            images.add(images.size() - 1, file[i].getAbsolutePath());
-                        }
+        //有缓存的话
+        File root = new File(Api.SENCE.concat("exceptionimage"));
+        if (root.exists()) {
+            File[] file = root.listFiles();
+            if (file != null) {
+                for (int i = 0; i < file.length; i++) {
+                    DLog.i(file[i].getPath() + "---->" + file[i].getAbsolutePath());
+                    if (file[i].getAbsolutePath().endsWith(".jpg")) {
+                        images.add(images.size() - 1, file[i].getAbsolutePath());
                     }
                 }
             }
@@ -152,6 +153,8 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     @Override
     protected void initListener() {
+        declare.addTextChangedListener(new MaxLengthWatcher(200, declare, this));
+        declare_num.setText("0/200");
         //两个选择
         type.setOnClickListener(this);
         chosLand.setOnClickListener(this);
@@ -173,7 +176,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 if (position == (images.size() - 1)) {
                     Intent intentCamera = new Intent(SamplingExPageActivity.this, CameraActivity.class);
                     intentCamera.putExtra("size", images.size());
-                    intentCamera.putExtra("file", Api.SENCE.concat("123"));
+                    intentCamera.putExtra("file", Api.SENCE.concat("exceptionimage"));
                     intentCamera.setAction("Sence");
                     intentCamera.putExtra("LOGO", false);//不打印水印
                     startActivityForResult(intentCamera, 1);
@@ -200,7 +203,24 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 startLocate();
                 break;
             case R.id.title_view_ok:
-                presenter.addException();
+
+                //进行提示弹窗，询问用户是否确认修改上传状态。
+                msgDialog = new MsgDialog(this);
+                msgDialog.setTiele("是否确认上传异常地块信息？");
+                msgDialog.setButLeftListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        msgDialog.dismiss();
+                    }
+                });
+                msgDialog.setButRightListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        msgDialog.dismiss();
+                        presenter.addException();
+                    }
+                });
+                msgDialog.show();
                 break;
             case R.id.id_exception_chos_land:
                 //跳转到地块选择
@@ -294,7 +314,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     @Override
     public String getLandid() {
-        return landid;
+        return TextUtils.isEmpty(landid) ? "1707261056427559b2e06119104c6456" : landid;
     }
 
     @Override
@@ -315,5 +335,10 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     @Override
     public void setEnableClick() {
 
+    }
+
+    @Override
+    public void onUiChanged(int num) {
+        declare_num.setText(num + "/200");
     }
 }

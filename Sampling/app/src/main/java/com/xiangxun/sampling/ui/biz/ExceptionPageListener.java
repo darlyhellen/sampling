@@ -14,8 +14,6 @@ import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.AnaylistParamer;
-import com.xiangxun.sampling.common.retrofit.paramer.ExceptionPageParamer;
 
 import java.util.List;
 
@@ -40,14 +38,13 @@ public class ExceptionPageListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void addException(ExceptionPageParamer paramer, final FrameListener<HisExceptionInfo> listener) {
+    public void addException(RequestBody requestBody, final FrameListener<HisExceptionInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .addexc(body)
+                .addexc(requestBody)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<JsonObject, HisExceptionInfo>() {

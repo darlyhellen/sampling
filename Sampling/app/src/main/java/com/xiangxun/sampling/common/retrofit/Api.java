@@ -19,8 +19,6 @@ public class Api {
     private static final boolean DEBUGURL = AppBuildConfig.DEBUGURL;
 
     public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
-    // 发布拍照path
-    public static String xXPublishPictureDir = Root.concat("/publishPicture/");
     public static String VIDEO = Root.concat("video/");
     public static String SENCE = VIDEO.concat("sence/");
 

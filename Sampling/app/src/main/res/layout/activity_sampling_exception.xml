@@ -61,8 +61,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/black"
-                        android:hint="请选择地块" />
+                        android:hint="请选择地块"
+                        android:textColor="@color/black" />
 
 
                 </LinearLayout>
@@ -110,8 +110,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/black"
-                        android:hint="请选择异常类型" />
+                        android:hint="请选择异常类型"
+                        android:textColor="@color/black" />
 
 
                 </LinearLayout>
@@ -152,17 +152,35 @@
                         android:textSize="@dimen/textSize16" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/id_exception__declare"
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/app_shape_backgroud"
-                    android:gravity="top"
-                    android:hint="请输入异常信息"
-                    android:minLines="4"
-                    android:padding="@dimen/margin_padding8"
-                    android:textColor="@color/color333333"
-                    android:textSize="@dimen/textSize16" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/id_exception__declare"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/app_shape_backgroud"
+                        android:gravity="top"
+                        android:hint="请输入异常信息"
+                        android:minLines="6"
+                        android:padding="@dimen/margin_padding8"
+                        android:textColor="@color/color333333"
+                        android:textSize="@dimen/textSize16" />
+
+                    <TextView
+                        android:id="@+id/id_order_equip_declare_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/margin_padding10"
+                        android:text="100/200"
+                        android:textColor="@color/color333333"
+                        android:textSize="@dimen/textSize16" />
+                </RelativeLayout>
+
 
             </LinearLayout>
 

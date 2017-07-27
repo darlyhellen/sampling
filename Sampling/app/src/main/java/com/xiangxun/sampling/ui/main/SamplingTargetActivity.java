@@ -102,12 +102,12 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                 onBackPressed();
             }
         });
-        titleView.setRightViewRightTextOneListener("筛选", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击筛选，获取删选列表。进行数据重新请求
-            }
-        });
+//        titleView.setRightViewRightTextOneListener("筛选", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //点击筛选，获取删选列表。进行数据重新请求
+//            }
+//        });
         xlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
