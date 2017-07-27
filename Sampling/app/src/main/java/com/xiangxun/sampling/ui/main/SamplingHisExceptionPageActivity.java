@@ -121,18 +121,17 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
 
     @Override
     public void onDateSuccess(HisExceptionPageInfo.HisExceptionPage result) {
-
         if (result != null) {
             address.isEdit(false);
             address.setInfo("位置：", result.regionName, null);
             latitude.isEdit(false);
-            latitude.setInfo("经度：", result.regionName, null);
+            latitude.setInfo("经度：", result.latitude, null);
             longitude.isEdit(false);
-            longitude.setInfo("纬度：", result.regionName, null);
+            longitude.setInfo("纬度：", result.longitude, null);
             //类型
             select.setText(result.regionName);
             //地块信息
-            land.setText(result.regionName);
+            land.setText(result.landBlockName);
             declare.setText(result.describe);
             for (HisExceptionPageInfo.FileList lis : result.fileList) {
                 images.add(lis.filePath);

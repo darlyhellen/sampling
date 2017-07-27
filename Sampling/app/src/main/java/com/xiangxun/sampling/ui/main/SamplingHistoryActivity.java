@@ -72,9 +72,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 PlannningData.Scheme planning = (PlannningData.Scheme) parent.getItemAtPosition(position);
-                Intent intent = new Intent(SamplingHistoryActivity.this, SamplingPointActivity.class);
+                Intent intent = new Intent(SamplingHistoryActivity.this, SamplingHisPointActivity.class);
                 intent.putExtra("Scheme", planning);//传递过去方案对象
-                intent.putExtra("SENCE", false);
                 startActivity(intent);
             }
         });

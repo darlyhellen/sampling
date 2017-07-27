@@ -108,6 +108,7 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
+            textView.setText("没有任务信息");
         }
     }
 

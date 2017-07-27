@@ -26,6 +26,8 @@ public class HisExceptionPageInfo {
         public String errorTime = "";
         public String createId = "";
         public String describe = "";
+        public String longitude = "";
+        public String latitude = "";
         public List<FileList> fileList;
     }
 

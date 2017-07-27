@@ -124,6 +124,11 @@ public interface HttpRetrofitInterface {
      */
     @POST("/server/land/sheme/query")
     Observable<JsonObject> hisence(@Body RequestBody body);
+    /**
+     * @TODO:历史采样点位列表接口
+     */
+    @POST("/server/land/point/queryBySampling")
+    Observable<JsonObject> hispoint(@Body RequestBody body);
 
     /**
      * @TODO:现场采样后续图片和视频上传接口

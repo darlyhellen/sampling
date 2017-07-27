@@ -70,7 +70,7 @@ public class ExceptionPageListener implements FramePresenter {
 
                                @Override
                                public void onNext(HisExceptionInfo data) {
-                                   if (data.resCode == 1000 && data.result != null) {
+                                   if (data.resCode == 1000) {
                                        listener.onSucces(data);
                                    } else {
                                        listener.onFaild(0, "解析异常");

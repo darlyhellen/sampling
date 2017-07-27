@@ -6,6 +6,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.biz.ExceptionPageListener;
 import com.xiangxun.sampling.ui.main.SamplingExPageActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -79,6 +80,8 @@ public class ExceptionPagePresenter {
         userBiz.addException(requestBody, new FrameListener<HisExceptionInfo>() {
             @Override
             public void onSucces(HisExceptionInfo data) {
+                File root = new File(Api.SENCE.concat("exceptionimage"));
+                RecursionDeleteFile(root);
                 userBiz.onStop(loading);
                 main.onDateSuccess(data.result);
             }
@@ -89,5 +92,26 @@ public class ExceptionPagePresenter {
                 main.onDateFailed(info);
             }
         });
+    }
+
+    /**
+     * @param file TODO：删除文件夹下所有文件。
+     */
+    public void RecursionDeleteFile(File file) {
+        if (file.isFile()) {
+            file.delete();
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] childFile = file.listFiles();
+            if (childFile == null || childFile.length == 0) {
+                file.delete();
+                return;
+            }
+            for (File f : childFile) {
+                RecursionDeleteFile(f);
+            }
+            file.delete();
+        }
     }
 }
