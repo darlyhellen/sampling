@@ -1,14 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <com.xiangxun.sampling.widget.header.TitleView
-        android:id="@+id/id_chaotu_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
 
     <com.supermap.android.maps.MapView
         android:id="@+id/id_chaotu_mapview"
@@ -17,4 +12,10 @@
         android:clickable="true"
         android:enabled="true" />
 
-</LinearLayout>
+    <com.xiangxun.sampling.widget.header.TitleView
+        android:id="@+id/id_chaotu_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
+</FrameLayout>

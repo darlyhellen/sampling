@@ -2,7 +2,6 @@ package com.xiangxun.sampling.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,21 +15,29 @@ import com.supermap.android.maps.DefaultItemizedOverlay;
 import com.supermap.android.maps.ItemizedOverlay;
 import com.supermap.android.maps.LayerView;
 import com.supermap.android.maps.MapView;
-import com.supermap.android.maps.Overlay;
 import com.supermap.android.maps.OverlayItem;
-import com.supermap.android.maps.Point2D;
+import com.supermap.android.maps.measure.MeasureMode;
+import com.supermap.android.maps.measure.MeasureParameters;
+import com.supermap.android.maps.measure.MeasureResult;
+import com.supermap.android.maps.measure.MeasureService;
 import com.supermap.android.maps.query.FilterParameter;
-import com.supermap.android.maps.query.QueryByBoundsParameters;
-import com.supermap.android.maps.query.QueryByBoundsService;
+import com.supermap.android.maps.query.QuertyResultInfo;
+import com.supermap.android.maps.query.QueryByGeometryParameters;
+import com.supermap.android.maps.query.QueryByGeometryService;
 import com.supermap.android.maps.query.QueryEventListener;
 import com.supermap.android.maps.query.QueryResult;
-import com.supermap.services.components.commontypes.Rectangle2D;
+import com.supermap.android.maps.query.SpatialQueryMode;
+import com.supermap.services.components.commontypes.Geometry;
+import com.supermap.services.components.commontypes.GeometryType;
+import com.supermap.services.components.commontypes.Point2D;
+import com.supermap.services.components.commontypes.Unit;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.GroundTypeInfo;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.biz.GroundChooseListener.GroundChooseInterface;
 import com.xiangxun.sampling.ui.presenter.GroundChoosePresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -52,7 +59,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @ViewsBinder(R.id.id_chaotu_mapview)
     protected MapView mapView;
 
-    private Point2D center;
+    private com.supermap.android.maps.Point2D center;
 
     private List<GroundTypeInfo.Ground> data;
 
@@ -69,72 +76,97 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         // 启用内置放大缩小控件
         mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
-        mapView.getController().setZoom(10);
+        mapView.getController().setZoom(2);
         titleView.setTitle("选择地块");
         presenter = new GroundChoosePresenter(this);
         presenter.block();
-        boundsQuery();
     }
 
     @Override
     protected void loadData() {
-        if (data != null) {
-            center = new Point2D(data.get(0).longitude, data.get(0).latitude);
+    }
+
+
+    private void datas() {
+        if (data != null && data.size() > 0) {
+            Point2D[] pts = new Point2D[data.size()];
+            for (int i = 0; i < data.size(); i++) {
+                Point2D s = new Point2D((float) data.get(i).longitude, (float) data.get(i).latitude);
+                pts[i] = s;
+            }
+            Measure_Area(pts);
+
+            center = new com.supermap.android.maps.Point2D(data.get(data.size() - 1).longitude, data.get(data.size() - 1).latitude);
             mapView.getController().setCenter(center);
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_unsamply_normal);
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_location);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
             for (GroundTypeInfo.Ground point : data) {
-                Point2D poind = new Point2D(point.longitude, point.latitude);
+                com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.longitude, point.latitude);
                 OverlayItem overlayItem = new OverlayItem(poind, point.name, point.id);
                 overlayItem.setMarker(drawableBlue);
                 overlay.addItem(overlayItem);
             }
             overlay.setOnFocusChangeListener(new SelectedOverlay());
-            //mapView.getOverlays().add(new CustomOverlay());
             mapView.getOverlays().add(overlay);
-
-            // 重新onDraw一次
             mapView.invalidate();
-        }else {
-            LayerView baseLayerView = new LayerView(this);
-            center = new Point2D(38.111231, 104.4561321);
-            baseLayerView.setURL(DEFAULT_URL);
-            CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
-            crs.wkid = 4326;
-            baseLayerView.setCRS(crs);
-            mapView.addLayer(baseLayerView);
-            mapView.getController().setCenter(center);
-
-            // 启用内置放大缩小控件
-            mapView.setBuiltInZoomControls(true);
-            mapView.setClickable(true);
-            mapView.getController().setZoom(10);
         }
     }
 
+    // 面积量算结果
+    public void Measure_Area(Point2D[] pts) {
+        // 构造查询参数
+        MeasureParameters parameters = new MeasureParameters();
+        parameters.point2Ds = pts;
+        MeasureService service = new MeasureService(DEFAULT_URL);
+        MyMeasureEventListener listener = new MyMeasureEventListener();
+        service.process(parameters, listener, MeasureMode.AREA);
+        try {
+            listener.waitUntilProcessed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    //范围查询
-    private void boundsQuery() {
-        QueryByBoundsParameters p = new QueryByBoundsParameters();
-        // left, bottom, right, top 必设范围
-        p.bounds = new Rectangle2D(104.4561321, 38.111231, 105.4561321, 39.111231);
-        p.expectCount = 2;// 期望返回的条数
+    }
+
+    // 量算监听器类
+    class MyMeasureEventListener extends MeasureService.MeasureEventListener {
+        @Override
+        public void onMeasureStatusChanged(Object sourceObject, EventStatus status) {
+            // 量算结果
+            MeasureResult result = (MeasureResult) sourceObject;
+        }
+    }
+
+    private void geometryQuery(Point2D[] pts) {
+        QueryByGeometryParameters p = new QueryByGeometryParameters();
+        p.spatialQueryMode = SpatialQueryMode.INTERSECT;// 必设，空间查询模式，默认相交
+        // 构建查询几何对象
+        Geometry g = new Geometry();
+        g.type = GeometryType.REGION;
+        g.points = pts;
+        g.parts = new int[]{4};
+        p.geometry = g;
         FilterParameter fp = new FilterParameter();
-        fp.name = "Capitals@World.1";// 必设参数，图层名称格式：数据集名称@数据源别名
+        fp.name = "绵竹市";// 必设参数，图层名称格式：数据集名称@数据源别名
         p.filterParameters = new FilterParameter[]{fp};
-        QueryByBoundsService qs = new QueryByBoundsService(DEFAULT_URL);
+        QueryByGeometryService qs = new QueryByGeometryService(DEFAULT_URL);
         qs.process(p, new MyQueryEventListener());
     }
 
     public class MyQueryEventListener extends QueryEventListener {
         @Override
         public void onQueryStatusChanged(Object sourceObject, EventStatus status) {
+            DLog.i(getClass().getSimpleName(), status);
             if (sourceObject instanceof QueryResult && status.equals(EventStatus.PROCESS_COMPLETE)) {
                 QueryResult qr = (QueryResult) sourceObject;
+
+
+                DLog.i(getClass().getSimpleName(), qr.quertyResultInfo + "" + qr.resourceInfo);
+                QuertyResultInfo info = qr.quertyResultInfo;
+                DLog.i(getClass().getSimpleName(), info.currentCount + "" + info.totalCount + "" + info.recordsets + "" + info.customResponse);
             }
         }
     }
-
 
     @Override
     protected void initListener() {
@@ -145,7 +177,6 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
                 onBackPressed();
             }
         });
-        titleView.setRightViewRightTextOneListener("确认", this);
     }
 
     @Override
@@ -160,7 +191,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @Override
     public void onDateSuccess(List<GroundTypeInfo.Ground> result) {
         data = result;
-        loadData();
+        datas();
     }
 
     private Handler handler = new Handler() {
@@ -197,26 +228,11 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
         @Override
         public void onFocusChanged(ItemizedOverlay overlay, OverlayItem item) {
-//			// 地图中心漫游至当前OverlayItem
-//			mapView.getController().animateTo(item.getPoint());
-//			Toast.makeText(mapView.getContext().getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-            // 弹出气泡展示消息
             Message m = new Message();
             m.obj = item;
             handler.sendMessage(m);
         }
 
-    }
-
-    /**
-     * 自定义Overlay
-     */
-    class CustomOverlay extends Overlay {
-
-        @Override
-        public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-            super.draw(canvas, mapView, shadow);
-        }
     }
 
 
