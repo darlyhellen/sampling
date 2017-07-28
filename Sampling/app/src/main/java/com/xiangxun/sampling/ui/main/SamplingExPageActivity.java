@@ -314,7 +314,7 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
 
     @Override
     public String getLandid() {
-        return TextUtils.isEmpty(landid) ? "1707261056427559b2e06119104c6456" : landid;
+        return landid;
     }
 
     @Override

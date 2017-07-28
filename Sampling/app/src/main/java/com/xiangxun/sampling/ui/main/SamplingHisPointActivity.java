@@ -96,7 +96,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
                 {
                     Intent intent = new Intent(SamplingHisPointActivity.this, HisSenceActivity.class);
                     intent.putExtra("ID", pointly.data.id);
-                    intent.putExtra("missionId", planning.missionId);
+                    intent.putExtra("missionId", planning.id);
                     startActivity(intent);
                 }
 

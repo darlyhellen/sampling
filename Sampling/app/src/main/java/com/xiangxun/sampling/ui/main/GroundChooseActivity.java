@@ -30,7 +30,6 @@ import com.supermap.android.maps.query.SpatialQueryMode;
 import com.supermap.services.components.commontypes.Geometry;
 import com.supermap.services.components.commontypes.GeometryType;
 import com.supermap.services.components.commontypes.Point2D;
-import com.supermap.services.components.commontypes.Unit;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.GroundTypeInfo;

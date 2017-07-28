@@ -54,7 +54,7 @@ public class HisSenceListener implements FramePresenter {
         }
         Map<String, String> map = new HashMap<String, String>();
         map.put("id", id);
-        map.put("missionId", missionId);
+        map.put("schemeId", missionId);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(map, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .sencehispage(body)

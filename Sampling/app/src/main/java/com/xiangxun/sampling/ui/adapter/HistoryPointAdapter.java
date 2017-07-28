@@ -53,7 +53,7 @@ public class HistoryPointAdapter extends ParentAdapter<Pointly> implements Stick
         //未采样进行展示 ,已采集不进行展示
         view.setVisibility(View.VISIBLE);
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-        hocker.name.setText(s.data.name);
+        hocker.name.setText(s.data.code);
         hocker.name.setTextColor(context.getResources().getColor(R.color.black));
         hocker.name.setTextSize(14);
         hocker.dept.setText(String.valueOf(s.data.longitude));
