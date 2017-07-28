@@ -10,15 +10,13 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
-import com.xiangxun.sampling.bean.PlannningData;
-import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
-import com.xiangxun.sampling.bean.SenceInfo;
+import com.xiangxun.sampling.bean.HisSencePageInfo;
+import com.xiangxun.sampling.bean.SimplingTarget;
+import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
-import com.xiangxun.sampling.db.SenceSamplingSugar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +30,9 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * @author zhangyh2 LoginUser 下午3:42:16 TODO  根据前面的方案列表点击获取方案id，根据方案id从服务端获取历史点位列表
+ * @author zhangyh2 LoginUser 下午3:42:16 TODO 历史现场展示页面
  */
-public class SamplingPointHisListener implements FramePresenter {
+public class HisSenceListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
         if (loading != null) loading.show();
@@ -45,34 +43,32 @@ public class SamplingPointHisListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void postHisPoint(String id, String strTime, final FrameListener<ResultPointData> listener) {
-
-        if (TextUtils.isEmpty(id) || TextUtils.isEmpty(id)) {
-            listener.onFaild(0, "方案id不能为空");
-            return;
-        }
+    public void sencehispage(String id, final FrameListener<HisSencePageInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-
+        if (TextUtils.isEmpty(id)) {
+            listener.onFaild(0, "id不能为空");
+            return;
+        }
         Map<String, String> map = new HashMap<String, String>();
-        map.put("missionId", id);
+        map.put("id", id);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(map, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .hispoint(body)
+                .sencehispage(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, ResultPointData>() {
+                .map(new Func1<JsonObject, HisSencePageInfo>() {
                     @Override
-                    public ResultPointData call(JsonObject s) {
+                    public HisSencePageInfo call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        ResultPointData root = new Gson().fromJson(s, new TypeToken<ResultPointData>() {
+                        HisSencePageInfo root = new Gson().fromJson(s, new TypeToken<HisSencePageInfo>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<ResultPointData>() {
+                .subscribe(new Observer<HisSencePageInfo>() {
                                @Override
                                public void onCompleted() {
 
@@ -85,31 +81,22 @@ public class SamplingPointHisListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(ResultPointData data) {
-                                   if (data != null) {
-                                       if (data.result != null) {
-                                           listener.onSucces(data);
-                                       } else {
-                                           listener.onFaild(0, data.resDesc);
-                                       }
+                               public void onNext(HisSencePageInfo data) {
+                                   if (data.resCode == 1000 && data.result != null) {
+                                       listener.onSucces(data);
                                    } else {
-                                       listener.onFaild(0, "解析错误");
+                                       listener.onFaild(0, "解析异常");
                                    }
                                }
                            }
 
                 );
-
-
     }
 
-    public interface SamplingPointHisInterface extends FrameView {
+    public interface HisSenceInterface extends FrameView {
 
-        void onLoginSuccess(List<PlannningData.Pointly> info);
+        void onDateSuccess(HisSencePageInfo.HisSencePage result);
 
-        void onLoginFailed();
-
+        void onDateFailed(String info);
     }
-
-
 }

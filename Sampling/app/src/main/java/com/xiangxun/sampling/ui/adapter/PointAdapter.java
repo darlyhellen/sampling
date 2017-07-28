@@ -65,10 +65,10 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                 hocker.name.setText(s.data.code);
                 hocker.name.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.name.setTextSize(14);
-                hocker.dept.setText(String.valueOf(s.data.latitude));
+                hocker.dept.setText(String.valueOf(s.data.longitude));
                 hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.dept.setTextSize(14);
-                hocker.position.setText(String.valueOf(s.data.longitude));
+                hocker.position.setText(String.valueOf(s.data.latitude));
                 hocker.position.setTextColor(context.getResources().getColor(R.color.black));
                 hocker.position.setTextSize(14);
                 final SenceSamplingSugar sugar = (SenceSamplingSugar) SharePreferHelp.getValue("sugar" + s.data.id);
@@ -111,10 +111,10 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.name.setText(s.data.code);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(String.valueOf(s.data.latitude));
+            hocker.dept.setText(String.valueOf(s.data.longitude));
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.data.longitude));
+            hocker.position.setText(String.valueOf(s.data.latitude));
             hocker.position.setTextColor(context.getResources().getColor(R.color.black));
             hocker.position.setTextSize(14);
             if (s.data.isSampling == 0) {

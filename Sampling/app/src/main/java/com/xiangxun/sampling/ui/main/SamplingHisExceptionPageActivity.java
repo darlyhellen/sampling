@@ -125,9 +125,9 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
             address.isEdit(false);
             address.setInfo("位置：", result.regionName, null);
             latitude.isEdit(false);
-            latitude.setInfo("经度：", result.latitude, null);
+            latitude.setInfo("经度：", result.longitude, null);
             longitude.isEdit(false);
-            longitude.setInfo("纬度：", result.longitude, null);
+            longitude.setInfo("纬度：", result.latitude, null);
             //类型
             select.setText(result.regionName);
             //地块信息

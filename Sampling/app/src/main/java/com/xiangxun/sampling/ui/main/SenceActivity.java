@@ -141,9 +141,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             address.isEdit(false);
             address.setInfo("采样地点：", sugar.getRegion_id(), null);
             latitude.isEdit(true);
-            latitude.setInfo("经度：", sugar.getLatitude(), null);
+            latitude.setInfo("经度：", sugar.getLongitude(), null);
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", sugar.getLongitude(), null);
+            longitude.setInfo("纬度：", sugar.getLatitude(), null);
             //初始化图片和视频信息所在位置。
             images = sugar.getImages();
             videos = sugar.getVideos();
@@ -374,9 +374,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
+                latitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
+                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
                 address.isEdit(false);
                 if (TextUtils.isEmpty(amapLocation.getAddress())) {
                     startLocate();

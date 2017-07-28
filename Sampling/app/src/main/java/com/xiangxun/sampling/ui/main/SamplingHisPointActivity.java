@@ -3,6 +3,7 @@ package com.xiangxun.sampling.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -67,7 +68,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
         titleView.setTitle(planning.name);
         //在这里根据方案ID请求点位信息。
         presenter = new SamplingPointHisPresenter(this);
-        presenter.point(planning.id);
+        presenter.point(planning.missionId);
 
     }
 
@@ -91,7 +92,14 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 //到现场采集页面.
                 DLog.i("到现场采集页面--" + position);
-                Intent intent = new Intent(SamplingHisPointActivity.this, SenceActivity.class);
+                Pointly pointly = (Pointly) parent.getItemAtPosition(position);
+                if (!TextUtils.isEmpty(pointly.data.id));{
+                    Intent intent = new Intent(SamplingHisPointActivity.this, HisSenceActivity.class);
+                    intent.putExtra("ID",pointly.data.id);
+                    startActivity(intent);
+                }
+
+
             }
         });
     }

@@ -106,6 +106,9 @@
             android:name=".ui.main.SamplingHisPointActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.HisSenceActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.SamplingExceptionActivity"
             android:screenOrientation="portrait" />
         <activity

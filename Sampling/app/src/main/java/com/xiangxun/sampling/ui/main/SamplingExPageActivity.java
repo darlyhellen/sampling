@@ -240,9 +240,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
+                latitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
+                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
                 if (TextUtils.isEmpty(amapLocation.getAddress())) {
                     startLocate();
                 } else {

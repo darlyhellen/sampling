@@ -129,6 +129,8 @@ public class PlannningData {
         //是否查看过
         private boolean userSee;
 
+        public String name;
+
         public boolean isUserSee() {
             return userSee;
         }

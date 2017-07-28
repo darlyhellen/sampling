@@ -23,8 +23,6 @@ import rx.Observable;
 
 public interface HttpRetrofitInterface {
     /**
-     * @param route
-     * @return
      * @TODO:用户登录POST接口，传递参数为<b>route</b>
      */
     //@FormUrlEncoded//添加这行注解，否则参数报错。Post请求
@@ -124,11 +122,18 @@ public interface HttpRetrofitInterface {
      */
     @POST("/server/land/sheme/query")
     Observable<JsonObject> hisence(@Body RequestBody body);
+
     /**
-     * @TODO:历史采样点位列表接口
+     * @TODO:历史采样现场采样列表接口
      */
-    @POST("/server/land/point/queryBySampling")
+    @POST("/server/land/reg/select")
     Observable<JsonObject> hispoint(@Body RequestBody body);
+
+    /**
+     * @TODO:历史采样现场采样页面接口
+     */
+    @POST("/server/land/reg/showView")
+    Observable<JsonObject> sencehispage(@Body RequestBody body);
 
     /**
      * @TODO:现场采样后续图片和视频上传接口
@@ -136,76 +141,12 @@ public interface HttpRetrofitInterface {
     @POST("/server/land/reg/uploud")
     Observable<JsonObject> allupload(@Body RequestBody body);
 
-//
-//    /**
-//     * @param status
-//     * @TODO:是否接收处理订单的接口
-//     */
-//    @GET("server/workorder/change/status/")
-//    Observable<JsonObject> getOrder(@Query("status") String status, @Query("id") String id, @Query("reason") String reason);
-//
-//    /**
-//     * @param args
-//     * @TODO:上图片接口
-//     */
-//    @POST("server/workorder/change/upLoadPicture/")
-//    Observable<JsonObject> upLoadImage(@Body RequestBody args);
-//
-//    /**
-//     * @TODO:图片下载接口。
-//     */
-//    @GET("server/workorder/refer/watchPicture/")
-//    Observable<JsonObject> downImage(@Query("id") String id);
-//
-//
-//    /**
-//     * @TODO:正常上报和异常上报接口
-//     */
-//    @GET("server/workorder/change/workorderUp/")
-//    Observable<JsonObject> upDataOrder(@Query("status") String status, @Query("id") String id, @Query("reason") String reason);
-//
-//    /**
-//     * @TODO:查找設備的接口
-//     */
-//    @GET("server/device/refer/searchDevice/")
-//    Observable<JsonObject> searchDevice(@Query("type") String type, @Query("pageNo") int pageNo);
-//
-//    /**
-//     * @TODO:巡检页面根据条件查询设备信息。
-//     */
-//    @GET("server/device/refer/searchOneDevice/")
-//    Observable<JsonObject> searchOneDevice(@Query("type") String type, @Query("code") String code, @Query("name") String name);
-//
-//    /**
-//     * @TODO:巡检页面参数完整,提交工单接口.
-//     */
-//    @POST("server/perambulate/refer/perambulateUp/")
-//    Observable<JsonObject> perambulateUp(@Body RequestBody args);
-//
-//    /**
-//     * @TODO:巡检列表页面
-//     */
-//    @GET("server/perambulate/refer/details/")
-//    Observable<JsonObject> details(@Query("pageNo") int pageNo);
-//
-//    /**
-//     * @param version
-//     * @TODO:版本更新接口
-//     */
-//    @GET("server/operations/app/getNewVersion")
-//    Observable<JsonObject> getVersion(@Query("version") int version);
-//
-//    /**
-//     * @TODO:测试接口，替换接口。
-//     */
-//    @GET("server")
-//    Observable<JsonObject> test();
-//
-//
-//    /**
-//     * @TODO:测试接口，替换接口。
-//     */
-//    @GET("zyh/json.json")
-//    Observable<JsonObject> github();
+
+    /**
+     * @param version
+     * @TODO:版本更新接口
+     */
+    @GET("server/operations/app/getNewVersion")
+    Observable<JsonObject> getVersion(@Query("version") int version);
 
 }

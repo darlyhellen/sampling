@@ -128,9 +128,9 @@ public class SenceOptionActivity extends BaseActivity {
             address.isEdit(false);
             address.setInfo("采样地点：", sugar.getRegion_id(), null);
             latitude.isEdit(false);
-            latitude.setInfo("经度：", sugar.getLatitude(), null);
+            latitude.setInfo("经度：", sugar.getLongitude(), null);
             longitude.isEdit(false);
-            longitude.setInfo("纬度：", sugar.getLongitude(), null);
+            longitude.setInfo("纬度：", sugar.getLatitude(), null);
             //初始化图片和视频信息所在位置。
             List<MediaSugar> media = MediaSugar.find(MediaSugar.class, "samplingId = ?", sugar.getSamplingId());
             images = new ArrayList<String>();

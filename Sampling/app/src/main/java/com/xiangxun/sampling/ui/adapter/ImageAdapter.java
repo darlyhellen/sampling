@@ -33,6 +33,19 @@ public class ImageAdapter extends ParentAdapter<String> {
     }
 
     @Override
+    public int getCount() {
+        if (data == null) {
+            return 0;
+        } else {
+            if (data.size() > 3) {
+                return 3;
+            } else {
+                return data.size();
+            }
+        }
+    }
+
+    @Override
     public View HockView(final int position, View view, ViewGroup parent, int resID, Context context, String info) {
         ViewHocker hocker = null;
         if (view == null) {
@@ -48,18 +61,15 @@ public class ImageAdapter extends ParentAdapter<String> {
             hocker = (ViewHocker) view.getTag();
         }
         hocker.close.setVisibility(View.GONE);
-        //if (parent.getChildCount() == position) { // 里面就是正常的position
-//        if (position == (data.size() - 1)) {
-//            hocker.photo.setImageResource(R.drawable.add_publish_image);
-//            hocker.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//
-//        } else {
+
+
         hocker.desc.setText("");
-        ImageLoaderUtil.getInstance().loadImageNor(info, hocker.photo);
-//        }
-        // }
-
-
+        if (info.contains("http://")) {
+            ImageLoaderUtil.getInstance().loadImageNor(info, hocker.photo);
+        } else {
+            ImageLoader.getInstance().displayImage(
+                    "file://" + info, hocker.photo);
+        }
         return view;
     }
 

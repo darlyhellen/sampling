@@ -99,8 +99,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:src="@mipmap/icon_pull"
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/icon_pull" />
                 </RelativeLayout>
 
                 <View
@@ -179,6 +179,7 @@
             </LinearLayout>
             <!--视频信息-->
             <LinearLayout
+                android:id="@+id/id_user_sence_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_padding10"

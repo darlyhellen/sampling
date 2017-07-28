@@ -18,7 +18,6 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.GridViewAdapter;
 import com.xiangxun.sampling.ui.main.SamplingExPageActivity;
-import com.xiangxun.sampling.ui.main.SamplingExceptionActivity;
 import com.xiangxun.sampling.ui.main.SamplingHisExceptionActivity;
 import com.xiangxun.sampling.ui.main.SamplingHistoryActivity;
 import com.xiangxun.sampling.ui.main.SamplingPlanningActivity;
