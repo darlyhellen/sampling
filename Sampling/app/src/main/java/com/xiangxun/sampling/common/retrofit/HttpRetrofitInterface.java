@@ -147,6 +147,6 @@ public interface HttpRetrofitInterface {
      * @TODO:版本更新接口
      */
     @GET("/server/mobile/app/getNewVersion")
-    Observable<JsonObject> getVersion(@Query("version") int version);
+    Observable<JsonObject> getVersion(@Query("version") String version);
 
 }

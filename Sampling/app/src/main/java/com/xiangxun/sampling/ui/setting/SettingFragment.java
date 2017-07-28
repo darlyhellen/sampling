@@ -230,7 +230,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
 
     private void CheckUpdate() {
         if (NetUtils.isNetworkAvailable(getActivity())) {
-            versionPresenter.findVersion(XiangXunApplication.getInstance().getVersionCode());
+            versionPresenter.findVersion(XiangXunApplication.getAppVersionName());
         } else {
             ToastApp.showToast("无网络,请检查网络是否正常连接!");
         }

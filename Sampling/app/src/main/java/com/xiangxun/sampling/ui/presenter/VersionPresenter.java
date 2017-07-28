@@ -25,7 +25,7 @@ public class VersionPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void findVersion(int version) {
+    public void findVersion(String version) {
         userBiz.findVersion(version, new FrameListener<VerisonInfo>() {
             @Override
             public void onSucces(VerisonInfo data) {

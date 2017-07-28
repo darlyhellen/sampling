@@ -40,7 +40,7 @@ public class VersionListener implements FramePresenter {
     public void onStop(Dialog loading) {
     }
 
-    public void findVersion(int version, final FrameListener<VerisonInfo> listener) {
+    public void findVersion(String version, final FrameListener<VerisonInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;

@@ -65,7 +65,7 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
         if (NetUtils.isNetworkAvailable(this)) {
             //DcNetWorkUtils.getVersoin(false, handler, this);
             presenter = new VersionPresenter(this);
-            presenter.findVersion(XiangXunApplication.getInstance().getVersionCode());
+            presenter.findVersion(XiangXunApplication.getAppVersionName());
         }
     }
 
