@@ -3,12 +3,8 @@ package com.xiangxun.sampling.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -19,12 +15,18 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.SystemCfg;
+import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.UpdateData;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.fun.InfoCache;
+import com.xiangxun.sampling.ui.biz.VersionListener.VersionInterface;
+import com.xiangxun.sampling.ui.presenter.VersionPresenter;
 import com.xiangxun.sampling.ui.setting.SettingActivity;
+import com.xiangxun.sampling.widget.dialog.UpdateDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import java.util.List;
  * @TODO:项目首页，进行轮播展示，还有4个图表分类展示
  */
 @ContentBinder(R.layout.activity_main)
-public class MainFragmentActivity extends BaseActivity implements OnItemClickListener, OnClickListener {
+public class MainFragmentActivity extends BaseActivity implements OnItemClickListener, OnClickListener, VersionInterface {
 
     private long exitTime = 0;
     @ViewsBinder(R.id.id_main_title)
@@ -48,6 +50,8 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
 
     private List<Integer> data = new ArrayList<Integer>();
 
+    private VersionPresenter presenter;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle(R.string.app_name);
@@ -58,9 +62,10 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
 
     @Override
     protected void loadData() {
-
         if (NetUtils.isNetworkAvailable(this)) {
             //DcNetWorkUtils.getVersoin(false, handler, this);
+            presenter = new VersionPresenter(this);
+            presenter.findVersion(XiangXunApplication.getInstance().getVersionCode());
         }
     }
 
@@ -107,6 +112,41 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
                 break;
         }
         DLog.i(getClass().getSimpleName(), "菜单");
+    }
+
+    private UpdateDialog updateDialog;// 更新版本提示框
+
+    @Override
+    public void onVersionSuccess(UpdateData result) {
+        if (result != null) {
+            StringBuilder sb = new StringBuilder();
+            String str = result.remark;
+            if (str != null && str.length() > 0) {
+                sb.append(str);
+            } else {
+                sb.append("发现新版本,请更新!");
+            }
+            if (updateDialog == null) {
+                updateDialog = new UpdateDialog(this, R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
+            }
+            updateDialog.setCancelable(true);
+            updateDialog.show();
+        }
+    }
+
+    @Override
+    public void onVersionFailed(String info) {
+
+    }
+
+    @Override
+    public void setDisableClick() {
+
+    }
+
+    @Override
+    public void setEnableClick() {
+
     }
 
     /**

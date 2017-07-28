@@ -69,7 +69,6 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
         //在这里根据方案ID请求点位信息。
         presenter = new SamplingPointHisPresenter(this);
         presenter.point(planning.missionId);
-
     }
 
     @Override
@@ -93,9 +92,11 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
                 //到现场采集页面.
                 DLog.i("到现场采集页面--" + position);
                 Pointly pointly = (Pointly) parent.getItemAtPosition(position);
-                if (!TextUtils.isEmpty(pointly.data.id));{
+                if (!TextUtils.isEmpty(pointly.data.id)) ;
+                {
                     Intent intent = new Intent(SamplingHisPointActivity.this, HisSenceActivity.class);
-                    intent.putExtra("ID",pointly.data.id);
+                    intent.putExtra("ID", pointly.data.id);
+                    intent.putExtra("missionId", planning.missionId);
                     startActivity(intent);
                 }
 

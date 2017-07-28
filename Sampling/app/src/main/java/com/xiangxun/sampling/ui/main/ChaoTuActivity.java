@@ -89,8 +89,8 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         if (data != null && data.size() != 0) {
             center = new com.supermap.android.maps.Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
             mapView.getController().setCenter(center);
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_location);
-            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_samply_normal);
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
+            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_sence_down);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
             for (PlannningData.Pointly point : data) {
                 com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.data.longitude, point.data.latitude);
@@ -117,7 +117,6 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
             }
         });
     }
-
 
 
     //获取点位成功信息记录。

@@ -98,7 +98,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
             center = new com.supermap.android.maps.Point2D(data.get(data.size() - 1).longitude, data.get(data.size() - 1).latitude);
             mapView.getController().setCenter(center);
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_location);
+            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
             for (GroundTypeInfo.Ground point : data) {
                 com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.longitude, point.latitude);

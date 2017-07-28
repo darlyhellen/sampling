@@ -79,8 +79,9 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
         locationname.setText("现场采样定位：");
         video.setVisibility(View.GONE);
         String id = getIntent().getStringExtra("ID");
+        String missionId = getIntent().getStringExtra("missionId");
         presenter = new HisSencePresenter(this);
-        presenter.sencehispage(id);
+        presenter.sencehispage(id, missionId);
     }
 
 

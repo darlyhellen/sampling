@@ -1,10 +1,8 @@
 package com.xiangxun.sampling.ui.setting;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,7 +14,7 @@ import android.widget.ListView;
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.XiangXunApplication;
-import com.xiangxun.sampling.common.ConstantStatus;
+import com.xiangxun.sampling.bean.UpdateData;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.Api;
@@ -26,8 +24,10 @@ import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.ui.LoginActivity;
 import com.xiangxun.sampling.ui.biz.SettingFragmentListener.SettingFragmentInterface;
+import com.xiangxun.sampling.ui.biz.VersionListener.VersionInterface;
 import com.xiangxun.sampling.ui.main.SamplingDbActivity;
 import com.xiangxun.sampling.ui.presenter.SettingFragmentPresenter;
+import com.xiangxun.sampling.ui.presenter.VersionPresenter;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
@@ -35,7 +35,7 @@ import com.xiangxun.sampling.widget.dialog.UpdateDialog;
 import java.io.File;
 
 
-public class SettingFragment extends BaseFunctionList implements SettingFragmentInterface {
+public class SettingFragment extends BaseFunctionList implements SettingFragmentInterface, VersionInterface {
     private int isNoLoginFlag;
     private View mParentView = null;
     private ListView functionListView;
@@ -48,6 +48,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     private UpdateDialog updateDialog;// 更新版本提示框
 
     private SettingFragmentPresenter presenter;
+    private VersionPresenter versionPresenter;
 
     private Function[] functions = {
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
@@ -61,43 +62,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     private Function[] functionsNoLogin = {
             new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
     };
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        private MsgDialog mUpdateDialog;
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case ConstantStatus.updateSuccess:// 获取版本更新数据成功
-                    StringBuilder sb = new StringBuilder();
-                    String str = InfoCache.getInstance().getmData().remark;
-                    if (str != null && str.length() > 0) {
-                        sb.append(str);
-                    } else {
-                        sb.append("发现新版本,请更新!");
-                    }
-                    String url = InfoCache.getInstance().getmData().saveUrl.trim();
-                    if (updateDialog == null) {
-                        updateDialog = new UpdateDialog(getActivity(), R.style.updateDialog, InfoCache.getInstance().getmData().name, sb.toString(), url);
-                    }
-                    updateDialog.setCancelable(true);
-                    updateDialog.show();
-                    showNew();
-                    break;
-                case ConstantStatus.updateFalse:// 版本更新
-                    if (mUpdateDialog == null) {
-                        mUpdateDialog = new MsgDialog(getActivity());
-                        mUpdateDialog.setTiele(Html.fromHtml(getText(R.string.update_tips_html).toString()));
-                        mUpdateDialog.setMsg(getString(R.string.latest_version_please_look));
-                        mUpdateDialog.setOnlyOneBut();
-                    }
-                    mUpdateDialog.show();
-                    break;
-            }
-        }
-    };
+    private MsgDialog mUpdateDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,6 +76,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
         super.onActivityCreated(savedInstanceState);
         isNoLoginFlag = getActivity().getIntent().getIntExtra("isFlag", 0);
         presenter = new SettingFragmentPresenter(this);
+        versionPresenter = new VersionPresenter(this);
         initView();
         initData();
         initListener();
@@ -264,8 +230,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
 
     private void CheckUpdate() {
         if (NetUtils.isNetworkAvailable(getActivity())) {
-            ToastApp.showToast("检查更新中");
-            //DcNetWorkUtils.getVersoin(true, handler, getActivity());
+            versionPresenter.findVersion(XiangXunApplication.getInstance().getVersionCode());
         } else {
             ToastApp.showToast("无网络,请检查网络是否正常连接!");
         }
@@ -301,5 +266,35 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     @Override
     public void setEnableClick() {
 
+    }
+
+    @Override
+    public void onVersionSuccess(UpdateData result) {
+        if (result != null) {
+            StringBuilder sb = new StringBuilder();
+            String str = result.remark;
+            if (str != null && str.length() > 0) {
+                sb.append(str);
+            } else {
+                sb.append("发现新版本,请更新!");
+            }
+            if (updateDialog == null) {
+                updateDialog = new UpdateDialog(getActivity(), R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
+            }
+            updateDialog.setCancelable(true);
+            updateDialog.show();
+            showNew();
+        }
+    }
+
+    @Override
+    public void onVersionFailed(String info) {
+        if (mUpdateDialog == null) {
+            mUpdateDialog = new MsgDialog(getActivity());
+            mUpdateDialog.setTiele(Html.fromHtml(getText(R.string.update_tips_html).toString()));
+            mUpdateDialog.setMsg(getString(R.string.latest_version_please_look));
+            mUpdateDialog.setOnlyOneBut();
+        }
+        mUpdateDialog.show();
     }
 }

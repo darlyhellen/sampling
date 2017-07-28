@@ -11,15 +11,14 @@ import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.HisSencePageInfo;
-import com.xiangxun.sampling.bean.SimplingTarget;
-import com.xiangxun.sampling.bean.SimplingTargetResult;
+import com.xiangxun.sampling.bean.UpdateData;
+import com.xiangxun.sampling.bean.VerisonInfo;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -30,46 +29,36 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * @author zhangyh2 LoginUser 下午3:42:16 TODO 历史现场展示页面
+ * @author zhangyh2 LoginUser 下午3:42:16 TODO 版本更新接口
  */
-public class HisSenceListener implements FramePresenter {
+public class VersionListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
-        if (loading != null) loading.show();
     }
 
     @Override
     public void onStop(Dialog loading) {
-        if (loading != null) loading.dismiss();
     }
 
-    public void sencehispage(String id,String missionId, final FrameListener<HisSencePageInfo> listener) {
+    public void findVersion(int version, final FrameListener<VerisonInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        if (TextUtils.isEmpty(id)) {
-            listener.onFaild(0, "id不能为空");
-            return;
-        }
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("id", id);
-        map.put("missionId", missionId);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(map, "UTF-8"));
-        RxjavaRetrofitRequestUtil.getInstance().post()
-                .sencehispage(body)
+        RxjavaRetrofitRequestUtil.getInstance().get()
+                .getVersion(version)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, HisSencePageInfo>() {
+                .map(new Func1<JsonObject, VerisonInfo>() {
                     @Override
-                    public HisSencePageInfo call(JsonObject s) {
+                    public VerisonInfo call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        HisSencePageInfo root = new Gson().fromJson(s, new TypeToken<HisSencePageInfo>() {
+                        VerisonInfo root = new Gson().fromJson(s, new TypeToken<VerisonInfo>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<HisSencePageInfo>() {
+                .subscribe(new Observer<VerisonInfo>() {
                                @Override
                                public void onCompleted() {
 
@@ -82,11 +71,11 @@ public class HisSenceListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(HisSencePageInfo data) {
-                                   if (data.resCode == 1000 && data.result != null) {
+                               public void onNext(VerisonInfo data) {
+                                   if (data.resCode == 1000) {
                                        listener.onSucces(data);
                                    } else {
-                                       listener.onFaild(0, "解析异常");
+                                       listener.onFaild(0, "没有新版本");
                                    }
                                }
                            }
@@ -94,10 +83,10 @@ public class HisSenceListener implements FramePresenter {
                 );
     }
 
-    public interface HisSenceInterface extends FrameView {
+    public interface VersionInterface extends FrameView {
 
-        void onDateSuccess(HisSencePageInfo.HisSencePage result);
+        void onVersionSuccess(UpdateData result);
 
-        void onDateFailed(String info);
+        void onVersionFailed(String info);
     }
 }
