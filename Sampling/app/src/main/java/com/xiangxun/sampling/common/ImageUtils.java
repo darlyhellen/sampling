@@ -9,16 +9,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
-import android.os.Environment;
-
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.SystemCfg;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ImageUtils {
 
@@ -26,53 +22,6 @@ public class ImageUtils {
 
 	public ImageUtils(Context mContext) {
 		this.mContext = mContext;
-	}
-
-	public String copyToSD(Context context) {
-		File file;
-		InputStream is = null;
-		FileOutputStream fos = null;
-		String emptyImgPath = Environment.getExternalStorageDirectory() + "/xiangxun/no_image.JPG";
-		try {
-			String path = Environment.getExternalStorageDirectory() + "/xiangxun/";
-
-			file = new File(path);
-
-			if (file.exists() == false) {
-
-				file.mkdir();
-			}
-
-			File dbFile = new File(emptyImgPath);
-			if (!dbFile.exists()) {
-				is = context.getResources().openRawResource(R.mipmap.no_image);
-				fos = new FileOutputStream(dbFile);
-
-				byte[] buffer = new byte[8 * 1024];// 8K
-				while (is.read(buffer) > 0)// >
-				{
-					fos.write(buffer);
-				}
-			}
-
-		} catch (Exception e) {
-
-		} finally {
-			try {
-				if (is != null) {
-					is.close();
-				}
-
-				if (fos != null) {
-					fos.close();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-
-			}
-		}
-		return emptyImgPath;
 	}
 
 	public void pressText(String targetImg, String time, String road, String code) {
