@@ -19,6 +19,7 @@ import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment;
+import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment.SearchListener;
 import com.xiangxun.sampling.ui.adapter.SamplingTargetAdapter;
 import com.xiangxun.sampling.ui.biz.TargetListener.TargetInterface;
 import com.xiangxun.sampling.ui.presenter.TargetPresenter;
@@ -38,7 +39,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:指标查询查询各个功能
  */
 @ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingTargetActivity extends BaseActivity implements TargetInterface, AMapLocationListener {
+public class SamplingTargetActivity extends BaseActivity implements TargetInterface, AMapLocationListener, SearchListener {
 
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
@@ -53,7 +54,12 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     private List<SimplingTarget> data;
 
     private TargetPresenter presenter;
-
+    //样品名称
+    private String sampleName;
+    //指标名称
+    private String sampleTarget;
+    //是否超标
+    private String sampleOver;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationClient mlocationClient = null;
@@ -118,6 +124,10 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                 //点击获取筛选结果
                 SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
                 Bundle bundle = new Bundle();
+                bundle.putBoolean("SWITCH", true);
+                bundle.putString("SampleName", sampleName);
+                bundle.putString("Target", sampleTarget);
+                bundle.putString("Over", sampleOver);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
@@ -198,5 +208,10 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
             mlocationClient.stopLocation();
         }
         super.onPause();
+    }
+
+    @Override
+    public void findParamers(String sampleName, String target, String over) {
+        DLog.i(getClass().getSimpleName(), sampleName + target + over);
     }
 }

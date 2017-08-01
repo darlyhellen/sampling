@@ -14,6 +14,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment;
+import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment.SearchListener;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener.SamplingHistoryInterface;
@@ -33,7 +34,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:历史采样展示历史数据
  */
 @ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingHistoryActivity extends BaseActivity implements SamplingHistoryInterface {
+public class SamplingHistoryActivity extends BaseActivity implements SamplingHistoryInterface, SearchListener {
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
 
@@ -46,6 +47,9 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     private StickyAdapter adapter;
 
     private SamplingHistoryPresenter presenter;
+
+    private String sampleName;
+    private String sampleTarget;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -72,9 +76,12 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         titleView.setRightViewRightOneListener(R.mipmap.ic_title_search, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //点击获取筛选结果
+                //历史记录中的选择
                 SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
                 Bundle bundle = new Bundle();
+                bundle.putBoolean("SWITCH", false);
+                bundle.putString("SampleName", sampleName);
+                bundle.putString("Target", sampleTarget);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
@@ -124,6 +131,11 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     @Override
     public void setEnableClick() {
+
+    }
+
+    @Override
+    public void findParamers(String sampleName, String target, String over) {
 
     }
 }

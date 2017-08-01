@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Switch;
+import android.widget.TableRow;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.SystemCfg;
@@ -24,18 +25,23 @@ import com.xiangxun.sampling.widget.header.TitleView;
  *
  * @TODO:搜索条件列表窗口。
  */
-public class SearchWorkOrderDialogFragment extends DialogFragment implements View.OnClickListener {
+public class SearchWorkOrderDialogFragment extends DialogFragment {
 
 
     public interface SearchListener {
-        void findParamers(String statu, String name, String num, String ip);
+        void findParamers(String sampleName, String target, String over);
     }
 
     private View view;
     private TitleView titleView;
     private EditText name;
     private EditText num;
-    private EditText ip;
+    private Switch switchs;
+
+    private SearchListener listener;
+
+    private String over;
+
 
     //重写onCreateView方法
     @Override
@@ -61,12 +67,47 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
     }
 
     private void initView() {
+        boolean switche = getArguments().getBoolean("SWITCH");
         titleView = (TitleView) view.findViewById(R.id.id_search_header);
+        titleView.setTitle("查询");
         name = (EditText) view.findViewById(R.id.id_search_name);
         num = (EditText) view.findViewById(R.id.id_search_num);
+        switchs = (Switch) view.findViewById(R.id.id_search_switch);
+        TableRow sw = (TableRow) view.findViewById(R.id.id_search_switch_show);
+        if (switche) {
+            //展现切换开关
+            sw.setVisibility(View.VISIBLE);
+            name.setText(getArguments().getString("SampleName"));
+            num.setText(getArguments().getString("Target"));
+            over = getArguments().getString("Over");
+            if ("0".equals(over)) {
+                //未超标
+                switchs.setChecked(false);
+            } else {
+                switchs.setChecked(true);
+                over = "1";
+            }
+        } else {
+            sw.setVisibility(View.GONE);
+        }
     }
 
     private void initListener() {
+        switchs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                // TODO Auto-generated method stub
+                if (isChecked) {
+                    over = "1";//Over open;
+                } else {
+                    over = "0";
+                }
+            }
+        });
+
+
         titleView.setLeftBackOneListener(R.mipmap.ic_back_title, new View.OnClickListener() {
 
             @Override
@@ -75,18 +116,15 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             }
         });
 
-        titleView.setRightViewLeftOneListener(R.mipmap.ic_title_search, new View.OnClickListener() {
+        titleView.setRightViewRightTextOneListener("确认", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //点击获取筛选结果
-
+                String sampleName = name.getText().toString().trim();
+                String target = num.getText().toString().trim();
+                ((SearchListener) getActivity()).findParamers(sampleName, target, over);
+                dismiss();
             }
         });
     }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
 }
