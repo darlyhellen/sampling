@@ -3,6 +3,7 @@ package com.xiangxun.sampling.ui.presenter;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
+import com.xiangxun.sampling.common.retrofit.paramer.AnaylistParamer;
 import com.xiangxun.sampling.ui.biz.TargetListener;
 import com.xiangxun.sampling.ui.main.SamplingTargetActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -29,15 +30,16 @@ public class TargetPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void analysis(String address, String regionId) {
+    public void analysis(String address, String regionId, String sampleOver, String sampleName, String sampleTarget) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.analysis(address, regionId, new FrameListener<SimplingTargetResult>() {
+        AnaylistParamer paramers = new AnaylistParamer(address, regionId, sampleOver, sampleName, sampleTarget);
+        userBiz.analysis(paramers, new FrameListener<SimplingTargetResult>() {
             @Override
             public void onSucces(SimplingTargetResult data) {
                 userBiz.onStop(loading);
                 main.setEnableClick();
-                main.onDateSuccess(data.result);
+                main.onDateSuccess(data);
             }
 
             @Override

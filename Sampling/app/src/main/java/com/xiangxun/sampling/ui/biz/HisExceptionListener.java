@@ -46,7 +46,7 @@ public class HisExceptionListener implements FramePresenter {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer("", ""), "UTF-8"));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer("", "", "", "", ""), "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .hisexc(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())

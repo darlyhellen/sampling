@@ -115,7 +115,7 @@ public interface HttpRetrofitInterface {
      * @TODO:地块分组接口
      */
     @POST("/server/block/query")
-    Observable<JsonObject> block(@Body RequestBody body);
+    Observable<JsonObject> block();
 
     /**
      * @TODO:历史采样列表接口

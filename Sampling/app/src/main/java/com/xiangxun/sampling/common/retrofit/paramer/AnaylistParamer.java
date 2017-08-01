@@ -12,8 +12,17 @@ public class AnaylistParamer {
     public String regionName;
     public String regionId;
 
-    public AnaylistParamer(String regionName, String regionId) {
+    public String isOver;
+
+    public String type_name;
+
+    public String analy_name;
+
+    public AnaylistParamer(String regionName, String regionId, String isOver, String type_name, String analy_name) {
         this.regionName = regionName;
         this.regionId = regionId;
+        this.isOver = isOver;
+        this.type_name = type_name;
+        this.analy_name = analy_name;
     }
 }

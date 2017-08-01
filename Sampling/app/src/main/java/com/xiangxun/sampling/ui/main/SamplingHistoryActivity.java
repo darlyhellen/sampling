@@ -79,7 +79,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
                 //历史记录中的选择
                 SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("SWITCH", false);
+                bundle.putString("CLASS", "SamplingHistoryActivity");
                 bundle.putString("SampleName", sampleName);
                 bundle.putString("Target", sampleTarget);
                 dialog.setArguments(bundle);

@@ -13,6 +13,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.SimplingTarget;
+import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
@@ -54,6 +55,8 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     private List<SimplingTarget> data;
 
     private TargetPresenter presenter;
+
+    private String resID;
     //样品名称
     private String sampleName;
     //指标名称
@@ -73,7 +76,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            presenter.analysis("绵竹市九龙镇", null);
+            presenter.analysis("绵竹市九龙镇", resID, sampleOver, sampleName, sampleTarget);
         } else {
             startLocate();
         }
@@ -124,7 +127,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                 //点击获取筛选结果
                 SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("SWITCH", true);
+                bundle.putString("CLASS", "SamplingTargetActivity");
                 bundle.putString("SampleName", sampleName);
                 bundle.putString("Target", sampleTarget);
                 bundle.putString("Over", sampleOver);
@@ -150,7 +153,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                     startLocate();
                 } else {
                     //请求列表
-                    presenter.analysis(amapLocation.getAddress(), null);
+                    presenter.analysis(amapLocation.getAddress(), resID, sampleOver, sampleName, sampleTarget);
                     DLog.i(amapLocation.getAddress());
                 }
 
@@ -173,8 +176,9 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     }
 
     @Override
-    public void onDateSuccess(List<SimplingTarget> result) {
-        data = result;
+    public void onDateSuccess(SimplingTargetResult result) {
+        data = result.result;
+        resID = result.resId;
         if (data != null && data.size() > 1) {
             xlist.setVisibility(View.VISIBLE);
             adapter.setData(data);
@@ -211,7 +215,11 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     }
 
     @Override
-    public void findParamers(String sampleName, String target, String over) {
-        DLog.i(getClass().getSimpleName(), sampleName + target + over);
+    public void findParamers(String samplename, String target, String over) {
+        DLog.i(getClass().getSimpleName(), samplename + target + over);
+        sampleName = samplename;
+        sampleTarget = target;
+        sampleOver = over;
+        presenter.analysis(null, resID, sampleOver, sampleName, sampleTarget);
     }
 }

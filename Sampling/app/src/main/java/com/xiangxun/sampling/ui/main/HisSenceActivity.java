@@ -148,7 +148,7 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
             params.isEdit(false);
             params.setInfo("样品深度:", result.depth, null);
             project.isEdit(false);
-            project.setInfo("土壤类型:", result.sampleName, null);
+            project.setInfo("土壤类型:", result.soilNme, null);
             other.isEdit(false);
             other.setInfo("其他說明:", "", null);
             address.isEdit(false);

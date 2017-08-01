@@ -44,14 +44,12 @@ public class TargetListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void analysis(String address, String regionId, final FrameListener<SimplingTargetResult> listener) {
+    public void analysis(AnaylistParamer paramer, final FrameListener<SimplingTargetResult> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-
-
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer(address, regionId), "UTF-8"));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .analysis(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
@@ -92,7 +90,7 @@ public class TargetListener implements FramePresenter {
 
     public interface TargetInterface extends FrameView {
 
-        void onDateSuccess(List<SimplingTarget> result);
+        void onDateSuccess(SimplingTargetResult result);
 
         void onDateFailed(String info);
     }

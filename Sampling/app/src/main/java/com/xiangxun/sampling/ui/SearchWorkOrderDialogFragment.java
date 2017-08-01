@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.SystemCfg;
+import com.xiangxun.sampling.widget.dialog.SelectItemDialog;
+import com.xiangxun.sampling.widget.dialog.SelectItemDialog.SelectResultItemClick;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 
@@ -25,8 +29,7 @@ import com.xiangxun.sampling.widget.header.TitleView;
  *
  * @TODO:搜索条件列表窗口。
  */
-public class SearchWorkOrderDialogFragment extends DialogFragment {
-
+public class SearchWorkOrderDialogFragment extends DialogFragment implements View.OnClickListener, SelectResultItemClick {
 
     public interface SearchListener {
         void findParamers(String sampleName, String target, String over);
@@ -34,13 +37,18 @@ public class SearchWorkOrderDialogFragment extends DialogFragment {
 
     private View view;
     private TitleView titleView;
+
+    //指标查询
+
+    private LinearLayout targetSearch;
     private EditText name;
-    private EditText num;
     private Switch switchs;
+    private LinearLayout tagerClick;
+    private TextView tager;
+    private String over;
+
 
     private SearchListener listener;
-
-    private String over;
 
 
     //重写onCreateView方法
@@ -67,18 +75,19 @@ public class SearchWorkOrderDialogFragment extends DialogFragment {
     }
 
     private void initView() {
-        boolean switche = getArguments().getBoolean("SWITCH");
         titleView = (TitleView) view.findViewById(R.id.id_search_header);
         titleView.setTitle("查询");
-        name = (EditText) view.findViewById(R.id.id_search_name);
-        num = (EditText) view.findViewById(R.id.id_search_num);
-        switchs = (Switch) view.findViewById(R.id.id_search_switch);
-        TableRow sw = (TableRow) view.findViewById(R.id.id_search_switch_show);
-        if (switche) {
+        String cla = getArguments().getString("CLASS");
+        targetSearch = (LinearLayout) view.findViewById(R.id.id_target);
+        name = (EditText) view.findViewById(R.id.id_target_name);
+        switchs = (Switch) view.findViewById(R.id.id_target_switch);
+        tagerClick = (LinearLayout) view.findViewById(R.id.id_target_targ_click);
+        tager = (TextView) view.findViewById(R.id.id_target_targ);
+        if ("SamplingTargetActivity".equals(cla)) {
             //展现切换开关
-            sw.setVisibility(View.VISIBLE);
+            targetSearch.setVisibility(View.VISIBLE);
             name.setText(getArguments().getString("SampleName"));
-            num.setText(getArguments().getString("Target"));
+            tager.setText(getArguments().getString("Target"));
             over = getArguments().getString("Over");
             if ("0".equals(over)) {
                 //未超标
@@ -87,8 +96,10 @@ public class SearchWorkOrderDialogFragment extends DialogFragment {
                 switchs.setChecked(true);
                 over = "1";
             }
-        } else {
-            sw.setVisibility(View.GONE);
+        }
+        if ("SamplingHistoryActivity".equals(cla)) {
+            //进入历史信息搜索
+            targetSearch.setVisibility(View.GONE);
         }
     }
 
@@ -121,10 +132,32 @@ public class SearchWorkOrderDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 //点击获取筛选结果
                 String sampleName = name.getText().toString().trim();
-                String target = num.getText().toString().trim();
+                String target = tager.getText().toString().trim();
                 ((SearchListener) getActivity()).findParamers(sampleName, target, over);
                 dismiss();
             }
         });
+
+        tagerClick.setOnClickListener(this);
     }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.id_target_targ_click:
+                //点击获取下拉列表.
+                SelectItemDialog dialog = new SelectItemDialog(getActivity(), new String[]{"ph", "cadmium", "availabl"}, "请选择指标");
+                dialog.setSelectResultItemClick(this);
+                dialog.show();
+                break;
+        }
+    }
+
+
+    @Override
+    public void resultOnClick(String result, String title) {
+        tager.setText(result);
+    }
+
 }

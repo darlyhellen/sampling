@@ -94,10 +94,6 @@ public class SamplingPointPresenter {
             ToastApp.showToast("采样名称不能为空");
             return;
         }
-        if (TextUtils.isEmpty(point.getSoil_type())) {
-            ToastApp.showToast("土壤类型不能为空");
-            return;
-        }
         if (TextUtils.isEmpty(point.getDepth())) {
             ToastApp.showToast("采样深度不能为空");
             return;
