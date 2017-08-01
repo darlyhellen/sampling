@@ -228,6 +228,9 @@ public class WechatRecoderActivity extends Activity implements MediaRecorderBase
         id_recoder_time = (ImageView) findViewById(R.id.id_recoder_time);
         id_recoder_switch = (ImageView) findViewById(R.id.id_recoder_switch);
 
+        id_recoder_ratio.setVisibility(View.GONE);
+        id_recoder_time.setVisibility(View.GONE);
+        id_recoder_switch.setVisibility(View.GONE);
 
         mediaco = new MediaController(this);
         mediaco.setVisibility(View.INVISIBLE);

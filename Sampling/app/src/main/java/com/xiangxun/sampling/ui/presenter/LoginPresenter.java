@@ -60,23 +60,23 @@ public class LoginPresenter {
                 }
                 break;
             case R.id.id_login_btn:
-                if (!NetUtils.isNetworkAvailable(context) && SystemCfg.getUserId(context) != null && !SystemCfg.getUserId(context).equals("")) {
-                    LoginInfo.isOffLine = true;
-                    SystemCfg.setUserId(context, "00001");
-                    SystemCfg.setAccount(context, main.getUserName());
-                    SystemCfg.setUserName(context, "管理员");
-                    SystemCfg.setDepartment(context, "研究所");
-                    SystemCfg.setDepartmentID(context, "101");
-                    SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
-                    SystemCfg.setWhitePwd(context, main.getPassword());
-                    Intent offline = new Intent(context, MainFragmentActivity.class);
-                    context.startActivity(offline);
-                    main.end();
-                } else {
-                    LoginInfo.isOffLine = false;
-                    String deviceId = XiangXunApplication.getInstance().getDevId();
-                    login(context, main.getUserName(), main.getPassword(), deviceId);
-                }
+//                if (!NetUtils.isNetworkAvailable(context) && SystemCfg.getUserId(context) != null && !SystemCfg.getUserId(context).equals("")) {
+//                    LoginInfo.isOffLine = true;
+//                    SystemCfg.setUserId(context, "00001");
+//                    SystemCfg.setAccount(context, main.getUserName());
+//                    SystemCfg.setUserName(context, "管理员");
+//                    SystemCfg.setDepartment(context, "研究所");
+//                    SystemCfg.setDepartmentID(context, "101");
+//                    SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
+//                    SystemCfg.setWhitePwd(context, main.getPassword());
+//                    Intent offline = new Intent(context, MainFragmentActivity.class);
+//                    context.startActivity(offline);
+//                    main.end();
+//                } else {
+//                    LoginInfo.isOffLine = false;
+                String deviceId = XiangXunApplication.getInstance().getDevId();
+                login(context, main.getUserName(), main.getPassword(), deviceId);
+//                }
                 break;
             default:
                 break;
@@ -94,7 +94,6 @@ public class LoginPresenter {
                 if (resDesc.contains("登录成功")) {
                     ResultData.UserInfos user = data.result;
                     if (user != null) {
-
                         main.onLoginSuccess();
                     } else {
                         main.onLoginFailed("登录失败，请检查网络！");
@@ -115,19 +114,6 @@ public class LoginPresenter {
             public void onFaild(int code, String info) {
                 main.setEnableClick();
                 main.onLoginFailed(info);
-                if (BuildConfig.DEBUG) {
-                    LoginInfo.isOffLine = true;
-                    SystemCfg.setUserId(context, "00001");
-                    SystemCfg.setAccount(context, main.getUserName());
-                    SystemCfg.setUserName(context, "管理员");
-                    SystemCfg.setDepartment(context, "研究所");
-                    SystemCfg.setDepartmentID(context, "101");
-                    SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
-                    SystemCfg.setWhitePwd(context, main.getPassword());
-                    Intent offline = new Intent(context, MainFragmentActivity.class);
-                    context.startActivity(offline);
-                    main.end();
-                }
             }
         });
     }

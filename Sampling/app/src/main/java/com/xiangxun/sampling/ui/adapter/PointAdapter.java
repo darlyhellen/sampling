@@ -56,7 +56,6 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-
         if (isSence) {
             if (s.data.isSampling == 0) {
                 //未采样进行展示 ,已采集不进行展示

@@ -1,7 +1,6 @@
 package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.R;
-import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.ui.biz.TargetListener;

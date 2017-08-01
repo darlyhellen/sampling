@@ -47,8 +47,6 @@ public class LoginListener implements FramePresenter {
     }
 
     public void onLogin(String name, final String pass, String deviceId, final FrameListener<LoginData> listener) {
-
-
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass)) {
             listener.onFaild(0, "用户名密码不为空");
             return;

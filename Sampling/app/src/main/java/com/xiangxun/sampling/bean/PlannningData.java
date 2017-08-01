@@ -52,6 +52,9 @@ public class PlannningData {
         public int status;
         //任务关联ID
         public String missionId;
+
+        //任务名称
+        public String missionName;
         //点位个数
         public int quantity;
         //是否查看过

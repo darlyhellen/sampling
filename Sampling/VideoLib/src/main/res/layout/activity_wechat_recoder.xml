@@ -42,7 +42,7 @@
     <RelativeLayout
         android:id="@+id/rl_recoder_surfaceview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/layout_header"
         android:background="@color/black">
 
@@ -96,7 +96,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="30dp"
@@ -108,10 +107,15 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/id_recorder_de"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:padding="10dp"
                 android:src="@mipmap/ic_video_delete" />
 
@@ -122,10 +126,15 @@
 
             <ImageView
                 android:id="@+id/id_recorder_ch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:padding="10dp"
                 android:src="@mipmap/ic_video_chose" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
         </TableRow>
 
@@ -138,7 +147,8 @@
             android_custom:roundWidth="10dip"
             android_custom:textColor="#9A32CD"
             android_custom:textIsDisplayable="false"
-            android_custom:textSize="18sp" />
+            android_custom:textSize="18sp"
+            android:visibility="visible"/>
     </LinearLayout>
 
 </RelativeLayout>

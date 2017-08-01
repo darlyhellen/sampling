@@ -139,6 +139,7 @@ public class SamplingPointPresenter {
                         sugar.setType("image");
                         sugar.save();
                     }
+                    point.save();
                 }
                 //视频信息建表
                 if (point.getVideos() != null && point.getVideos().size() > 1) {
@@ -150,8 +151,8 @@ public class SamplingPointPresenter {
                         sugar.setType("video");
                         sugar.save();
                     }
+                    point.save();
                 }
-                point.save();
                 //将对应的缓存点位进行剔除操作。
                 PontCacheHelper.update(point.getSchemeId(), dats);
                 view.onUpSuccess();

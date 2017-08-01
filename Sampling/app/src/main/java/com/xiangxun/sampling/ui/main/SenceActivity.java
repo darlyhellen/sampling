@@ -145,9 +145,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             longitude.setInfo("经度：", sugar.getLongitude(), null);
             //初始化图片和视频信息所在位置。
             images = sugar.getImages();
-            images.add(images.size() - 1, "add");
             videos = sugar.getVideos();
-            videos.add(videos.size() - 1, "add");
             imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
             imageGrid.setAdapter(imageAdapter);
             videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
@@ -350,10 +348,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 }
                 if (TextUtils.isEmpty(getlatitude())) {
                     ToastApp.showToast("请输入纬度");
-                    return;
-                }
-                if (getImages().size() <= 1 && getVideos().size() <= 1) {
-                    ToastApp.showToast("图片或视频信息不能为空");
                     return;
                 }
                 SenceSamplingSugar paramer = new SenceSamplingSugar();

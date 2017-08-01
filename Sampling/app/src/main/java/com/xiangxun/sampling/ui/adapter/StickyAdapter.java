@@ -55,7 +55,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
         }
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.name);
+            hocker.name.setText(s.missionName);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
             hocker.dept.setText(s.sampleName);

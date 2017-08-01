@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.fun;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,9 +74,15 @@ public class FunctionListAdapter extends BaseAdapter {
         image.setImageResource(function.getIconId());
         name.setText(function.getTitleId());
 
-        if (function.getDescription() != null)
-            note.setText(function.getDescription());
-
+        if (function.getDescription() != null) {
+            if (function.getDescription().contains("New!")) {
+                note.setText(function.getDescription());
+                note.setTextColor(Color.RED);
+            } else {
+                note.setText(function.getDescription());
+                note.setTextColor(context.getResources().getColor(R.color.color999999));
+            }
+        }
         if (isShow)
             arrow.setVisibility(View.VISIBLE);
         else

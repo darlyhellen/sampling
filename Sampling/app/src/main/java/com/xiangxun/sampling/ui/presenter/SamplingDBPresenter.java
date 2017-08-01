@@ -51,7 +51,7 @@ public class SamplingDBPresenter {
         //构建body
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         builder.addFormDataPart("", id, RequestBody.create(MediaType.parse("image/*"), ""));
-        if (sugar != null && sugar.size() == 0) {
+        if (sugar != null && sugar.size() != 0) {
             for (MediaSugar media : sugar) {
                 File file = new File(media.getUrl());
                 if ("image".equals(media.getType())) {

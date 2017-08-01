@@ -52,6 +52,7 @@ import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.bean.MDate;
 import com.xiangxun.sampling.common.ImageUtils;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.retrofit.Api;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,8 +99,6 @@ public class CameraActivity extends Activity implements OnClickListener {
     private float oldDist;
 
     private boolean logo;
-
-    private boolean TESTPHONE = false;
 
 
     @Override
@@ -587,7 +586,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                 }
                 try {
                     callbackTimes = 0;
-                    if (TESTPHONE) {
+                    if (Api.TESTPHONE) {
                         camera.takePicture(new shutterCallback(), null, picture);//使用电脑虚拟机进行拍照
                     } else {
                         camera.autoFocus(new TPcallback());
