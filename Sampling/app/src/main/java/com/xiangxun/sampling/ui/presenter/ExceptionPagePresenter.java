@@ -46,11 +46,11 @@ public class ExceptionPagePresenter {
             return;
         }
         if (TextUtils.isEmpty(main.getLatitude())) {
-            ToastApp.showToast("经度不能为空");
+            ToastApp.showToast("纬度不能为空");
             return;
         }
         if (TextUtils.isEmpty(main.getLongitude())) {
-            ToastApp.showToast("纬度不能为空");
+            ToastApp.showToast("经度不能为空");
             return;
         }
         if (TextUtils.isEmpty(main.getLandid())) {

@@ -173,4 +173,23 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     public void onDateFailed(String info) {
 
     }
+
+
+    @Override
+    protected void onResume() {
+        DLog.d(getClass().getSimpleName(), "onResume()");
+        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
+            mlocationClient.startLocation();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        DLog.d(getClass().getSimpleName(), "onPause()");
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+        }
+        super.onPause();
+    }
 }

@@ -99,7 +99,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
     private boolean logo;
 
-    private boolean TESTPHONE = true;
+    private boolean TESTPHONE = false;
 
 
     @Override

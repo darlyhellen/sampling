@@ -67,7 +67,11 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
-        baseLayerView.setURL(Api.CHAOTU);
+        if (Api.TESTING) {
+            baseLayerView.setURL(Api.TESTCHAOTU);
+        } else {
+            baseLayerView.setURL(Api.CHAOTU);
+        }
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
@@ -116,7 +120,12 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         // 构造查询参数
         MeasureParameters parameters = new MeasureParameters();
         parameters.point2Ds = pts;
-        MeasureService service = new MeasureService(Api.CHAOTU);
+        MeasureService service = null;
+        if (Api.TESTING) {
+            service = new MeasureService(Api.TESTCHAOTU);
+        } else {
+            service = new MeasureService(Api.CHAOTU);
+        }
         MyMeasureEventListener listener = new MyMeasureEventListener();
         service.process(parameters, listener, MeasureMode.AREA);
         try {
@@ -148,7 +157,12 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         FilterParameter fp = new FilterParameter();
         fp.name = "绵竹市";// 必设参数，图层名称格式：数据集名称@数据源别名
         p.filterParameters = new FilterParameter[]{fp};
-        QueryByGeometryService qs = new QueryByGeometryService(Api.CHAOTU);
+        QueryByGeometryService qs = null;
+        if (Api.TESTING) {
+            qs = new QueryByGeometryService(Api.TESTCHAOTU);
+        } else {
+            qs = new QueryByGeometryService(Api.CHAOTU);
+        }
         qs.process(p, new MyQueryEventListener());
     }
 

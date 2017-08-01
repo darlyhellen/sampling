@@ -140,9 +140,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             address.isEdit(false);
             address.setInfo("采样地点：", sugar.getRegion_id(), null);
             latitude.isEdit(true);
-            latitude.setInfo("经度：", sugar.getLongitude(), null);
+            latitude.setInfo("纬度：", sugar.getLatitude(), null);
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", sugar.getLatitude(), null);
+            longitude.setInfo("经度：", sugar.getLongitude(), null);
             //初始化图片和视频信息所在位置。
             images = sugar.getImages();
             videos = sugar.getVideos();
@@ -202,9 +202,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             if (Api.TESTING) {
                 //测试环境下，经纬度写死。手动让其修改。
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+                latitude.setInfo("纬度：", String.valueOf(Api.latitude), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+                longitude.setInfo("经度：", String.valueOf(Api.longitude), "");
                 address.isEdit(false);
                 address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
             } else {
@@ -317,6 +317,36 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
 
             @Override
             public void onClick(View v) {
+
+
+                if (TextUtils.isEmpty(getname())) {
+                    ToastApp.showToast("请输入样品名称");
+                    return;
+                }
+                if (TextUtils.isEmpty(getparams())) {
+                    ToastApp.showToast("请输入样品深度");
+                    return;
+                }
+                if (TextUtils.isEmpty(getproject())) {
+                    ToastApp.showToast("请输入待测项目");
+                    return;
+                }
+                if (gettype() == null) {
+                    ToastApp.showToast("请选择采样类型");
+                    return;
+                }
+                if (TextUtils.isEmpty(getaddress())) {
+                    ToastApp.showToast("请输入地址信息");
+                    return;
+                }
+                if (TextUtils.isEmpty(getlongitude())) {
+                    ToastApp.showToast("请输入经度");
+                    return;
+                }
+                if (TextUtils.isEmpty(getlatitude())) {
+                    ToastApp.showToast("请输入纬度");
+                    return;
+                }
                 SenceSamplingSugar paramer = new SenceSamplingSugar();
                 paramer.setPointId(point.data.id);
                 paramer.setSchemeId(point.data.schemeId);
@@ -352,9 +382,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 if (Api.TESTING) {
                     //测试环境下，经纬度写死。手动让其修改。
                     latitude.isEdit(true);
-                    latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+                    latitude.setInfo("纬度：", String.valueOf(Api.latitude), "");
                     longitude.isEdit(true);
-                    longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+                    longitude.setInfo("经度：", String.valueOf(Api.longitude), "");
                     address.isEdit(false);
                     address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
                 } else {
@@ -394,9 +424,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
+                latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
+                longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
                 address.isEdit(false);
                 if (TextUtils.isEmpty(amapLocation.getAddress())) {
                     startLocate();
@@ -407,9 +437,9 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0), "");
+                latitude.setInfo("纬度：", String.valueOf(0), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(0), "");
+                longitude.setInfo("经度：", String.valueOf(0), "");
                 address.isEdit(false);
                 address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
                 startLocate();
@@ -539,7 +569,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void onResume() {
         DLog.d(getClass().getSimpleName(), "onResume()");
-        if (mlocationClient != null && !mlocationClient.isStarted()) {
+        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
             mlocationClient.startLocation();
         }
         super.onResume();

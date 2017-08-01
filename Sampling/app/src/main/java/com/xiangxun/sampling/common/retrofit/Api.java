@@ -31,9 +31,10 @@ public class Api {
     }
 
     public static final String CHAOTU = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
+    public static final String TESTCHAOTU = "http://193.169.100.232:8080/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
     public static final boolean TESTING = true;
-    public static final double latitude = 104.222581588531465;
-    public static final double longitude = 38.64158436546875314;
+    public static final double latitude = 31.64158436546875314;
+    public static final double longitude = 104.222581588531465;
 
     public static String getSipIp() {
         return SystemCfg.getServerIP(XiangXunApplication.getInstance());

@@ -129,9 +129,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             latitude.isEdit(true);
-            latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+            latitude.setInfo("纬度：", String.valueOf(Api.latitude), "");
             longitude.isEdit(true);
-            longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+            longitude.setInfo("经度：", String.valueOf(Api.longitude), "");
             address.isEdit(false);
             address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
         } else {
@@ -250,9 +250,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
+                latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
+                longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
                 if (TextUtils.isEmpty(amapLocation.getAddress())) {
                     startLocate();
                 } else {
@@ -265,9 +265,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 address.isEdit(true);
                 address.setInfo("地址：", String.valueOf("未知地方"), "");
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0), "");
+                latitude.setInfo("纬度：", String.valueOf(0), "");
                 longitude.isEdit(false);
-                longitude.setInfo("纬度：", String.valueOf(0), "");
+                longitude.setInfo("经度：", String.valueOf(0), "");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
             }
             mlocationClient.stopLocation();
@@ -350,5 +350,25 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     @Override
     public void onUiChanged(int num) {
         declare_num.setText(num + "/200");
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        DLog.d(getClass().getSimpleName(), "onResume()");
+        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
+            mlocationClient.startLocation();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        DLog.d(getClass().getSimpleName(), "onPause()");
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+        }
+        super.onPause();
     }
 }

@@ -55,7 +55,11 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
-        baseLayerView.setURL(Api.CHAOTU);
+        if (Api.TESTING) {
+            baseLayerView.setURL(Api.TESTCHAOTU);
+        } else {
+            baseLayerView.setURL(Api.CHAOTU);
+        }
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
         //设置地图缩放

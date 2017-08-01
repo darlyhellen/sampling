@@ -16,6 +16,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
 import com.xiangxun.sampling.ui.presenter.AddPointPresenter;
 import com.xiangxun.sampling.widget.groupview.DetailView;
@@ -95,7 +96,15 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             // 在定位结束后，在合适的生命周期调用onDestroy()方法
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
             //启动定位
-            mlocationClient.startLocation();
+
+            if (Api.TESTING) {
+                latitude.isEdit(true);
+                latitude.setInfo("纬度：", String.valueOf(Api.latitude), "");
+                longitude.isEdit(true);
+                longitude.setInfo("经度：", String.valueOf(Api.longitude), "");
+            } else {
+                mlocationClient.startLocation();
+            }
             titleView.setRightViewRightTextOneListener("保存", this);
 
         } else {
@@ -105,16 +114,16 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
                 desc.setInfo("是否已采样：", "是", "");
                 titleView.setTitle("修改" + planning.name + "点位");
                 latitude.isEdit(false);
-                latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
+                latitude.setInfo("纬度：", String.valueOf(point.data.latitude), "");
                 longitude.isEdit(false);
-                longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
+                longitude.setInfo("经度：", String.valueOf(point.data.longitude), "");
             } else {
                 desc.setInfo("是否已采样：", "否", "");
                 titleView.setTitle("修改" + planning.name + "点位");
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(point.data.latitude), "");
+                latitude.setInfo("纬度：", String.valueOf(point.data.latitude), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(point.data.longitude), "");
+                longitude.setInfo("经度：", String.valueOf(point.data.longitude), "");
                 titleView.setRightViewRightTextOneListener("修改", this);
             }
         }
@@ -155,17 +164,17 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(amapLocation.getLatitude()), "");
+                latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(amapLocation.getLongitude()), "");
+                longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
                 desc.isEdit(true);
                 desc.setInfo("说明：", amapLocation.getAddress(), "");
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 latitude.isEdit(true);
-                latitude.setInfo("经度：", String.valueOf(0), "");
+                latitude.setInfo("纬度：", String.valueOf(0), "");
                 longitude.isEdit(true);
-                longitude.setInfo("纬度：", String.valueOf(0), "");
+                longitude.setInfo("经度：", String.valueOf(0), "");
                 desc.isEdit(true);
                 desc.setInfo("说明：", " ", "");
                 ToastApp.showToast("请链接网络或者打开GPS进行定位");
@@ -214,7 +223,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     @Override
     protected void onResume() {
         DLog.d(getClass().getSimpleName(), "onResume()");
-        if (mlocationClient != null && !mlocationClient.isStarted()) {
+        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
             mlocationClient.startLocation();
         }
         super.onResume();
