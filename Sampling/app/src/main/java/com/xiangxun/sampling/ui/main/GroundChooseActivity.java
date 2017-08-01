@@ -37,6 +37,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.biz.GroundChooseListener.GroundChooseInterface;
 import com.xiangxun.sampling.ui.presenter.GroundChoosePresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -52,7 +53,6 @@ import java.util.List;
  */
 @ContentBinder(R.layout.activity_chaotu)
 public class GroundChooseActivity extends BaseActivity implements OnClickListener, GroundChooseInterface {
-    private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";//2是影像地图。没有是行政地图
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -67,7 +67,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
-        baseLayerView.setURL(DEFAULT_URL);
+        baseLayerView.setURL(Api.CHAOTU);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
@@ -116,7 +116,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         // 构造查询参数
         MeasureParameters parameters = new MeasureParameters();
         parameters.point2Ds = pts;
-        MeasureService service = new MeasureService(DEFAULT_URL);
+        MeasureService service = new MeasureService(Api.CHAOTU);
         MyMeasureEventListener listener = new MyMeasureEventListener();
         service.process(parameters, listener, MeasureMode.AREA);
         try {
@@ -148,7 +148,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         FilterParameter fp = new FilterParameter();
         fp.name = "绵竹市";// 必设参数，图层名称格式：数据集名称@数据源别名
         p.filterParameters = new FilterParameter[]{fp};
-        QueryByGeometryService qs = new QueryByGeometryService(DEFAULT_URL);
+        QueryByGeometryService qs = new QueryByGeometryService(Api.CHAOTU);
         qs.process(p, new MyQueryEventListener());
     }
 

@@ -17,6 +17,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.adapter.SamplingTargetAdapter;
 import com.xiangxun.sampling.ui.biz.TargetListener.TargetInterface;
 import com.xiangxun.sampling.ui.presenter.TargetPresenter;
@@ -62,7 +63,13 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         titleView.setTitle("指标查询");
         presenter = new TargetPresenter(this);
         //啟動定位
-        startLocate();
+        if (Api.TESTING) {
+            //测试环境下，经纬度写死。手动让其修改。
+            //定位成功回调信息，设置相关消息
+            presenter.analysis("绵竹市九龙镇", null);
+        } else {
+            startLocate();
+        }
     }
 
     private void startLocate() {

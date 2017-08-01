@@ -18,6 +18,7 @@ public class Api {
      */
     private static final boolean DEBUGURL = AppBuildConfig.DEBUGURL;
 
+
     public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
     public static String VIDEO = Root.concat("video/");
     public static String SENCE = VIDEO.concat("sence/");
@@ -29,16 +30,10 @@ public class Api {
         return "http://" + SystemCfg.getServerIP(XiangXunApplication.getInstance()) + ":" + SystemCfg.getServerPort(XiangXunApplication.getInstance());
     }
 
-    /**
-     * SIP
-     */
-    public static String password = "123456yng";
-
-    public static final int LISTSTATEFIRST = 0x204;
-
-    public static final int LISTSTATEREFRESH = 0x205;
-
-    public static final int LISTSTATELOADMORE = 0x206;
+    public static final String CHAOTU = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
+    public static final boolean TESTING = true;
+    public static final double latitude = 104.222581588531465;
+    public static final double longitude = 38.64158436546875314;
 
     public static String getSipIp() {
         return SystemCfg.getServerIP(XiangXunApplication.getInstance());

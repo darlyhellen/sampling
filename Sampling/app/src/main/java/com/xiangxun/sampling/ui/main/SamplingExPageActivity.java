@@ -126,7 +126,17 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         imageAdapter = new SenceImageAdapter(images, R.layout.item_main_detail_image_adapter, this, this);
         gridView.setAdapter(imageAdapter);
         //啟動定位
-        startLocate();
+        if (Api.TESTING) {
+            //测试环境下，经纬度写死。手动让其修改。
+            latitude.isEdit(true);
+            latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+            longitude.isEdit(true);
+            longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+            address.isEdit(false);
+            address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
+        } else {
+            startLocate();
+        }
     }
 
 

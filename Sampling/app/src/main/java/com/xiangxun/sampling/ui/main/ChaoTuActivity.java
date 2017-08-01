@@ -23,6 +23,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
@@ -40,7 +41,6 @@ import java.util.List;
  */
 @ContentBinder(R.layout.activity_chaotu)
 public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface {
-    private static final String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -55,7 +55,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
-        baseLayerView.setURL(DEFAULT_URL);
+        baseLayerView.setURL(Api.CHAOTU);
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
         //设置地图缩放

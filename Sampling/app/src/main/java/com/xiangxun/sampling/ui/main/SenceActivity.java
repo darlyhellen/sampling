@@ -55,7 +55,6 @@ import java.util.List;
  */
 @ContentBinder(R.layout.activity_sence)
 public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectTypeRegionDialog.SelectResultItemClick {
-    private static String DEFAULT_URL = "http://10.10.15.201:8090/iserver/services/map-ETuoKeQi/rest/maps/地区面@地区面";
     private Scheme planning;
     private Pointly point;
     @ViewsBinder(R.id.id_user_sence_title)
@@ -200,7 +199,17 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
             videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
             videoGrid.setAdapter(videoAdapter);
             //啟動定位
-            startLocate();
+            if (Api.TESTING) {
+                //测试环境下，经纬度写死。手动让其修改。
+                latitude.isEdit(true);
+                latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+                longitude.isEdit(true);
+                longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+                address.isEdit(false);
+                address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
+            } else {
+                startLocate();
+            }
         }
     }
 
@@ -339,7 +348,18 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 presenter.landType("请选择土壤类型");
                 break;
             case R.id.id_user_sence_location:
-                startLocate();
+                //啟動定位
+                if (Api.TESTING) {
+                    //测试环境下，经纬度写死。手动让其修改。
+                    latitude.isEdit(true);
+                    latitude.setInfo("经度：", String.valueOf(Api.latitude), "");
+                    longitude.isEdit(true);
+                    longitude.setInfo("纬度：", String.valueOf(Api.longitude), "");
+                    address.isEdit(false);
+                    address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
+                } else {
+                    startLocate();
+                }
                 break;
             case R.id.id_user_sence_video_submit:
                 //进行提示弹窗，询问用户是否确认修改上传状态。
