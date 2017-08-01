@@ -50,7 +50,8 @@ public class SamplingDBPresenter {
         final List<MediaSugar> sugar = SugarRecord.find(MediaSugar.class, "samplingId = ?", id);
         //构建body
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (sugar != null) {
+        builder.addFormDataPart("", id, RequestBody.create(MediaType.parse("image/*"), ""));
+        if (sugar != null && sugar.size() == 0) {
             for (MediaSugar media : sugar) {
                 File file = new File(media.getUrl());
                 if ("image".equals(media.getType())) {
@@ -60,6 +61,9 @@ public class SamplingDBPresenter {
                     builder.addFormDataPart(media.getType(), id + "@" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
                 }
             }
+        } else {
+            ToastApp.showToast("上传图片和视频不能为空");
+            return;
         }
         RequestBody body = builder.build();
         biz.onStart(loading);

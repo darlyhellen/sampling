@@ -80,7 +80,7 @@ public class MainIndexFragment extends BaseFragment implements OnItemClickListen
         // TODO Auto-generated metdhod stub
         if (data == null) {
             data = new ArrayList<Index>();
-            data.add(new Index(0, "采样计划", R.drawable.grid_selecter_simp));
+            data.add(new Index(0, "采样方案", R.drawable.grid_selecter_simp));
             data.add(new Index(1, "现场采样", R.drawable.grid_selecter_sence));
             data.add(new Index(2, "指标查询", R.drawable.grid_selecter_target));
             data.add(new Index(3, "历史采样", R.drawable.grid_selecter_his));

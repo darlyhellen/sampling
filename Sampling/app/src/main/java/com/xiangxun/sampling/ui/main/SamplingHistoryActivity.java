@@ -13,6 +13,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener.SamplingHistoryInterface;
@@ -66,6 +67,16 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
             @Override
             public void onClick(View arg0) {
                 onBackPressed();
+            }
+        });
+        titleView.setRightViewRightOneListener(R.mipmap.ic_title_search, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击获取筛选结果
+                SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
+                Bundle bundle = new Bundle();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
         });
         wlist.setOnItemClickListener(new ItemClickListenter() {

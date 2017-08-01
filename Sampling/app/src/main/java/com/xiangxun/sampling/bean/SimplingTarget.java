@@ -10,6 +10,7 @@ package com.xiangxun.sampling.bean;
 public class SimplingTarget {
     public String id;
     public int status;
+    public int isOver;
     public String code;
     public String name;
     public String type_name;

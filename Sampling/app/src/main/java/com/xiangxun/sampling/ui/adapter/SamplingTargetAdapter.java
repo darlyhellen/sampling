@@ -60,12 +60,12 @@ public class SamplingTargetAdapter extends ParentAdapter<SimplingTarget> impleme
         hocker.position.setText(String.valueOf(info.analy_value));
         hocker.position.setTextColor(context.getResources().getColor(R.color.black));
         hocker.position.setTextSize(14);
-        switch (info.status) {
+        switch (info.isOver) {
             case 0:
-                hocker.iv.setImageResource(R.mipmap.key_clear);
-                break;
-            case 1:
                 hocker.iv.setImageResource(R.mipmap.key_end);
+                break;
+            default:
+                hocker.iv.setImageResource(R.mipmap.key_clear);
                 break;
         }
         return view;

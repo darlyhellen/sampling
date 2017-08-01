@@ -7,36 +7,36 @@ import android.app.Activity;
  */
 
 public class Function {
-	private int titleId;
-	private String description;
-	private int iconId;
-	private Class<? extends Activity> activityClass;
+    private int titleId;
+    private String description;
+    private int iconId;
+    private Class<? extends Activity> activityClass;
 
-	public Function(int iconId, int titleId, String description, Class<? extends Activity> activityClass) {
-		super();
-		this.iconId = iconId;
-		this.titleId = titleId;
-		this.description = description;
-		this.activityClass = activityClass;
-	}
+    public Function(int iconId, int titleId, String description, Class<? extends Activity> activityClass) {
+        super();
+        this.iconId = iconId;
+        this.titleId = titleId;
+        this.description = description;
+        this.activityClass = activityClass;
+    }
 
-	public int getTitleId() {
-		return titleId;
-	}
+    public int getTitleId() {
+        return titleId;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String value) {
-		description = value;
-	}
+    public void setDescription(String value) {
+        description = value;
+    }
 
-	public int getIconId() {
-		return iconId;
-	}
+    public int getIconId() {
+        return iconId;
+    }
 
-	public Class<? extends Activity> getActivityClass() {
-		return activityClass;
-	}
+    public Class<? extends Activity> getActivityClass() {
+        return activityClass;
+    }
 }

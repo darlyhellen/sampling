@@ -18,6 +18,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
+import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment;
 import com.xiangxun.sampling.ui.adapter.SamplingTargetAdapter;
 import com.xiangxun.sampling.ui.biz.TargetListener.TargetInterface;
 import com.xiangxun.sampling.ui.presenter.TargetPresenter;
@@ -82,6 +83,8 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
         mLocationOption.setInterval(2000);
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
         //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
         // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -109,12 +112,16 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                 onBackPressed();
             }
         });
-//        titleView.setRightViewRightTextOneListener("筛选", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //点击筛选，获取删选列表。进行数据重新请求
-//            }
-//        });
+        titleView.setRightViewRightOneListener(R.mipmap.ic_title_search, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击获取筛选结果
+                SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
+                Bundle bundle = new Bundle();
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
+            }
+        });
         xlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {

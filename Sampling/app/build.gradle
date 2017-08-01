@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.xiangxun.sampling"
-        minSdkVersion 10
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

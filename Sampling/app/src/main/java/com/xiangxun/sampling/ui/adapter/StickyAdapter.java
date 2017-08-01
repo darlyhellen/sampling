@@ -58,7 +58,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
             hocker.name.setText(s.name);
             hocker.name.setTextColor(context.getResources().getColor(R.color.black));
             hocker.name.setTextSize(14);
-            hocker.dept.setText(s.dept);
+            hocker.dept.setText(s.sampleName);
             hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
             hocker.dept.setTextSize(14);
             hocker.position.setText(String.valueOf(s.quantity).concat("个"));
@@ -129,7 +129,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
             hocker.position.setTextSize(16);
         } else {
             hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-            hocker.name.setText("计划名称");
+            hocker.name.setText("方案名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
             hocker.dept.setText("采样样品");
