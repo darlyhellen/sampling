@@ -18,6 +18,8 @@ import com.xiangxun.sampling.bean.HisExceptionPageInfo;
 import com.xiangxun.sampling.bean.SimplingTarget;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.adapter.ImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
@@ -97,12 +99,16 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
                 //这里跳转不同的图片页面
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (images.size() - 1)) {
-                    Intent intentCamera = new Intent(SamplingHisExceptionPageActivity.this, CameraActivity.class);
-                    intentCamera.putExtra("size", images.size());
-                    intentCamera.putExtra("file", Api.SENCE.concat("123"));
-                    intentCamera.setAction("Sence");
-                    intentCamera.putExtra("LOGO", false);//不打印水印
-                    startActivityForResult(intentCamera, 1);
+                    if (ImageLoaderUtil.isCameraUseable()) {
+                        Intent intentCamera = new Intent(SamplingHisExceptionPageActivity.this, CameraActivity.class);
+                        intentCamera.putExtra("size", images.size());
+                        intentCamera.putExtra("file", Api.SENCE.concat("123"));
+                        intentCamera.setAction("Sence");
+                        intentCamera.putExtra("LOGO", false);//不打印水印
+                        startActivityForResult(intentCamera, 1);
+                    } else {
+                        ToastApp.showToast("需要调用摄像头权限，请在设置中打开摄像头权限");
+                    }
                 } else {
                     Intent intent = new Intent(SamplingHisExceptionPageActivity.this, ShowImageViewActivity.class);
                     intent.putExtra("position", position);

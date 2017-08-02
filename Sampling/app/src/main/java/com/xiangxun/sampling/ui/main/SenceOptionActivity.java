@@ -1,9 +1,7 @@
 package com.xiangxun.sampling.ui.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -12,40 +10,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.PlannningData.Pointly;
-import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
-import com.xiangxun.sampling.common.SharePreferHelp;
-import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.db.MediaSugar;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.ImageAdapter;
-import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
-import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
-import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter;
-import com.xiangxun.sampling.ui.adapter.SenceVideoAdapter.OnVideoConsListener;
 import com.xiangxun.sampling.ui.adapter.VideoAdapter;
-import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
-import com.xiangxun.sampling.ui.presenter.SencePresenter;
-import com.xiangxun.sampling.widget.dialog.MsgDialog;
-import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
-import com.xiangxun.video.camera.VCamera;
-import com.xiangxun.video.ui.WechatRecoderActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

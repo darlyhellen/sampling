@@ -72,6 +72,8 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         } else {
             baseLayerView.setURL(Api.CHAOTU);
         }
+        center = new com.supermap.android.maps.Point2D(Double.parseDouble(getIntent().getStringExtra("longitude")), Double.parseDouble(getIntent().getStringExtra("latitude")));
+        mapView.getController().setCenter(center);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
         crs.wkid = 4326;
         baseLayerView.setCRS(crs);
@@ -99,8 +101,6 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
             }
             Measure_Area(pts);
 
-            center = new com.supermap.android.maps.Point2D(data.get(data.size() - 1).longitude, data.get(data.size() - 1).latitude);
-            mapView.getController().setCenter(center);
             Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
             for (GroundTypeInfo.Ground point : data) {
@@ -172,8 +172,6 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
             DLog.i(getClass().getSimpleName(), status);
             if (sourceObject instanceof QueryResult && status.equals(EventStatus.PROCESS_COMPLETE)) {
                 QueryResult qr = (QueryResult) sourceObject;
-
-
                 DLog.i(getClass().getSimpleName(), qr.quertyResultInfo + "" + qr.resourceInfo);
                 QuertyResultInfo info = qr.quertyResultInfo;
                 DLog.i(getClass().getSimpleName(), info.currentCount + "" + info.totalCount + "" + info.recordsets + "" + info.customResponse);
@@ -211,6 +209,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         @Override
         public void handleMessage(Message msg) {
             OverlayItem item = (OverlayItem) msg.obj;
+            DLog.i(getClass().getSimpleName(), item.getTitle() + item.getSnippet() + item);
             Intent intent = new Intent();
             intent.putExtra("name", item.getTitle());
             intent.putExtra("id", item.getSnippet());
@@ -241,6 +240,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
         @Override
         public void onFocusChanged(ItemizedOverlay overlay, OverlayItem item) {
+            DLog.i(getClass().getSimpleName(), item.getTitle() + item.getSnippet() + item);
             Message m = new Message();
             m.obj = item;
             handler.sendMessage(m);
@@ -252,6 +252,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @Override
     public void onBackPressed() {
         if (mapView != null) {
+            mapView.stopClearCacheTimer();// 停止和销毁 清除运行时服务器中缓存瓦片的定时器。
             mapView.destroy();
         }
         super.onBackPressed();

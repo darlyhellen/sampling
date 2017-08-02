@@ -21,6 +21,8 @@ import com.xiangxun.sampling.bean.GPSInfo;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 
+import org.apache.http.NameValuePair;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -726,12 +728,12 @@ public class Utils {
         return CRC16Validator.getCRC(crc.getBytes());
     }
 
-//    public static String getCRC(List<NameValuePair> params) {
-//        String crc = params.toString();
-//        crc = crc.substring(1, crc.length() - 1);
-//        crc = crc.replaceAll(", ", "&");
-//        return CRC16Validator.getCRC(crc.getBytes());
-//    }
+    public static String getCRC(List<NameValuePair> params) {
+        String crc = params.toString();
+        crc = crc.substring(1, crc.length() - 1);
+        crc = crc.replaceAll(", ", "&");
+        return CRC16Validator.getCRC(crc.getBytes());
+    }
 
     public static String getCipherText(String orgText) {
         String res = orgText;

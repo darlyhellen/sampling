@@ -149,6 +149,21 @@ public class SystemCfg {
         init(context);
         return mysp.getString("account", "");
     }
+    /**
+     * 账户
+     */
+    public static void setCRC(Context context, String crc) {
+        init(context);
+        mysp.edit().putString("crc", crc).commit();
+    }
+
+    /**
+     * 账户
+     */
+    public static String getCRC(Context context) {
+        init(context);
+        return mysp.getString("crc", "");
+    }
 
     /**
      * 密码

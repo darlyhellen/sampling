@@ -25,6 +25,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter.OnImageConsListener;
@@ -186,12 +187,16 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 //这里跳转不同的图片页面
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (images.size() - 1)) {
-                    Intent intentCamera = new Intent(SamplingExPageActivity.this, CameraActivity.class);
-                    intentCamera.putExtra("size", images.size());
-                    intentCamera.putExtra("file", Api.SENCE.concat("exceptionimage"));
-                    intentCamera.setAction("Sence");
-                    intentCamera.putExtra("LOGO", false);//不打印水印
-                    startActivityForResult(intentCamera, 1);
+                    if (ImageLoaderUtil.isCameraUseable()) {
+                        Intent intentCamera = new Intent(SamplingExPageActivity.this, CameraActivity.class);
+                        intentCamera.putExtra("size", images.size());
+                        intentCamera.putExtra("file", Api.SENCE.concat("exceptionimage"));
+                        intentCamera.setAction("Sence");
+                        intentCamera.putExtra("LOGO", false);//不打印水印
+                        startActivityForResult(intentCamera, 1);
+                    } else {
+                        ToastApp.showToast("需要调用摄像头权限，请在设置中打开摄像头权限");
+                    }
                 } else {
                     Intent intent = new Intent(SamplingExPageActivity.this, ShowImageViewActivity.class);
                     intent.putExtra("position", position);
@@ -236,7 +241,18 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                 break;
             case R.id.id_exception_chos_land:
                 //跳转到地块选择
+                if (TextUtils.isEmpty(longitude.getText()) || TextUtils.isEmpty(latitude.getText())) {
+                    ToastApp.showToast("经纬度信息为空，请重新定位");
+                    return;
+                }
+                if ("0".equals(longitude.getText()) || "0".equals(latitude.getText())) {
+                    ToastApp.showToast("定位失败，请重新定位");
+                    return;
+                }
+
                 Intent intent = new Intent(this, GroundChooseActivity.class);
+                intent.putExtra("longitude", longitude.getText());
+                intent.putExtra("latitude", latitude.getText());
                 startActivityForResult(intent, 900);
                 break;
             case R.id.id_exception_chos_type:
@@ -353,7 +369,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     public void onUiChanged(int num) {
         declare_num.setText(num + "/200");
     }
-
 
 
     @Override

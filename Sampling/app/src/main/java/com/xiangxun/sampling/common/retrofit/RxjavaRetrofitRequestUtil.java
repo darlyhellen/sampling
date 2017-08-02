@@ -47,7 +47,7 @@ public class RxjavaRetrofitRequestUtil {
         //设置请求日志
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor log = new HttpLoggingInterceptor();
-            log.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             builder.addInterceptor(log);
         }
         interSize = builder.interceptors().size();

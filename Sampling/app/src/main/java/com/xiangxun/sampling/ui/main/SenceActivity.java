@@ -26,6 +26,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.SenceImageAdapter;
@@ -269,12 +270,16 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 //这里跳转不同的图片页面
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (images.size() - 1)) {
-                    Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
-                    intentCamera.putExtra("size", images.size());
-                    intentCamera.putExtra("file", Api.SENCE.concat(point.data.id));
-                    intentCamera.setAction("Sence");
-                    intentCamera.putExtra("LOGO", false);//不打印水印
-                    startActivityForResult(intentCamera, 1);
+                    if (ImageLoaderUtil.isCameraUseable()) {
+                        Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
+                        intentCamera.putExtra("size", images.size());
+                        intentCamera.putExtra("file", Api.SENCE.concat(point.data.id));
+                        intentCamera.setAction("Sence");
+                        intentCamera.putExtra("LOGO", false);//不打印水印
+                        startActivityForResult(intentCamera, 1);
+                    } else {
+                        ToastApp.showToast("需要调用摄像头权限，请在设置中打开摄像头权限");
+                    }
                 } else {
                     Intent intent = new Intent(SenceActivity.this, ShowImageViewActivity.class);
                     intent.putExtra("position", position);
@@ -295,14 +300,18 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 //这里跳转不同的视频页面
                 String st = (String) parent.getItemAtPosition(position);
                 if (position == (videos.size() - 1)) {
-                    //跳转到视频录制页面
-                    //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
-                    File root = new File(Api.SENCE.concat(point.data.id));
-                    if (!root.exists()) {
-                        root.mkdir();
+                    if (ImageLoaderUtil.isCameraUseable()) {
+                        //跳转到视频录制页面
+                        //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
+                        File root = new File(Api.SENCE.concat(point.data.id));
+                        if (!root.exists()) {
+                            root.mkdir();
+                        }
+                        VCamera.setVideoCachePath(root + "/cache/");
+                        startActivityForResult(new Intent(SenceActivity.this, WechatRecoderActivity.class), 900);
+                    } else {
+                        ToastApp.showToast("需要调用摄像头权限，请在设置中打开摄像头权限");
                     }
-                    VCamera.setVideoCachePath(root + "/cache/");
-                    startActivityForResult(new Intent(SenceActivity.this, WechatRecoderActivity.class), 900);
                 }
             }
         });

@@ -159,7 +159,9 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
             longitude.setInfo("纬度：", result.latitude, null);
             if (result.file != null && result.file.size() > 0) {
                 for (HisSencePageInfo.FileList fils : result.file) {
-                    images.add(fils.filePath);
+                    if (!fils.filePath.endsWith(".mp4")) {
+                        images.add(fils.filePath);
+                    }
                 }
                 imageAdapter.setData(images);
             }

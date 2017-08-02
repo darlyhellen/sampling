@@ -23,6 +23,9 @@ import com.xiangxun.sampling.ui.biz.LoginListener;
 import com.xiangxun.sampling.ui.setting.SetGuide;
 import com.xiangxun.sampling.ui.setting.SystemSettingActivity;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 /**
  * @author zhangyh2 s 上午10:57:39 TODO 控制器 页面动作操作
@@ -74,7 +77,13 @@ public class LoginPresenter {
 //                    main.end();
 //                } else {
 //                    LoginInfo.isOffLine = false;
+                SystemCfg.setAccount(context, main.getUserName());
                 String deviceId = XiangXunApplication.getInstance().getDevId();
+                Map<String, String> params = new LinkedHashMap<String, String>();
+                params.put("account", main.getUserName());
+                params.put("pwd", Utils.getCipherText(main.getPassword()));
+                params.put("imei", deviceId);
+                SystemCfg.setCRC(context, Utils.getCRC(params));
                 login(context, main.getUserName(), main.getPassword(), deviceId);
 //                }
                 break;
