@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,14 @@ import android.view.Window;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.binder.InitBinder;
+import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.dlog.DLog;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
+
+import java.util.List;
 
 
 /**
@@ -24,7 +33,7 @@ import com.xiangxun.sampling.binder.InitBinder;
 public abstract class BaseActivity extends FragmentActivity {
     public int REQUEST_CODE = 0; // 请求码
 
-    public String[] PERMISSIONS_GROUP = {
+    private String[] PERMISSIONS_GROUP = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -109,18 +118,49 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            // 缺少权限时, 进入权限配置页面
+        if (Build.VERSION.SDK_INT >= 23) {
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(PERMISSIONS_GROUP)
+                    .rationale(new RationaleListener() {
+                        @Override
+                        public void showRequestPermissionRationale(int i, Rationale rationale) {
+                            AndPermission.rationaleDialog(BaseActivity.this, rationale).show();
+                        }
+                    })
+                    .callback(new PermissionListener() {
+                        @Override
+                        public void onSucceed(int requestCode, @NonNull List<String> list) {
+                            // Successfully.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                                XiangXunApplication.createFiles();
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int requestCode, @NonNull List<String> list) {
+                            // Failure.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                                ToastApp.showToast("授权失败");
+                            }
+                        }
+                    })
+                    .start();
+            // 缺少权限时, 进入权限配置页面
 //            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
-//                startPermissionsActivity();
+//                startPermissionsActivity(PERMISSIONS_GROUP);
+//            } else {
+//                DLog.i(getClass().getSimpleName(), "文件增加修改權限已經打開");
 //            }
-//        } else {
-//            XiangXunApplication.createFiles();
-//        }
+        } else {
+            XiangXunApplication.createFiles();
+        }
     }
 
-    private void startPermissionsActivity() {
-        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS_GROUP);
+    public void startPermissionsActivity(String[] group) {
+        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, group);
     }
 
     @Override

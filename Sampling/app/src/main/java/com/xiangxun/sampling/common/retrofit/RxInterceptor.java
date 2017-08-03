@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.common.Utils;
 import com.xiangxun.sampling.common.dlog.DLog;
 
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class RxInterceptor implements Interceptor {
         String account = SystemCfg.getAccount(XiangXunApplication.getInstance());
         String imei = XiangXunApplication.getInstance().getDevId();
         String crc = SystemCfg.getCRC(XiangXunApplication.getInstance());
+
+        String pwd = Utils.getCipherText(SystemCfg.getWhitePwd(XiangXunApplication.getInstance()));
+
+
         DLog.i(account + "-" + crc + "-" + imei);
         if (TextUtils.isEmpty(account) && TextUtils.isEmpty(imei)) {
             builder.addHeader("Content-Type", "application/json;charset=UTF-8")
@@ -57,6 +62,7 @@ public class RxInterceptor implements Interceptor {
                     .addHeader("account", account)
                     .addHeader("imei", imei)
                     .addHeader("crc", crc)
+                    .addHeader("pwd", pwd)
                     .addHeader("version", APPSYS_STRING + VersionCode)
                     .build();
         }

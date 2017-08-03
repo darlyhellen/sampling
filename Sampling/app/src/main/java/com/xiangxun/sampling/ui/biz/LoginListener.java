@@ -15,6 +15,7 @@ import com.xiangxun.sampling.bean.ResultData;
 import com.xiangxun.sampling.bean.ResultData.LoginData;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
+import com.xiangxun.sampling.common.Utils;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
@@ -69,7 +70,7 @@ public class LoginListener implements FramePresenter {
             return;
         }
 
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new LoginParamer(name, pass, deviceId), "UTF-8"));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new LoginParamer(name, Utils.getCipherText(pass), deviceId), "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .postlogin(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())

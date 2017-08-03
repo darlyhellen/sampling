@@ -78,11 +78,12 @@ public class LoginPresenter {
 //                } else {
 //                    LoginInfo.isOffLine = false;
                 SystemCfg.setAccount(context, main.getUserName());
+                SystemCfg.setWhitePwd(context, main.getPassword());
                 String deviceId = XiangXunApplication.getInstance().getDevId();
                 Map<String, String> params = new LinkedHashMap<String, String>();
-                params.put("account", main.getUserName());
-                params.put("pwd", Utils.getCipherText(main.getPassword()));
                 params.put("imei", deviceId);
+                params.put("pwd", Utils.getCipherText(main.getPassword()));
+                params.put("account", main.getUserName());
                 SystemCfg.setCRC(context, Utils.getCRC(params));
                 login(context, main.getUserName(), main.getPassword(), deviceId);
 //                }

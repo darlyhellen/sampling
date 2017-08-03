@@ -1,7 +1,10 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.Manifest;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.amap.api.location.AMapLocation;
@@ -10,6 +13,8 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.base.PermissionCheck;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
@@ -21,6 +26,10 @@ import com.xiangxun.sampling.ui.biz.AddPointListener.AddPointInterface;
 import com.xiangxun.sampling.ui.presenter.AddPointPresenter;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.List;
 
@@ -58,6 +67,11 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     public AMapLocationClient mlocationClient = null;
 
     private AddPointPresenter presenter;
+    //权限问题
+    private String[] PERMISSIONS_GROUP = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -223,6 +237,44 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
     @Override
     protected void onResume() {
         DLog.d(getClass().getSimpleName(), "onResume()");
+        if (Build.VERSION.SDK_INT >= 23) {
+            // 缺少权限时, 进入权限配置页面
+
+
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(PERMISSIONS_GROUP)
+                    .rationale(new RationaleListener() {
+                        @Override
+                        public void showRequestPermissionRationale(int i, Rationale rationale) {
+                            AndPermission.rationaleDialog(AddNewPointPlanningActivity.this, rationale).show();
+                        }
+                    })
+                    .callback(new PermissionListener() {
+                        @Override
+                        public void onSucceed(int requestCode, @NonNull List<String> list) {
+                            // Successfully.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int requestCode, @NonNull List<String> list) {
+                            // Failure.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                                ToastApp.showToast("授权失败");
+                            }
+                        }
+                    })
+                    .start();
+            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
+                startPermissionsActivity(PERMISSIONS_GROUP);
+            } else {
+                DLog.i(getClass().getSimpleName(), "定位權限已經開啟");
+            }
+        }
         if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
             mlocationClient.startLocation();
         }

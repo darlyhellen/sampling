@@ -1,8 +1,11 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +21,8 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.base.PermissionCheck;
+import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SenceLandRegion;
@@ -42,6 +47,10 @@ import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
 import com.xiangxun.video.camera.VCamera;
 import com.xiangxun.video.ui.WechatRecoderActivity;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,6 +114,16 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     private SenceSamplingSugar sugar;
     private MsgDialog msgDialog;
     private SelectTypeRegionDialog typeDialog;
+
+
+    //权限问题
+    private String[] PERMISSIONS_GROUP = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.RECORD_AUDIO
+    };
+
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -582,6 +601,45 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @Override
     protected void onResume() {
         DLog.d(getClass().getSimpleName(), "onResume()");
+        if (Build.VERSION.SDK_INT >= 23) {
+            // 缺少权限时, 进入权限配置页面
+
+            AndPermission.with(this)
+                    .requestCode(REQUEST_CODE)
+                    .permission(PERMISSIONS_GROUP)
+                    .rationale(new RationaleListener() {
+                        @Override
+                        public void showRequestPermissionRationale(int i, Rationale rationale) {
+                            AndPermission.rationaleDialog(SenceActivity.this, rationale).show();
+                        }
+                    })
+                    .callback(new PermissionListener() {
+                        @Override
+                        public void onSucceed(int requestCode, @NonNull List<String> list) {
+                            // Successfully.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int requestCode, @NonNull List<String> list) {
+                            // Failure.
+                            if (requestCode == REQUEST_CODE) {
+                                // TODO ...
+                                ToastApp.showToast("授权失败");
+                            }
+                        }
+                    })
+                    .start();
+
+
+//            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
+//                startPermissionsActivity(PERMISSIONS_GROUP);
+//            } else {
+//                DLog.i(getClass().getSimpleName(), "摄像头，语音，定位权限已经打开");
+//            }
+        }
         if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
             mlocationClient.startLocation();
         }
