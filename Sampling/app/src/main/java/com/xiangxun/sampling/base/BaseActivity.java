@@ -3,16 +3,13 @@ package com.xiangxun.sampling.base;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.Window;
 
 import com.xiangxun.sampling.R;
@@ -135,6 +132,7 @@ public abstract class BaseActivity extends FragmentActivity {
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
                                 XiangXunApplication.createFiles();
+                                DLog.i(getClass().getSimpleName(), "文件增加修改權限已經打開");
                             }
                         }
 

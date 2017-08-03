@@ -239,8 +239,6 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
         DLog.d(getClass().getSimpleName(), "onResume()");
         if (Build.VERSION.SDK_INT >= 23) {
             // 缺少权限时, 进入权限配置页面
-
-
             AndPermission.with(this)
                     .requestCode(REQUEST_CODE)
                     .permission(PERMISSIONS_GROUP)
@@ -256,6 +254,7 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
                             // Successfully.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
+                                DLog.i(getClass().getSimpleName(), "定位權限已經開啟");
                             }
                         }
 
@@ -264,16 +263,16 @@ public class AddNewPointPlanningActivity extends BaseActivity implements AMapLoc
                             // Failure.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
-                                ToastApp.showToast("授权失败");
+                                ToastApp.showToast("定位授权失败,请手动授权");
                             }
                         }
                     })
                     .start();
-            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
-                startPermissionsActivity(PERMISSIONS_GROUP);
-            } else {
-                DLog.i(getClass().getSimpleName(), "定位權限已經開啟");
-            }
+//            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
+//                startPermissionsActivity(PERMISSIONS_GROUP);
+//            } else {
+//                DLog.i(getClass().getSimpleName(), "定位權限已經開啟");
+//            }
         }
         if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
             mlocationClient.startLocation();

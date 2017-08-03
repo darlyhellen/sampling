@@ -231,6 +231,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                             // Successfully.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
+                                DLog.i(getClass().getSimpleName(), "定位權限已經開啟");
                             }
                         }
 
@@ -239,7 +240,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
                             // Failure.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
-                                ToastApp.showToast("授权失败");
+                                ToastApp.showToast("定位授权失败,请手动授权");
                             }
                         }
                     })

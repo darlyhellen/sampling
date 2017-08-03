@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,8 +98,11 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             name.setText(getArguments().getString("SampleName"));
             tager.setText(getArguments().getString("Target"));
             over = getArguments().getString("Over");
-            if ("0".equals(over)) {
+
+            if (TextUtils.isEmpty(over)) {
                 //未超标
+                switchs.setChecked(false);
+            } else if ("0".equals(over)) {
                 switchs.setChecked(false);
             } else {
                 switchs.setChecked(true);

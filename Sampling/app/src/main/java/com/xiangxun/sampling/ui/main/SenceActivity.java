@@ -619,6 +619,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                             // Successfully.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
+                                DLog.i(getClass().getSimpleName(), "摄像头，语音，定位权限已经打开");
                             }
                         }
 
@@ -627,7 +628,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                             // Failure.
                             if (requestCode == REQUEST_CODE) {
                                 // TODO ...
-                                ToastApp.showToast("授权失败");
+                                ToastApp.showToast("摄像头，语音，定位授权失败,请手动授权");
                             }
                         }
                     })
