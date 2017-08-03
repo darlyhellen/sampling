@@ -96,9 +96,23 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             targetSearch.setVisibility(View.VISIBLE);
             hiSearch.setVisibility(View.GONE);
             name.setText(getArguments().getString("SampleName"));
-            tager.setText(getArguments().getString("Target"));
-            over = getArguments().getString("Over");
 
+
+            over = getArguments().getString("Over");
+            String targets = getArguments().getString("Target");
+            if (TextUtils.isEmpty(targets)) {
+                tager.setText(null);
+            } else {
+                if ("ph".endsWith(targets)) {
+                    tager.setText("PH值");
+                }
+                if ("cadmium".endsWith(targets)) {
+                    tager.setText("镉");
+                }
+                if ("availabl".endsWith(targets)) {
+                    tager.setText("有效态镉");
+                }
+            }
             if (TextUtils.isEmpty(over)) {
                 //未超标
                 switchs.setChecked(false);
@@ -151,7 +165,15 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
                     //展现切换开关
                     String sampleName = name.getText().toString().trim();
                     String target = tager.getText().toString().trim();
-                    ((SearchListener) getActivity()).findParamers(sampleName, target, over);
+                    if ("PH值".endsWith(target)) {
+                        ((SearchListener) getActivity()).findParamers(sampleName, "ph", over);
+                    }
+                    if ("镉".endsWith(target)) {
+                        ((SearchListener) getActivity()).findParamers(sampleName, "cadmium", over);
+                    }
+                    if ("有效态镉".endsWith(target)) {
+                        ((SearchListener) getActivity()).findParamers(sampleName, "availabl", over);
+                    }
                 }
                 if ("SamplingHistoryActivity".equals(cla)) {
                     //进入历史信息搜索
@@ -173,7 +195,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
         switch (v.getId()) {
             case R.id.id_target_targ_click:
                 //点击获取下拉列表.
-                SelectItemDialog dialog = new SelectItemDialog(getActivity(), new String[]{"ph", "cadmium", "availabl"}, "请选择指标");
+                SelectItemDialog dialog = new SelectItemDialog(getActivity(), new String[]{"PH值", "镉", "有效态镉"}, "请选择指标");
                 dialog.setSelectResultItemClick(this);
                 dialog.show();
                 break;

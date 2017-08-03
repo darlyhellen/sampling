@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar"/>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
@@ -215,5 +215,12 @@
         <item name="android:layout_marginLeft">@dimen/margin_padding10</item>
         <item name="android:layout_marginRight">@dimen/margin_padding10</item>
         <item name="android:background">@color/color_d1d1d1</item>
+    </style>
+
+
+    <style name="My.TextAppearance" parent="@style/TextAppearance.AppCompat.Widget.Switch">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#ffa6b3bf</item>
+
     </style>
 </resources>
