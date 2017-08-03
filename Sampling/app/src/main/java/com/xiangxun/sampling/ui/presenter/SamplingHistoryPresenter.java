@@ -23,9 +23,9 @@ public class SamplingHistoryPresenter {
     }
 
 
-    public void getHistory() {
+    public void getHistory(String hisName) {
 
-        biz.getHistory(new FrameListener<ResultData>() {
+        biz.getHistory(hisName, new FrameListener<ResultData>() {
             @Override
             public void onSucces(ResultData result) {
                 if (result.resCode == 2000) {

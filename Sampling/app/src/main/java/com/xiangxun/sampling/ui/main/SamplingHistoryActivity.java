@@ -48,14 +48,13 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     private SamplingHistoryPresenter presenter;
 
-    private String sampleName;
-    private String sampleTarget;
+    private String hisName;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle("历史采样");
         presenter = new SamplingHistoryPresenter(this);
-        presenter.getHistory();
+        presenter.getHistory(hisName);
     }
 
     @Override
@@ -80,8 +79,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
                 SearchWorkOrderDialogFragment dialog = new SearchWorkOrderDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("CLASS", "SamplingHistoryActivity");
-                bundle.putString("SampleName", sampleName);
-                bundle.putString("Target", sampleTarget);
+                bundle.putString("hisName", hisName);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
@@ -135,7 +133,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     }
 
     @Override
-    public void findParamers(String sampleName, String target, String over) {
-
+    public void findParamers(String hisName, String target, String over) {
+        this.hisName = hisName;
+        presenter.getHistory(hisName);
     }
 }

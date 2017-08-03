@@ -16,7 +16,9 @@ import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
 import com.xiangxun.sampling.common.retrofit.paramer.SamplingHistoryParamer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import rx.Observer;
@@ -39,8 +41,10 @@ public class SamplingHistoryListener implements FramePresenter {
 
     }
 
-    public void getHistory(final FrameListener<ResultData> listener) {
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new SamplingHistoryParamer("123"), "UTF-8"));
+    public void getHistory(String hisName, final FrameListener<ResultData> listener) {
+        Map<String, String> para = new HashMap<String, String>();
+        para.put("name", hisName);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(para, "UTF-8"));
 
         //在这里进行数据请求
         RxjavaRetrofitRequestUtil.getInstance().post().hisence(body).

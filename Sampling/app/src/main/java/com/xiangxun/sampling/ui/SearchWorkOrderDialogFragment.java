@@ -37,6 +37,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
 
     private View view;
     private TitleView titleView;
+    private String cla;
 
     //指标查询
 
@@ -46,7 +47,9 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
     private LinearLayout tagerClick;
     private TextView tager;
     private String over;
-
+    //历史信息
+    private LinearLayout hiSearch;
+    private EditText hisName;
 
     private SearchListener listener;
 
@@ -77,15 +80,20 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
     private void initView() {
         titleView = (TitleView) view.findViewById(R.id.id_search_header);
         titleView.setTitle("查询");
-        String cla = getArguments().getString("CLASS");
+        cla = getArguments().getString("CLASS");
         targetSearch = (LinearLayout) view.findViewById(R.id.id_target);
         name = (EditText) view.findViewById(R.id.id_target_name);
         switchs = (Switch) view.findViewById(R.id.id_target_switch);
         tagerClick = (LinearLayout) view.findViewById(R.id.id_target_targ_click);
         tager = (TextView) view.findViewById(R.id.id_target_targ);
+
+
+        hiSearch = (LinearLayout) view.findViewById(R.id.id_his);
+        hisName = (EditText) view.findViewById(R.id.id_his_name);
         if ("SamplingTargetActivity".equals(cla)) {
             //展现切换开关
             targetSearch.setVisibility(View.VISIBLE);
+            hiSearch.setVisibility(View.GONE);
             name.setText(getArguments().getString("SampleName"));
             tager.setText(getArguments().getString("Target"));
             over = getArguments().getString("Over");
@@ -100,6 +108,8 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
         if ("SamplingHistoryActivity".equals(cla)) {
             //进入历史信息搜索
             targetSearch.setVisibility(View.GONE);
+            hiSearch.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -131,9 +141,21 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             @Override
             public void onClick(View v) {
                 //点击获取筛选结果
-                String sampleName = name.getText().toString().trim();
-                String target = tager.getText().toString().trim();
-                ((SearchListener) getActivity()).findParamers(sampleName, target, over);
+
+
+                if ("SamplingTargetActivity".equals(cla)) {
+                    //展现切换开关
+                    String sampleName = name.getText().toString().trim();
+                    String target = tager.getText().toString().trim();
+                    ((SearchListener) getActivity()).findParamers(sampleName, target, over);
+                }
+                if ("SamplingHistoryActivity".equals(cla)) {
+                    //进入历史信息搜索
+                    String hisname = hisName.getText().toString().trim();
+                    ((SearchListener) getActivity()).findParamers(hisname, null, null);
+
+                }
+
                 dismiss();
             }
         });
