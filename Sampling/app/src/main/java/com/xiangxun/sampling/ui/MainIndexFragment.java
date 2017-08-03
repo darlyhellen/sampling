@@ -135,12 +135,6 @@ public class MainIndexFragment extends BaseFragment implements OnItemClickListen
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        DLog.d(getClass().getSimpleName(), "onAttach()");
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         DLog.d(getClass().getSimpleName(), "onViewCreated()");

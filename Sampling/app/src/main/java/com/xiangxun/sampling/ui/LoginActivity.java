@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.base.PermissionCheck;
+import com.xiangxun.sampling.base.PermissionsActivity;
 import com.xiangxun.sampling.base.SystemCfg;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.LoginInfo;
@@ -200,41 +203,6 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
         idLoginBtn.setNormal();
     }
 
-    @Override
-    protected void onStart() {
-        DLog.d(getClass().getSimpleName(), "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        DLog.d(getClass().getSimpleName(), "onRestart()");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        DLog.d(getClass().getSimpleName(), "onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        DLog.d(getClass().getSimpleName(), "onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        DLog.d(getClass().getSimpleName(), "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DLog.d(getClass().getSimpleName(), "onDestroy()");
-        super.onDestroy();
-    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

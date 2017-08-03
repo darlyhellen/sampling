@@ -61,7 +61,6 @@ public class XiangXunApplication extends Application {
         registerReceiver(mReceiver, new IntentFilter(lOCALE_CHANGED));
         // 网络对象初始化
         ImageLoaderUtil.init(this);
-        createFiles();
         if (SystemCfg.getWidth(this) == 0 || SystemCfg.getHeight(this) == 0) {
             calculate();
         }
@@ -176,7 +175,7 @@ public class XiangXunApplication extends Application {
     }
 
 
-    public void createFiles() {
+    public static void createFiles() {
         File root = new File(Api.Root);
         if (!root.exists()) {
             root.mkdir();

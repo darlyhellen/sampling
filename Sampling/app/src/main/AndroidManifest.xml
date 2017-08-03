@@ -52,6 +52,7 @@
 
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -89,6 +90,9 @@
 
         <activity
             android:name=".ui.MainFragmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".base.PermissionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.SamplingPlanningActivity"

@@ -28,6 +28,7 @@ import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
+import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     private SamplingPointPresenter presenter;
 
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
@@ -63,13 +65,12 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
         //设置地图缩放
-        mapView.setBuiltInZoomControls(true);
+        //mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
         mapView.getController().setZoom(3);
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
         if (planning == null) {
             titleView.setTitle("点位分布");
-
         } else {
             titleView.setTitle(planning.name + "点位分布");
             Object ob = SharePreferHelp.getValue(planning.id);
@@ -170,10 +171,15 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     public void onBackPressed() {
-        if (mapView != null) {
-            mapView.destroy();
-        }
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mapView != null) {
+            mapView.stopClearCacheTimer();// 停止和销毁 清除运行时服务器中缓存瓦片的定时器。
+            mapView.destroy();
+        }
+        super.onDestroy();
+    }
 }

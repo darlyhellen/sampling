@@ -48,7 +48,7 @@ public class SamplingPointPresenter {
         biz.postPoint(id, time, new FrameListener<ResultPointData>() {
             @Override
             public void onSucces(ResultPointData result) {
-                biz.onStop(loading);
+
                 if (result.resCode == 2000) {
                     //使用缓存
                     view.onLoginFailed();
@@ -57,13 +57,15 @@ public class SamplingPointPresenter {
                     PontCacheHelper.cachePoint(id, result);
                     view.onLoginSuccess(result.result);
                 }
+                biz.onStop(loading);
             }
 
             @Override
             public void onFaild(int code, String info) {
-                biz.onStop(loading);
+
                 ToastApp.showToast(info);
                 view.onLoginFailed();
+                biz.onStop(loading);
             }
         });
 

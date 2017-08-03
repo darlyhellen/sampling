@@ -1,23 +1,33 @@
 package com.xiangxun.sampling.base;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.Window;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.binder.InitBinder;
-import com.xiangxun.sampling.common.dlog.DLog;
 
 
 /**
  * @author zhangyh2 BaseActivity $ 下午2:33:01 TODO
  */
 public abstract class BaseActivity extends FragmentActivity {
+    public int REQUEST_CODE = 0; // 请求码
+
+    public String[] PERMISSIONS_GROUP = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     /*
      * (non-Javadoc)
@@ -52,6 +62,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param savedInstanceState 下午2:34:08
      * @author zhangyh2 BaseActivity.java TODO 初始化控件
      */
+
     protected abstract void initView(Bundle savedInstanceState);
 
     /**
@@ -93,6 +104,34 @@ public abstract class BaseActivity extends FragmentActivity {
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
         int4Right();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            // 缺少权限时, 进入权限配置页面
+//            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
+//                startPermissionsActivity();
+//            }
+//        } else {
+//            XiangXunApplication.createFiles();
+//        }
+    }
+
+    private void startPermissionsActivity() {
+        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS_GROUP);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 拒绝时, 关闭页面, 缺少主要权限, 无法运行
+        if (requestCode == REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
+            finish();
+        } else if (requestCode == REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_GRANTED) {
+            XiangXunApplication.createFiles();
+        }
     }
 
     @Override

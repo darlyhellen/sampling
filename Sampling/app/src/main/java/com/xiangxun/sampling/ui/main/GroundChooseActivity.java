@@ -40,6 +40,8 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.biz.GroundChooseListener.GroundChooseInterface;
 import com.xiangxun.sampling.ui.presenter.GroundChoosePresenter;
+import com.xiangxun.sampling.widget.dialog.LoadDialog;
+import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 
 import java.util.List;
@@ -64,6 +66,8 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     private GroundChoosePresenter presenter;
 
+    private LoadDialog loading;
+
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
@@ -79,12 +83,15 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         baseLayerView.setCRS(crs);
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
-        mapView.setBuiltInZoomControls(true);
+       // mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
         mapView.getController().setZoom(2);
         titleView.setTitle("选择地块");
         presenter = new GroundChoosePresenter(this);
         presenter.block();
+        loading = new LoadDialog(this);
+        loading.setTitle(R.string.st_loading);
+        loading.show();
     }
 
     @Override
@@ -203,6 +210,9 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     public void onDateSuccess(List<GroundTypeInfo.Ground> result) {
         data = result;
         datas();
+        if (loading != null && loading.isShowing()) {
+            loading.dismiss();
+        }
     }
 
     private Handler handler = new Handler() {
@@ -220,7 +230,9 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     @Override
     public void onDateFailed(String info) {
-
+        if (loading != null && loading.isShowing()) {
+            loading.dismiss();
+        }
     }
 
     @Override
@@ -251,12 +263,16 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     @Override
     public void onBackPressed() {
-        if (mapView != null) {
-            mapView.stopClearCacheTimer();// 停止和销毁 清除运行时服务器中缓存瓦片的定时器。
-            mapView.destroy();
-        }
         super.onBackPressed();
     }
 
 
+    @Override
+    protected void onDestroy() {
+        if (mapView != null) {
+            mapView.stopClearCacheTimer();// 停止和销毁 清除运行时服务器中缓存瓦片的定时器。
+            mapView.destroy();
+        }
+        super.onDestroy();
+    }
 }

@@ -17,13 +17,11 @@ public class GroundChoosePresenter {
     private String TAG = getClass().getSimpleName();
     private GroundChooseListener userBiz;
     private GroundChooseListener.GroundChooseInterface main;
-    private LoadDialog loading;
 
     public GroundChoosePresenter(GroundChooseListener.GroundChooseInterface main) {
         this.main = main;
         this.userBiz = new GroundChooseListener();
-        loading = new LoadDialog((GroundChooseActivity) main);
-        loading.setTitle(R.string.st_loading);
+
     }
 
 
@@ -31,17 +29,14 @@ public class GroundChoosePresenter {
      * 获取地块信息。
      */
     public void block() {
-        userBiz.onStart(loading);
         userBiz.getBlock(new FrameListener<GroundTypeInfo>() {
             @Override
             public void onSucces(GroundTypeInfo data) {
-                userBiz.onStop(loading);
                 main.onDateSuccess(data.result);
             }
 
             @Override
             public void onFaild(int code, String info) {
-                userBiz.onStop(loading);
                 main.onDateFailed(info);
             }
         });
