@@ -35,7 +35,7 @@ public class Api {
     //测试环境
     public static final boolean TESTING = true;
     //是否是虚拟机测试
-    public static final boolean TESTPHONE = true;
+    public static final boolean TESTPHONE = false;
     public static final double latitude = 31.320828804632135465;
     public static final double longitude = 104.24860444448522;
 
