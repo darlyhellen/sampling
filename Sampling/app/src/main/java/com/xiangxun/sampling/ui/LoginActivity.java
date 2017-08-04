@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
                 idLoginBtn.setEnabled(false);
             }
         }
-
+        idLoginName.setJoinEdit(idLoginPassword);
         SpannableString nams = new SpannableString("请输入账户名");//定义hint的值
         AbsoluteSizeSpan namass = new AbsoluteSizeSpan(16, true);//设置字体大小 true表示单位是sp
         nams.setSpan(namass, 0, nams.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

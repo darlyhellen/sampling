@@ -115,6 +115,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             }
             if (TextUtils.isEmpty(over)) {
                 //未超标
+                over = "0";
                 switchs.setChecked(false);
             } else if ("0".equals(over)) {
                 switchs.setChecked(false);
@@ -127,6 +128,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             //进入历史信息搜索
             targetSearch.setVisibility(View.GONE);
             hiSearch.setVisibility(View.VISIBLE);
+            hisName.setText(getArguments().getString("hisName"));
 
         }
     }
@@ -160,18 +162,20 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             public void onClick(View v) {
                 //点击获取筛选结果
 
-
                 if ("SamplingTargetActivity".equals(cla)) {
                     //展现切换开关
                     String sampleName = name.getText().toString().trim();
                     String target = tager.getText().toString().trim();
-                    if ("PH值".endsWith(target)) {
+                    if (TextUtils.isEmpty(target)) {
+                        ((SearchListener) getActivity()).findParamers(sampleName, "", over);
+                    }
+                    if ("PH值".equals(target)) {
                         ((SearchListener) getActivity()).findParamers(sampleName, "ph", over);
                     }
-                    if ("镉".endsWith(target)) {
+                    if ("镉".equals(target)) {
                         ((SearchListener) getActivity()).findParamers(sampleName, "cadmium", over);
                     }
-                    if ("有效态镉".endsWith(target)) {
+                    if ("有效态镉".equals(target)) {
                         ((SearchListener) getActivity()).findParamers(sampleName, "availabl", over);
                     }
                 }

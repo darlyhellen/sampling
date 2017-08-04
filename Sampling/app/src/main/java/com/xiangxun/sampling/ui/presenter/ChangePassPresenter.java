@@ -2,6 +2,7 @@ package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
+import com.xiangxun.sampling.common.Utils;
 import com.xiangxun.sampling.ui.biz.ChangePassListener;
 import com.xiangxun.sampling.ui.setting.ChangePasswordActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -28,7 +29,7 @@ public class ChangePassPresenter {
     public void ChangePass(String oldpasswords, String newpasswords) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.ChangePass(oldpasswords, newpasswords, new FrameListener<String>() {
+        userBiz.ChangePass(Utils.getCipherText(oldpasswords), Utils.getCipherText(newpasswords), new FrameListener<String>() {
             @Override
             public void onSucces(String data) {
                 main.setEnableClick();

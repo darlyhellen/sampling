@@ -65,7 +65,7 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
                 adapter.setData(data);
             }
         }
-        presenter.planning(s == null ? null : ((ResultData) s).resTime);
+        presenter.planning(null/*s == null ? null : ((ResultData) s).resTime*/);
     }
 
     @Override

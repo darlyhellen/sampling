@@ -28,12 +28,12 @@ import rx.schedulers.Schedulers;
 public class SamplingPlanningListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
-
+        if (loading != null) loading.show();
     }
 
     @Override
     public void onStop(Dialog loading) {
-
+        if (loading != null) loading.dismiss();
     }
 
     public void getPlanning(String time, final FrameListener<ResultData> listener) {

@@ -13,8 +13,6 @@ import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
-import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPlanningPresenter;
@@ -65,7 +63,7 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
                 adapter.setData(data);
             }
         }
-        presenter.planning(s == null ? null : ((ResultData) s).resTime);
+        presenter.planning(null/*s == null ? null : ((ResultData) s).resTime*/);
     }
 
     @Override
