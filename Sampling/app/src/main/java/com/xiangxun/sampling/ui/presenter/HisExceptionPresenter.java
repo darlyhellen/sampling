@@ -31,7 +31,7 @@ public class HisExceptionPresenter {
     /**
      * 列表展示。
      */
-    public void hisList() {
+    public void hisList(String location) {
         userBiz.onStart(loading);
         main.setDisableClick();
         userBiz.hisExcList(new FrameListener<HisExceptionInfo>() {

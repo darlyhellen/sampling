@@ -25,7 +25,6 @@ dependencies {
     compile files('libs/CRC.jar')
     compile files('libs/httpmime-4.2.2.jar')
     compile 'com.google.code.gson:gson:2.8.1'
-    compile files('libs/AMap_Location_V3.4.1_20170629.jar')
     compile files('libs/iclient_android_8.1.0.jar')
     compile project(':VideoLib')
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
@@ -38,4 +37,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.yanzhenjie:permission:1.0.8'
+    compile files('libs/AMap_Location_V3.5.0_20170731.jar')
 }

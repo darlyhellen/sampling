@@ -1,18 +1,8 @@
 package com.xiangxun.sampling.base;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-
-import com.xiangxun.sampling.common.ToastApp;
-import com.xiangxun.sampling.common.dlog.DLog;
 
 import java.util.ArrayList;
 

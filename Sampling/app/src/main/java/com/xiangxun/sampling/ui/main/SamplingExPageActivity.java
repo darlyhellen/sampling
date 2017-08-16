@@ -18,15 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.LocationTools;
+import com.xiangxun.sampling.common.LocationTools.LocationToolsListener;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
@@ -58,7 +56,7 @@ import java.util.List;
  * @TODO:新增地块异常页面，包括定位，图片等功能上传。
  */
 @ContentBinder(R.layout.activity_sampling_exception)
-public class SamplingExPageActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, ExceptionPageInterface, MaxLengthUiListener {
+public class SamplingExPageActivity extends BaseActivity implements LocationToolsListener, OnClickListener, OnImageConsListener, ExceptionPageInterface, MaxLengthUiListener {
 
     private boolean iShow;//是否是展示页面，true为展示页面，false为编辑页面,异常模块进来属于新增编辑,历史异常进来属于展示页面.
     @ViewsBinder(R.id.id_exception_title)
@@ -98,10 +96,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     private ExceptionPagePresenter presenter;
 
     private MsgDialog msgDialog;
-
-    //声明mLocationOption对象
-    public AMapLocationClientOption mLocationOption = null;
-    public AMapLocationClient mlocationClient = null;
 
     //权限问题
     private String[] PERMISSIONS_GROUP = {
@@ -152,31 +146,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
             address.isEdit(false);
             address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
         } else {
-            startLocate();
+            LocationTools.getInstance().setLocationToolsListener(this);
+            LocationTools.getInstance().start();
         }
-    }
-
-
-    private void startLocate() {
-        mlocationClient = new AMapLocationClient(this);
-        //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位监听
-        mlocationClient.setLocationListener(this);
-        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
-        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
-        //设置定位参数
-        mlocationClient.setLocationOption(mLocationOption);
-        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
-        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
-        // 在定位结束后，在合适的生命周期调用onDestroy()方法
-        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-        //启动定位
-        mlocationClient.startLocation();
     }
 
 
@@ -233,10 +205,9 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.id_user_sence_location:
-                startLocate();
+                LocationTools.getInstance().start();
                 break;
             case R.id.title_view_ok:
-
                 //进行提示弹窗，询问用户是否确认修改上传状态。
                 msgDialog = new MsgDialog(this);
                 msgDialog.setTiele("是否确认上传异常地块信息？");
@@ -277,36 +248,27 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         }
     }
 
+    @Override
+    public void locationSuccess(AMapLocation amapLocation) {
+        latitude.isEdit(true);
+        latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
+        longitude.isEdit(true);
+        longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
+        address.isEdit(false);
+        address.setInfo("位置：", String.valueOf(amapLocation.getProvince() + amapLocation.getCity() + amapLocation.getDistrict()), "");
+    }
 
     @Override
-    public void onLocationChanged(AMapLocation amapLocation) {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                latitude.isEdit(true);
-                latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
-                longitude.isEdit(true);
-                longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
-                if (TextUtils.isEmpty(amapLocation.getAddress())) {
-                    startLocate();
-                } else {
-                    address.isEdit(false);
-                    address.setInfo("位置：", String.valueOf(amapLocation.getProvince() + amapLocation.getCity() + amapLocation.getDistrict()), "");
-                }
-                DLog.i(amapLocation);
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                address.isEdit(true);
-                address.setInfo("地址：", String.valueOf("未知地方"), "");
-                latitude.isEdit(true);
-                latitude.setInfo("纬度：", String.valueOf(0), "");
-                longitude.isEdit(false);
-                longitude.setInfo("经度：", String.valueOf(0), "");
-                ToastApp.showToast("请链接网络或者打开GPS进行定位");
-            }
-            mlocationClient.stopLocation();
-        }
+    public void locationFail() {
+        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+        address.isEdit(true);
+        address.setInfo("地址：", String.valueOf("未知地方"), "");
+        latitude.isEdit(true);
+        latitude.setInfo("纬度：", String.valueOf(0), "");
+        longitude.isEdit(false);
+        longitude.setInfo("经度：", String.valueOf(0), "");
     }
+
 
     @Override
     public void onConsImageListener(View v, int position) {
@@ -392,8 +354,6 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
         DLog.d(getClass().getSimpleName(), "onResume()");
         if (Build.VERSION.SDK_INT >= 23) {
             // 缺少权限时, 进入权限配置页面
-
-
             AndPermission.with(this)
                     .requestCode(REQUEST_CODE)
                     .permission(PERMISSIONS_GROUP)
@@ -423,26 +383,17 @@ public class SamplingExPageActivity extends BaseActivity implements AMapLocation
                         }
                     })
                     .start();
-
-
-//            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
-//                startPermissionsActivity(PERMISSIONS_GROUP);
-//            } else {
-//                DLog.i(getClass().getSimpleName(), "摄像头，语音，定位权限已经打开");
-//            }
         }
-        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
-            mlocationClient.startLocation();
-        }
+        LocationTools.getInstance().reStart();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
         DLog.d(getClass().getSimpleName(), "onPause()");
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-        }
+        LocationTools.getInstance().stop();
         super.onPause();
     }
+
+
 }

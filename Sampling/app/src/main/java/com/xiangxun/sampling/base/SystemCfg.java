@@ -3,8 +3,6 @@ package com.xiangxun.sampling.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.xiangxun.sampling.ui.setting.UserInformationActivity;
-
 
 public class SystemCfg {
     private static SharedPreferences mysp = null;

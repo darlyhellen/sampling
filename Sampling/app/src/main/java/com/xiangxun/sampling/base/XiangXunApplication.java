@@ -20,6 +20,7 @@ import android.view.WindowManager;
 
 import com.orm.SugarContext;
 import com.xiangxun.sampling.BuildConfig;
+import com.xiangxun.sampling.common.LocationTools;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.common.retrofit.Api;
@@ -72,28 +73,8 @@ public class XiangXunApplication extends Application {
         VCamera.setDebugMode(false);
         // 初始化拍摄SDK，必须
         VCamera.initialize(this);
-
-
-//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()//
-//                .detectCustomSlowCalls()//
-//                .detectDiskReads()//
-//                .detectDiskWrites()//
-//                .detectNetwork()//
-//                .penaltyLog()//
-//                .penaltyFlashScreen()//
-//                .build());
-//        try {
-//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()//
-//                    .detectLeakedClosableObjects()//
-//                    .detectLeakedSqlLiteObjects()//
-//                    .setClassInstanceLimit(Class.forName("com.apress.proandroid.SomeClass"), 100)//
-//                    .penaltyLog()//
-//                    .build());
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-
+        //定位功能模块初始化
+        LocationTools.init(this);
     }
 
     public static XiangXunApplication getInstance() {

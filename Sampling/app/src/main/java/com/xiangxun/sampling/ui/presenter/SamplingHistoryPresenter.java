@@ -23,7 +23,7 @@ public class SamplingHistoryPresenter {
     }
 
 
-    public void getHistory(String hisName) {
+    public void getHistory(String hisName, String loaction) {
 
         biz.getHistory(hisName, new FrameListener<ResultData>() {
             @Override

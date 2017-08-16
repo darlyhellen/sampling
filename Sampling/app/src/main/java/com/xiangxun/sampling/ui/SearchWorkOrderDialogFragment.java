@@ -13,7 +13,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -153,7 +152,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
 
             @Override
             public void onClick(View arg0) {
-                getActivity().onBackPressed();
+                dismiss();
             }
         });
 

@@ -16,18 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.base.PermissionCheck;
-import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.LocationTools;
+import com.xiangxun.sampling.common.LocationTools.LocationToolsListener;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
@@ -64,7 +61,7 @@ import java.util.List;
  * @TODO: 現場情況的展示頁面
  */
 @ContentBinder(R.layout.activity_sence)
-public class SenceActivity extends BaseActivity implements AMapLocationListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectTypeRegionDialog.SelectResultItemClick {
+public class SenceActivity extends BaseActivity implements LocationToolsListener, OnClickListener, OnImageConsListener, OnVideoConsListener, SenceInterface, SelectTypeRegionDialog.SelectResultItemClick {
     private Scheme planning;
     private Pointly point;
     @ViewsBinder(R.id.id_user_sence_title)
@@ -92,10 +89,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     @ViewsBinder(R.id.id_user_sence_video_submit)
     private Button submit;
 
-
-    //声明mLocationOption对象
-    public AMapLocationClientOption mLocationOption = null;
-    public AMapLocationClient mlocationClient = null;
 
     @ViewsBinder(R.id.id_user_sence_image_grid)
     private WholeGridView imageGrid;
@@ -228,7 +221,8 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                 address.isEdit(false);
                 address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
             } else {
-                startLocate();
+                LocationTools.getInstance().setLocationToolsListener(this);
+                LocationTools.getInstance().start();
             }
         }
     }
@@ -255,29 +249,6 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
         videoAdapter.setData(videos);
     }
 
-
-    private void startLocate() {
-        mlocationClient = new AMapLocationClient(this);
-        //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位监听
-        mlocationClient.setLocationListener(this);
-        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
-        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
-        //设置定位参数
-        mlocationClient.setLocationOption(mLocationOption);
-        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
-
-        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
-        // 在定位结束后，在合适的生命周期调用onDestroy()方法
-        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-        //启动定位
-        mlocationClient.startLocation();
-    }
 
     @Override
     protected void initListener() {
@@ -419,7 +390,7 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                     address.isEdit(false);
                     address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
                 } else {
-                    startLocate();
+                    LocationTools.getInstance().start();
                 }
                 break;
             case R.id.id_user_sence_video_submit:
@@ -450,35 +421,26 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
     }
 
     @Override
-    public void onLocationChanged(AMapLocation amapLocation) {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                latitude.isEdit(true);
-                latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
-                longitude.isEdit(true);
-                longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
-                address.isEdit(false);
-                if (TextUtils.isEmpty(amapLocation.getAddress())) {
-                    startLocate();
-                } else {
-                    address.setInfo("位置：", String.valueOf(amapLocation.getProvince() + amapLocation.getCity() + amapLocation.getDistrict()), "");
-                    //当获取了正确位置信息时。
-                }
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                latitude.isEdit(true);
-                latitude.setInfo("纬度：", String.valueOf(0), "");
-                longitude.isEdit(true);
-                longitude.setInfo("经度：", String.valueOf(0), "");
-                address.isEdit(false);
-                address.setInfo("位置：", String.valueOf(TextUtils.isEmpty(amapLocation.getAddress()) ? "未知位置" : amapLocation.getAddress()), "");
-                startLocate();
-                ToastApp.showToast("请链接网络或者打开GPS进行定位");
-            }
-            DLog.i(getClass().getSimpleName(), amapLocation.toString() + "---------->is runing");
-            mlocationClient.stopLocation();
-        }
+    public void locationSuccess(AMapLocation amapLocation) {
+        //定位成功回调信息，设置相关消息
+        latitude.isEdit(true);
+        latitude.setInfo("纬度：", String.valueOf(amapLocation.getLatitude()), "");
+        longitude.isEdit(true);
+        longitude.setInfo("经度：", String.valueOf(amapLocation.getLongitude()), "");
+        address.isEdit(false);
+        address.setInfo("位置：", String.valueOf(amapLocation.getProvince() + amapLocation.getCity() + amapLocation.getDistrict()), "");
+    }
+
+    @Override
+    public void locationFail() {
+        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+        latitude.isEdit(true);
+        latitude.setInfo("纬度：", String.valueOf(0), "");
+        longitude.isEdit(true);
+        longitude.setInfo("经度：", String.valueOf(0), "");
+        address.isEdit(false);
+        address.setInfo("位置：", "未知位置", "");
+        LocationTools.getInstance().start();
     }
 
 
@@ -633,26 +595,15 @@ public class SenceActivity extends BaseActivity implements AMapLocationListener,
                         }
                     })
                     .start();
-
-
-//            if (new PermissionCheck(this).lacksPermissions(PERMISSIONS_GROUP)) {
-//                startPermissionsActivity(PERMISSIONS_GROUP);
-//            } else {
-//                DLog.i(getClass().getSimpleName(), "摄像头，语音，定位权限已经打开");
-//            }
         }
-        if (!Api.TESTING && mlocationClient != null && !mlocationClient.isStarted()) {
-            mlocationClient.startLocation();
-        }
+        LocationTools.getInstance().reStart();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
         DLog.d(getClass().getSimpleName(), "onPause()");
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-        }
+        LocationTools.getInstance().stop();
         super.onPause();
     }
 

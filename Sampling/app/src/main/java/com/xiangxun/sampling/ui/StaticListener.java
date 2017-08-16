@@ -11,7 +11,6 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/5/25.
