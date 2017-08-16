@@ -90,6 +90,7 @@ public class ExceptionPagePresenter {
             public void onFaild(int code, String info) {
                 userBiz.onStop(loading);
                 main.onDateFailed(info);
+                ToastApp.showToast(info);
             }
         });
     }

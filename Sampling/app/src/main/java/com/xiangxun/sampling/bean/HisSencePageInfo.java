@@ -31,7 +31,7 @@ public class HisSencePageInfo {
         public String createId = "";
         public String regionName = "";
         public String blockName = "";
-        public String soilNme = "";
+        public String soilName = "";
         public String sampleName = "";
         public List<FileList> file;
     }

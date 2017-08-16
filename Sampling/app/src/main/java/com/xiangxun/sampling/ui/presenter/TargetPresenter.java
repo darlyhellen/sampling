@@ -3,6 +3,7 @@ package com.xiangxun.sampling.ui.presenter;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.paramer.AnaylistParamer;
 import com.xiangxun.sampling.ui.biz.TargetListener;
 import com.xiangxun.sampling.ui.main.SamplingTargetActivity;
@@ -47,6 +48,7 @@ public class TargetPresenter {
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 main.onDateFailed(info);
+                ToastApp.showToast(info);
             }
         });
     }

@@ -4,6 +4,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.HisSencePageInfo;
 import com.xiangxun.sampling.bean.SimplingTargetResult;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.ui.biz.HisSenceListener;
 import com.xiangxun.sampling.ui.main.HisSenceActivity;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -46,6 +47,7 @@ public class HisSencePresenter {
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 main.onDateFailed(info);
+                ToastApp.showToast(info);
             }
         });
     }

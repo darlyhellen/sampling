@@ -78,112 +78,134 @@ public class DetailView extends LinearLayout {
     }
 
     public void setInfo(String tital, String content, String hit) {
-        if (TextUtils.isEmpty(tital) || TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(tital)) {
             lin.setVisibility(View.GONE);
         } else {
-            lin.setVisibility(VISIBLE);
-            name.setText(tital);
-            if (flag) {
-                if (TextUtils.isEmpty(hit)) {
-                    edit.setText(content);
-                } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    edit.setHint(new SpannedString(ss));
-                }
+            if (TextUtils.isEmpty(content)) {
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
             } else {
-                if (TextUtils.isEmpty(hit)) {
-                    value.setText(content);
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
+                if (flag) {
+                    if (TextUtils.isEmpty(hit)) {
+                        edit.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        edit.setHint(new SpannedString(ss));
+                    }
                 } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    value.setHint(new SpannedString(ss));
+                    if (TextUtils.isEmpty(hit)) {
+                        value.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        value.setHint(new SpannedString(ss));
+                    }
                 }
             }
         }
     }
 
     public void setInfo(int tital, String content, String hit) {
-        if (tital == 0 || TextUtils.isEmpty(content)) {
+        if (tital == 0) {
             lin.setVisibility(View.GONE);
         } else {
-            lin.setVisibility(VISIBLE);
-            name.setText(tital);
-            if (flag) {
-                if (TextUtils.isEmpty(hit)) {
-                    edit.setText(content);
-                } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    edit.setHint(new SpannedString(ss));
-                }
+            if (TextUtils.isEmpty(content)) {
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
             } else {
-                if (TextUtils.isEmpty(hit)) {
-                    value.setText(content);
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
+                if (flag) {
+                    if (TextUtils.isEmpty(hit)) {
+                        edit.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        edit.setHint(new SpannedString(ss));
+                    }
                 } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    value.setHint(new SpannedString(ss));
+                    if (TextUtils.isEmpty(hit)) {
+                        value.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        value.setHint(new SpannedString(ss));
+                    }
                 }
             }
         }
     }
 
     public void setInfo(String tital, int content, String hit) {
-        if (TextUtils.isEmpty(tital) || content == 0) {
+
+        if (TextUtils.isEmpty(tital)) {
             lin.setVisibility(View.GONE);
         } else {
-            lin.setVisibility(VISIBLE);
-            name.setText(tital);
-            if (flag) {
-                if (TextUtils.isEmpty(hit)) {
-                    edit.setText(content);
-                } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    edit.setHint(new SpannedString(ss));
-                }
+            if (content == 0) {
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
             } else {
-                if (TextUtils.isEmpty(hit)) {
-                    value.setText(content);
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
+                if (flag) {
+                    if (TextUtils.isEmpty(hit)) {
+                        edit.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        edit.setHint(new SpannedString(ss));
+                    }
                 } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    value.setHint(new SpannedString(ss));
+                    if (TextUtils.isEmpty(hit)) {
+                        value.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        value.setHint(new SpannedString(ss));
+                    }
                 }
             }
         }
     }
 
     public void setInfo(int tital, int content, String hit) {
-        if (tital == 0 || content == 0) {
+
+        if (tital == 0) {
             lin.setVisibility(View.GONE);
         } else {
-            lin.setVisibility(VISIBLE);
-            name.setText(tital);
-            if (flag) {
-                if (TextUtils.isEmpty(hit)) {
-                    edit.setText(content);
-                } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    edit.setHint(new SpannedString(ss));
-                }
+            if (content == 0) {
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
             } else {
-                if (TextUtils.isEmpty(hit)) {
-                    value.setText(content);
+                lin.setVisibility(VISIBLE);
+                name.setText(tital);
+                if (flag) {
+                    if (TextUtils.isEmpty(hit)) {
+                        edit.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        edit.setHint(new SpannedString(ss));
+                    }
                 } else {
-                    SpannableString ss = new SpannableString(hit);//定义hint的值
-                    AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
-                    ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    value.setHint(new SpannedString(ss));
+                    if (TextUtils.isEmpty(hit)) {
+                        value.setText(content);
+                    } else {
+                        SpannableString ss = new SpannableString(hit);//定义hint的值
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        value.setHint(new SpannedString(ss));
+                    }
                 }
             }
         }

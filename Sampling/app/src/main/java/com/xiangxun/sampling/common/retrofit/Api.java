@@ -30,16 +30,18 @@ public class Api {
         return "http://" + SystemCfg.getServerIP(XiangXunApplication.getInstance()) + ":" + SystemCfg.getServerPort(XiangXunApplication.getInstance());
     }
 
-    public static final String CHAOTU = "http://10.10.15.201:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
-    public static final String TESTCHAOTU = "http://193.169.100.232:8090/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
-    //测试环境
+    //http://10.10.15.201:8090公司外网超图地址
+    public static String getMalink() {
+        if (DEBUGURL) {
+            return "http://" + SystemCfg.getGISServerIP(XiangXunApplication.getInstance()) + ":" + SystemCfg.getGISServerPort(XiangXunApplication.getInstance()) + "/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
+        }
+        return "http://" + SystemCfg.getGISServerIP(XiangXunApplication.getInstance()) + ":" + SystemCfg.getGISServerPort(XiangXunApplication.getInstance()) + "/iserver/services/map-MianZhuShi2/rest/maps/绵竹市";
+    }
+
+    //测试环境 仅仅调整了定位问题。写死的经纬度
     public static final boolean TESTING = true;
     //是否是虚拟机测试
     public static final boolean TESTPHONE = false;
     public static final double latitude = 31.320828804632135465;
     public static final double longitude = 104.24860444448522;
-
-    public static String getSipIp() {
-        return SystemCfg.getServerIP(XiangXunApplication.getInstance());
-    }
 }

@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.xiangxun.sampling.BuildConfig;
@@ -25,6 +26,8 @@ import com.xiangxun.sampling.ui.setting.SystemSettingActivity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -35,6 +38,10 @@ public class LoginPresenter {
     private String TAG = getClass().getSimpleName();
     private LoginListener userBiz;
     private LoginListener.LoginInterface main;
+
+    //固定的管理员用户名密码
+    private String master = "xxkj";
+    private String mtpass = "000000";
 
 
     public LoginPresenter(LoginListener.LoginInterface main) {
@@ -63,30 +70,45 @@ public class LoginPresenter {
                 }
                 break;
             case R.id.id_login_btn:
-//                if (!NetUtils.isNetworkAvailable(context) && SystemCfg.getUserId(context) != null && !SystemCfg.getUserId(context).equals("")) {
-//                    LoginInfo.isOffLine = true;
-//                    SystemCfg.setUserId(context, "00001");
-//                    SystemCfg.setAccount(context, main.getUserName());
-//                    SystemCfg.setUserName(context, "管理员");
-//                    SystemCfg.setDepartment(context, "研究所");
-//                    SystemCfg.setDepartmentID(context, "101");
-//                    SystemCfg.setIMEI(context, XiangXunApplication.getInstance().getDevId());
-//                    SystemCfg.setWhitePwd(context, main.getPassword());
-//                    Intent offline = new Intent(context, MainFragmentActivity.class);
-//                    context.startActivity(offline);
-//                    main.end();
-//                } else {
-//                    LoginInfo.isOffLine = false;
-                SystemCfg.setAccount(context, main.getUserName());
-                SystemCfg.setWhitePwd(context, main.getPassword());
-                String deviceId = XiangXunApplication.getInstance().getDevId();
-                Map<String, String> params = new LinkedHashMap<String, String>();
-                params.put("imei", deviceId);
-                params.put("pwd", Utils.getCipherText(main.getPassword()));
-                params.put("account", main.getUserName());
-                SystemCfg.setCRC(context, Utils.getCRC(params));
-                login(context, main.getUserName(), main.getPassword(), deviceId);
-//                }
+                if (TextUtils.isEmpty(main.getUserName()) || TextUtils.isEmpty(main.getPassword())) {
+                    ToastApp.showToast("用户名密码不为空");
+                    main.setEnableClick();
+                    return;
+                }
+
+                if (main.getPassword().contains(" ") && main.getUserName().contains(" ")) {
+                    main.setEnableClick();
+                    ToastApp.showToast("用户名密码不能包含空格");
+                    return;
+                }
+                Pattern pattern = Pattern
+                        .compile("([^\\._\\w\\u4e00-\\u9fa5])*");
+                Matcher matcher = pattern.matcher(main.getUserName());
+                if (matcher.matches()) {
+                    ToastApp.showToast("用户名不能包含表情");
+                    main.setEnableClick();
+                    return;
+                }
+
+                if (master.equals(main.getUserName()) && mtpass.equals(main.getPassword())) {
+                    if (!ActivityManager.isUserAMonkey()) {
+                        Intent intent = new Intent(context, SystemSettingActivity.class);
+                        intent.putExtra("isFlag", 1);
+                        context.startActivity(intent);
+                    }
+                    main.setEnableClick();
+                    main.cleanEdit();
+                } else {
+                    SystemCfg.setAccount(context, main.getUserName());
+                    SystemCfg.setWhitePwd(context, main.getPassword());
+                    String deviceId = XiangXunApplication.getInstance().getDevId();
+                    Map<String, String> params = new LinkedHashMap<String, String>();
+                    params.put("imei", deviceId);
+                    params.put("pwd", Utils.getCipherText(main.getPassword()));
+                    params.put("account", main.getUserName());
+                    SystemCfg.setCRC(context, Utils.getCRC(params));
+                    login(context, main.getUserName(), main.getPassword(), deviceId);
+                }
                 break;
             default:
                 break;

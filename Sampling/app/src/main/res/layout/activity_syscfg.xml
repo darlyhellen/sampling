@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,15 @@
         android:background="@color/white"
         android:orientation="vertical"
         android:padding="@dimen/margin_padding10">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:text="请配置接口服务器信息："
+            android:textColor="@color/color333333"
+            android:textSize="@dimen/textSize18" />
+
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/edt_server"
@@ -40,6 +50,52 @@
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/edt_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:paddingLeft="@dimen/margin_padding10"
+            android:paddingRight="@dimen/margin_padding10"
+            android:paddingTop="@dimen/margin_padding10" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding10"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_padding10">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:text="请配置地图服务器信息："
+            android:textColor="@color/color333333"
+            android:textSize="@dimen/textSize18" />
+
+        <com.xiangxun.sampling.widget.groupview.DetailView
+            android:id="@+id/edt_gis_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingBottom="@dimen/margin_padding4"
+            android:paddingLeft="@dimen/margin_padding10"
+            android:paddingRight="@dimen/margin_padding10"
+            android:paddingTop="@dimen/margin_padding10" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/margin_padding10"
+            android:background="@color/index_line"
+            android:paddingBottom="@dimen/margin_padding4" />
+
+        <com.xiangxun.sampling.widget.groupview.DetailView
+            android:id="@+id/edt_gis_port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"

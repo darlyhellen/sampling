@@ -52,7 +52,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
 
     private Function[] functions = {
             new Function(R.mipmap.set_password, R.string.set_fun1, "提供密码修改功能", ChangePasswordActivity.class),
-            new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
+//            new Function(R.mipmap.set_system, R.string.set_fun2, "设置系统相关参数", SystemSettingActivity.class),
             new Function(R.mipmap.set_cleardata, R.string.set_fun3, "清除缓存数据", null),
             new Function(R.mipmap.set_font, R.string.set_fun4, "在WiFi情况下上传采样图片视频", SamplingDbActivity.class),
             new Function(R.mipmap.set_update, R.string.set_fun5, "检查更新", null),
@@ -122,11 +122,11 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
                                                             if (null != functions[position].getActivityClass())
                                                                 startActivity(new Intent(getActivity(), functions[position].getActivityClass()));
                                                             else {
-                                                                if (2 == position) {
+                                                                if (1 == position) {
                                                                     clearDateOnClick();
-                                                                } else if (3 == position) {
+                                                                } else if (2 == position) {
                                                                     startActivity(new Intent(getActivity(), functions[position].getActivityClass()));
-                                                                } else if (4 == position) {
+                                                                } else if (3 == position) {
                                                                     CheckUpdate();
                                                                 } else {
                                                                     loginout();
@@ -142,7 +142,7 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     private void upload() {
         int size = SugarRecord.listAll(SenceSamplingSugar.class).size();
         if (size != 0) {
-            functions[3].setDescription(" New! " + size);
+            functions[2].setDescription(" New! " + size);
         }
     }
 
@@ -238,10 +238,10 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
 
     private void showNew() {
         if (InfoCache.getInstance().isNewVer()) {
-            functions[4].setDescription("New!");
+            functions[3].setDescription("New!");
         } else {
             String version = new StringBuilder(getString(R.string.curr_ver)).append(InfoCache.getInstance().getAppVersionName(getActivity())).toString();
-            functions[4].setDescription(version);
+            functions[3].setDescription(version);
         }
     }
 
@@ -271,19 +271,23 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     @Override
     public void onVersionSuccess(UpdateData result) {
         if (result != null) {
-            StringBuilder sb = new StringBuilder();
-            String str = result.remark;
-            if (str != null && str.length() > 0) {
-                sb.append(str);
+            if (Integer.parseInt(result.version) > XiangXunApplication.getInstance().getVersionCode()) {
+                StringBuilder sb = new StringBuilder();
+                String str = result.remark;
+                if (str != null && str.length() > 0) {
+                    sb.append(str);
+                } else {
+                    sb.append("发现新版本,请更新!");
+                }
+                if (updateDialog == null) {
+                    updateDialog = new UpdateDialog(getActivity(), R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
+                }
+                updateDialog.setCancelable(true);
+                updateDialog.show();
+                showNew();
             } else {
-                sb.append("发现新版本,请更新!");
+                onVersionFailed("");
             }
-            if (updateDialog == null) {
-                updateDialog = new UpdateDialog(getActivity(), R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
-            }
-            updateDialog.setCancelable(true);
-            updateDialog.show();
-            showNew();
         }
     }
 

@@ -71,11 +71,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
     @Override
     protected void initView(Bundle savedInstanceState) {
         LayerView baseLayerView = new LayerView(this);
-        if (Api.TESTING) {
-            baseLayerView.setURL(Api.TESTCHAOTU);
-        } else {
-            baseLayerView.setURL(Api.CHAOTU);
-        }
+        baseLayerView.setURL(Api.getMalink());
         center = new com.supermap.android.maps.Point2D(Double.parseDouble(getIntent().getStringExtra("longitude")), Double.parseDouble(getIntent().getStringExtra("latitude")));
         mapView.getController().setCenter(center);
         CoordinateReferenceSystem crs = new CoordinateReferenceSystem();
@@ -83,7 +79,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         baseLayerView.setCRS(crs);
         mapView.addLayer(baseLayerView);
         // 启用内置放大缩小控件
-       // mapView.setBuiltInZoomControls(true);
+        // mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
         mapView.getController().setZoom(2);
         titleView.setTitle("选择地块");
@@ -128,11 +124,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         MeasureParameters parameters = new MeasureParameters();
         parameters.point2Ds = pts;
         MeasureService service = null;
-        if (Api.TESTING) {
-            service = new MeasureService(Api.TESTCHAOTU);
-        } else {
-            service = new MeasureService(Api.CHAOTU);
-        }
+        service = new MeasureService(Api.getMalink());
         MyMeasureEventListener listener = new MyMeasureEventListener();
         service.process(parameters, listener, MeasureMode.AREA);
         try {
@@ -164,12 +156,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         FilterParameter fp = new FilterParameter();
         fp.name = "绵竹市";// 必设参数，图层名称格式：数据集名称@数据源别名
         p.filterParameters = new FilterParameter[]{fp};
-        QueryByGeometryService qs = null;
-        if (Api.TESTING) {
-            qs = new QueryByGeometryService(Api.TESTCHAOTU);
-        } else {
-            qs = new QueryByGeometryService(Api.CHAOTU);
-        }
+        QueryByGeometryService qs = new QueryByGeometryService(Api.getMalink());
         qs.process(p, new MyQueryEventListener());
     }
 
@@ -233,6 +220,7 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
         if (loading != null && loading.isShowing()) {
             loading.dismiss();
         }
+        ToastApp.showToast(info);
     }
 
     @Override

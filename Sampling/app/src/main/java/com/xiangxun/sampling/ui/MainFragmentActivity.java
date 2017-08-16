@@ -119,18 +119,20 @@ public class MainFragmentActivity extends BaseActivity implements OnItemClickLis
     @Override
     public void onVersionSuccess(UpdateData result) {
         if (result != null) {
-            StringBuilder sb = new StringBuilder();
-            String str = result.remark;
-            if (str != null && str.length() > 0) {
-                sb.append(str);
-            } else {
-                sb.append("发现新版本,请更新!");
+            if (Integer.parseInt(result.version) > XiangXunApplication.getInstance().getVersionCode()) {
+                StringBuilder sb = new StringBuilder();
+                String str = result.remark;
+                if (str != null && str.length() > 0) {
+                    sb.append(str);
+                } else {
+                    sb.append("发现新版本,请更新!");
+                }
+                if (updateDialog == null) {
+                    updateDialog = new UpdateDialog(this, R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
+                }
+                updateDialog.setCancelable(true);
+                updateDialog.show();
             }
-            if (updateDialog == null) {
-                updateDialog = new UpdateDialog(this, R.style.updateDialog, result.name, sb.toString(), result.saveUrl);
-            }
-            updateDialog.setCancelable(true);
-            updateDialog.show();
         }
     }
 

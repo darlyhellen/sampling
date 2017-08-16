@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RxjavaRetrofitRequestUtil {
     private volatile static RxjavaRetrofitRequestUtil instance;
 
-    private static final int REQUEST_TIME = 20;
+    private static final int REQUEST_TIME = 5;
     private int interSize = 0;
 
     private OkHttpClient.Builder builder;

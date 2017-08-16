@@ -103,6 +103,7 @@ public class SencePresenter {
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 main.onLoginFailed(info);
+                ToastApp.showToast(info);
             }
         });
     }

@@ -61,6 +61,7 @@ public class ServicePresenter {
 
             @Override
             public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
             }
         });
     }

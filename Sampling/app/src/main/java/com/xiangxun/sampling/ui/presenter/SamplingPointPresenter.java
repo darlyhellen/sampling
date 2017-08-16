@@ -160,6 +160,7 @@ public class SamplingPointPresenter {
             public void onFaild(int code, String info) {
                 biz.onStop(loading);
                 view.onUpFailed();
+                ToastApp.showToast(info);
             }
         });
     }

@@ -2,6 +2,7 @@ package com.xiangxun.sampling.ui.presenter;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.FrameListener;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.Utils;
 import com.xiangxun.sampling.ui.biz.ChangePassListener;
 import com.xiangxun.sampling.ui.setting.ChangePasswordActivity;
@@ -41,6 +42,7 @@ public class ChangePassPresenter {
             public void onFaild(int code, String info) {
                 main.setEnableClick();
                 userBiz.onStop(loading);
+                ToastApp.showToast(info);
             }
         });
     }

@@ -43,7 +43,6 @@ import com.xiangxun.sampling.widget.clearedit.ClearEditText;
  */
 @ContentBinder(R.layout.activity_login)
 public class LoginActivity extends BaseActivity implements LoginInterface, View.OnClickListener, OnCheckedChangeListener {
-
     @ViewsBinder(R.id.id_login_guide)
     CheckBox idLoginGuide;
     @ViewsBinder(R.id.id_login_set)
@@ -185,6 +184,13 @@ public class LoginActivity extends BaseActivity implements LoginInterface, View.
     @Override
     public String getPassword() {
         return idLoginPassword.getText().toString().trim();
+    }
+
+    @Override
+    public void cleanEdit() {
+        idLoginName.setText(null);
+        idLoginPassword.setText(null);
+        idLoginGuide.setChecked(false);
     }
 
     @Override

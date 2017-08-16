@@ -23,7 +23,7 @@
     <string name="tool_fun2">电话本</string>
 
     <string name="set_fun1">修改密码</string>
-    <string name="st_change_pass">密码由6-20位英文字母、数字或符合组成</string>
+    <string name="st_change_pass">密码由6-20位英文字母、数字或符号组成</string>
     <string name="set_fun2">系统参数设置</string>
     <string name="set_fun3">清除数据</string>
     <string name="set_out">退出登录</string>

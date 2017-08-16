@@ -48,23 +48,6 @@ public class LoginListener implements FramePresenter {
     }
 
     public void onLogin(String name, final String pass, String deviceId, final FrameListener<LoginData> listener) {
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass)) {
-            listener.onFaild(0, "用户名密码不为空");
-            return;
-        }
-
-        if (pass.contains(" ") && name.contains(" ")) {
-            listener.onFaild(0, "用户名密码不能包含空格");
-            return;
-        }
-        Pattern pattern = Pattern
-                .compile("([^\\._\\w\\u4e00-\\u9fa5])*");
-        Matcher matcher = pattern.matcher(name);
-        if (matcher.matches()) {
-            listener.onFaild(0, "用户名不能包含表情");
-            return;
-        }
-
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
@@ -104,8 +87,7 @@ public class LoginListener implements FramePresenter {
 
                                @Override
                                public void onError(Throwable e) {
-                                   ToastApp.showToast(e.getMessage());
-                                   listener.onFaild(1, e.getMessage());
+                                   listener.onFaild(1, "网络连接异常，请检查网络");
                                }
 
                                @Override
@@ -134,6 +116,8 @@ public class LoginListener implements FramePresenter {
         String getUserName();
 
         String getPassword();
+
+        void cleanEdit();
 
         void end();
     }

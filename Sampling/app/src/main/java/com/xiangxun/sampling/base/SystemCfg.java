@@ -70,6 +70,33 @@ public class SystemCfg {
             return mysp.getString("serverport", "8090");
     }
 
+    public static String getGISServerIP(Context context) {
+        init(context);
+        if (AppBuildConfig.DEBUGURL)
+            return mysp.getString("gisserverip", "193.169.100.232");
+        else
+            return mysp.getString("gisserverip", "193.169.100.232");
+    }
+
+    public static String getGISServerPort(Context context) {
+        init(context);
+        if (AppBuildConfig.DEBUGURL)
+            return mysp.getString("gisserverport", "8090");
+        else
+            return mysp.getString("gisserverport", "8090");
+    }
+
+
+    public static void setGISServerIP(Context context, String str) {
+        init(context);
+        mysp.edit().putString("gisserverip", str).commit();
+    }
+
+    public static void setGISServerPort(Context context, String str) {
+        init(context);
+        mysp.edit().putString("gisserverport", str).commit();
+    }
+
     /**
      * 名称
      */
@@ -149,6 +176,7 @@ public class SystemCfg {
         init(context);
         return mysp.getString("account", "");
     }
+
     /**
      * 账户
      */
@@ -197,7 +225,7 @@ public class SystemCfg {
         return mysp.getString("imei", "");
     }
 
-    public static void loginOut(Context context){
+    public static void loginOut(Context context) {
         init(context);
         mysp.edit().remove("userId").commit();
         mysp.edit().remove("account").commit();

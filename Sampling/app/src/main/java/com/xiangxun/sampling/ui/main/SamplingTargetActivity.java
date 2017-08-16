@@ -193,7 +193,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     public void onDateSuccess(SimplingTargetResult result) {
         data = result.result;
         resID = result.resId;
-        if (data != null && data.size() > 1) {
+        if (data != null && data.size() > 0) {
             xlist.setVisibility(View.VISIBLE);
             adapter.setData(data);
             textView.setVisibility(View.GONE);

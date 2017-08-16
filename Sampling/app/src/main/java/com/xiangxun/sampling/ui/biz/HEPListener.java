@@ -72,8 +72,7 @@ public class HEPListener implements FramePresenter {
 
                                @Override
                                public void onError(Throwable e) {
-                                   ToastApp.showToast(e.getMessage());
-                                   listener.onFaild(1, e.getMessage());
+                                   listener.onFaild(1, "网络连接异常，请检查网络");
                                }
 
                                @Override

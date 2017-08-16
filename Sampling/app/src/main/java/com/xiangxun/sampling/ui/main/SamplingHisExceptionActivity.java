@@ -87,7 +87,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
     @Override
     public void onDateSuccess(List<HisException> result) {
         data = result;
-        if (data != null && data.size() > 1) {
+        if (data != null && data.size() > 0) {
             xlist.setVisibility(View.VISIBLE);
             adapter.setData(data);
             textView.setVisibility(View.GONE);
@@ -100,7 +100,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
 
     @Override
     public void onDateFailed(String info) {
-        if (data != null && data.size() > 1) {
+        if (data != null && data.size() > 0) {
             xlist.setVisibility(View.VISIBLE);
             adapter.setData(data);
             textView.setVisibility(View.GONE);
