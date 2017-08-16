@@ -41,10 +41,11 @@ public class SamplingHistoryListener implements FramePresenter {
 
     }
 
-    public void getHistory(int currentPage, String hisName, final FrameListener<ResultData> listener) {
+    public void getHistory(int currentPage, String hisName, String loaction, final FrameListener<ResultData> listener) {
         Map<String, String> para = new HashMap<String, String>();
         para.put("name", hisName);
-        para.put("currentPage", currentPage + "");
+        para.put("currentPageNo", currentPage + "");
+        para.put("regionName", loaction);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(para, "UTF-8"));
 
         //在这里进行数据请求

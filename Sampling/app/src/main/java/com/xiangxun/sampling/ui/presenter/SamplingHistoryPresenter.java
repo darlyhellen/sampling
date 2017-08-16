@@ -32,7 +32,7 @@ public class SamplingHistoryPresenter {
 
     public void getHistory(int currentPage, String hisName, String loaction) {
         biz.onStart(loading);
-        biz.getHistory(currentPage, hisName, new FrameListener<ResultData>() {
+        biz.getHistory(currentPage, hisName,loaction, new FrameListener<ResultData>() {
             @Override
             public void onSucces(ResultData result) {
                 biz.onStop(loading);
