@@ -31,15 +31,15 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  *
  * @TODO:采样计划展示表格,逻辑为：服务端通过推送，下发到所有手机端，手机端根据推送资料。获取到任务列表，这里进行任务列表展示。
  */
-@ContentBinder(R.layout.activity_sampling_planning)
+@ContentBinder(R.layout.activity_sampling_sence)
 public class SamplingPlanningActivity extends BaseActivity implements SamplingPlanningInterface {
 
-    @ViewsBinder(R.id.id_planning_title)
+    @ViewsBinder(R.id.id_sence_title)
     private TitleView titleView;
 
-    @ViewsBinder(R.id.id_planning_wlist)
+    @ViewsBinder(R.id.id_sence_wlist)
     private StickyListHeadersListView wlist;
-    @ViewsBinder(R.id.id_planning_text)
+    @ViewsBinder(R.id.id_sence_text)
     private TextView textView;
     private List<Scheme> data;
     private StickyAdapter adapter;

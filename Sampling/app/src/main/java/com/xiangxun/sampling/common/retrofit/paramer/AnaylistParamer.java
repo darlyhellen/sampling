@@ -9,6 +9,7 @@ package com.xiangxun.sampling.common.retrofit.paramer;
  */
 public class AnaylistParamer {
 
+    public int currentPage;
     public String regionName;
     public String regionId;
 
@@ -18,7 +19,8 @@ public class AnaylistParamer {
 
     public String analy_name;
 
-    public AnaylistParamer(String regionName, String regionId, String isOver, String type_name, String analy_name) {
+    public AnaylistParamer(int currentPage, String regionName, String regionId, String isOver, String type_name, String analy_name) {
+        this.currentPage = currentPage;
         this.regionName = regionName;
         this.regionId = regionId;
         this.isOver = isOver;

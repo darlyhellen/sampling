@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -25,16 +26,18 @@ import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment.SearchListener;
 import com.xiangxun.sampling.ui.adapter.StickyAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener.SamplingHistoryInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingHistoryPresenter;
+import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
+import com.xiangxun.sampling.widget.xlistView.XListView;
+import com.xiangxun.sampling.widget.xlistView.XListView.IXListViewListener;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by Zhangyuhui/Darly on 2017/7/6.
@@ -44,42 +47,70 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @TODO:历史采样展示历史数据
  */
 @ContentBinder(R.layout.activity_sampling_planning)
-public class SamplingHistoryActivity extends BaseActivity implements SamplingHistoryInterface, SearchListener, LocationToolsListener {
+public class SamplingHistoryActivity extends BaseActivity implements SamplingHistoryInterface, SearchListener, LocationToolsListener, IXListViewListener {
     @ViewsBinder(R.id.id_planning_title)
     private TitleView titleView;
 
 
     @ViewsBinder(R.id.id_planning_wlist)
-    private StickyListHeadersListView wlist;
+    private XListView wlist;
     @ViewsBinder(R.id.id_planning_text)
     private TextView textView;
     private List<PlannningData.Scheme> data;
     private StickyAdapter adapter;
 
+
+    @ViewsBinder(R.id.id_planning_linear)
+    private LinearLayout bg;
+    @ViewsBinder(R.id.id_planning_name)
+    private TextView name;
+    @ViewsBinder(R.id.id_planning_dept)
+    private TextView dept;
+    @ViewsBinder(R.id.id_planning_place)
+    private TextView position;
+    @ViewsBinder(R.id.id_planning_tvs)
+    private TextView desc;
+
     private SamplingHistoryPresenter presenter;
 
     private String hisName;
     private String location;
-
+    private LoadDialog loading;
     //权限问题
     private String[] PERMISSIONS_GROUP = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
-
+    private int currentPage = 1;
+    private int PageSize = 10;
+    private int totalSize = 0;
+    private int listState = Api.LISTSTATEFIRST;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle("历史采样");
+        loading = new LoadDialog(this);
+        loading.setTitle(R.string.location_loading);
+
         presenter = new SamplingHistoryPresenter(this);
-        LocationTools.getInstance().setLocationToolsListener(this);
-        LocationTools.getInstance().start();
+        //初始化顶部标签
+        bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        name.setText("计划名称");
+        name.setTextColor(getResources().getColor(R.color.white));
+        name.setTextSize(16);
+        dept.setText("采样类型");
+        dept.setTextColor(getResources().getColor(R.color.white));
+        dept.setTextSize(16);
+        position.setText("位置");
+        position.setTextColor(getResources().getColor(R.color.white));
+        position.setTextSize(16);
         //啟動定位
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            presenter.getHistory(hisName, "绵竹市九龙镇");
+            presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
         } else {
+            loading.show();
             LocationTools.getInstance().setLocationToolsListener(this);
             LocationTools.getInstance().start();
         }
@@ -87,6 +118,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     @Override
     protected void loadData() {
+        data = new ArrayList<PlannningData.Scheme>();
         adapter = new StickyAdapter(null, R.layout.item_planning_list, this, false);
         wlist.setAdapter(adapter);
     }
@@ -112,6 +144,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
                 dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
         });
+        wlist.setPullLoadEnable(true);
+        wlist.setXListViewListener(this);
         wlist.setOnItemClickListener(new ItemClickListenter() {
             @Override
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
@@ -126,13 +160,13 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     @Override
     public void onLoginSuccess(List<PlannningData.Scheme> info) {
-        data = info;
-        if (data != null && data.size() > 0) {
-            wlist.setVisibility(View.VISIBLE);
+        stopXListView();
+        setWorkOrderData(info);
+        if (wlist.getCount() > 1) {
+            bg.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            adapter.setData(data);
         } else {
-            wlist.setVisibility(View.GONE);
+            bg.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
             textView.setText("没有已完成的任务");
         }
@@ -140,9 +174,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     @Override
     public void onLoginFailed() {
-        wlist.setVisibility(View.GONE);
-        textView.setVisibility(View.VISIBLE);
-        textView.setText("没有已完成的任务");
+        stopXListView();
+        DLog.i("onLoginFailed");
     }
 
     @Override
@@ -162,14 +195,17 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     @Override
     public void findParamers(String hisName, String target, String over) {
+        currentPage = 1;
+        listState = Api.LISTSTATEREFRESH;
         this.hisName = hisName;
-        presenter.getHistory(hisName, location);
+        presenter.getHistory(currentPage, hisName, location);
     }
 
     @Override
     public void locationSuccess(AMapLocation amapLocation) {
+        loading.dismiss();
         location = amapLocation.getAddress();
-        presenter.getHistory(hisName, amapLocation.getAddress());
+        presenter.getHistory(currentPage, hisName, amapLocation.getAddress());
         DLog.i(amapLocation.getAddress());
     }
 
@@ -225,5 +261,54 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         super.onPause();
     }
 
+    @Override
+    public void onRefresh(View v) {
+        currentPage = 1;
+        listState = Api.LISTSTATEREFRESH;
+        presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
+    }
+
+    @Override
+    public void onLoadMore(View v) {
+        if (totalSize < PageSize) {
+            ToastApp.showToast("已经是最后一页");
+            wlist.removeFooterView(wlist.mFooterView);
+        } else {
+            currentPage++;
+            listState = Api.LISTSTATELOADMORE;
+            presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
+        }
+    }
+
+    // xLisView 停止
+    private void stopXListView() {
+        wlist.stopRefresh();
+        wlist.stopLoadMore();
+    }
+
+    protected void setWorkOrderData(List<PlannningData.Scheme> orderBeans) {
+        wlist.removeFooterView(wlist.mFooterView);
+        if (orderBeans.size() > PageSize - 1) {
+            wlist.addFooterView(wlist.mFooterView);
+        }
+        switch (listState) {
+            case Api.LISTSTATEFIRST:
+                data.clear();
+                data.addAll(orderBeans);
+                adapter.setData(data);
+                wlist.smoothScrollToPosition(1);
+                break;
+            case Api.LISTSTATEREFRESH:
+                data.clear();
+                data.addAll(orderBeans);
+                adapter.setData(data);
+                break;
+            case Api.LISTSTATELOADMORE:
+                data.addAll(orderBeans);
+                adapter.setData(data);
+                break;
+        }
+        totalSize = orderBeans.size();
+    }
 
 }

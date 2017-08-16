@@ -31,10 +31,10 @@ public class TargetPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void analysis(String address, String regionId, String sampleOver, String sampleName, String sampleTarget) {
+    public void analysis(int page, String address, String regionId, String sampleOver, String sampleName, String sampleTarget) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        AnaylistParamer paramers = new AnaylistParamer(address, regionId, sampleOver, sampleName, sampleTarget);
+        AnaylistParamer paramers = new AnaylistParamer(page, address, regionId, sampleOver, sampleName, sampleTarget);
         userBiz.analysis(paramers, new FrameListener<SimplingTargetResult>() {
             @Override
             public void onSucces(SimplingTargetResult data) {

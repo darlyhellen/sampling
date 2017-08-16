@@ -31,13 +31,13 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  *
  * @TODO:保存在本地的数据库信息，进行展示
  */
-@ContentBinder(R.layout.activity_sampling_planning)
+@ContentBinder(R.layout.activity_sampling_sence)
 public class SamplingDbActivity extends BaseActivity implements SamplingDBInterface {
-    @ViewsBinder(R.id.id_planning_title)
+    @ViewsBinder(R.id.id_sence_title)
     private TitleView titleView;
-    @ViewsBinder(R.id.id_planning_wlist)
+    @ViewsBinder(R.id.id_sence_wlist)
     private StickyListHeadersListView wlist;
-    @ViewsBinder(R.id.id_planning_text)
+    @ViewsBinder(R.id.id_sence_text)
     private TextView textView;
 
     private List<SenceSamplingSugar> data;

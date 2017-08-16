@@ -31,10 +31,10 @@ public class HisExceptionPresenter {
     /**
      * 列表展示。
      */
-    public void hisList(String location) {
+    public void hisList(int page,String location) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.hisExcList(new FrameListener<HisExceptionInfo>() {
+        userBiz.hisExcList(page,location,new FrameListener<HisExceptionInfo>() {
             @Override
             public void onSucces(HisExceptionInfo data) {
                 userBiz.onStop(loading);

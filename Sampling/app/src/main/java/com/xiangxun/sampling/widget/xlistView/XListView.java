@@ -12,13 +12,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
 import com.xiangxun.sampling.R;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+import com.xiangxun.sampling.common.Tools;
 
 
 /**
@@ -29,7 +28,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * @author: HanGJ
  * @date: 2015-10-12 下午2:13:50
  */
-public class XListView extends StickyListHeadersListView implements OnScrollListener {
+public class XListView extends ListView implements OnScrollListener {
 
     private float mLastY = -1; // save event y
     private Scroller mScroller; // used for scroll back
@@ -115,7 +114,7 @@ public class XListView extends StickyListHeadersListView implements OnScrollList
     }
 
     @Override
-    public void setAdapter(StickyListHeadersAdapter adapter) {
+    public void setAdapter(ListAdapter adapter) {
         // make sure XListViewFooter is the last footer view, and only add once.
         if (adapter.getCount() > 9) {
             if (mIsFooterReady == false) {
@@ -210,7 +209,7 @@ public class XListView extends StickyListHeadersListView implements OnScrollList
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @SuppressLint("HandlerLeak")
-        public void handleMessage(Message msg) {
+        public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 1:
                     resetHeaderHeight();
@@ -422,16 +421,7 @@ public class XListView extends StickyListHeadersListView implements OnScrollList
     public void initRef() {
         mPullRefreshing = true;
         handler1.sendEmptyMessageDelayed(0, 0); // 必须比上一行的数大 1
-        mHeaderView.setVisiableHeight(dip2px(getContext(), 50));
-    }
-
-
-    /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     */
-    private int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+        mHeaderView.setVisiableHeight(Tools.dip2px(getContext(), 50));
     }
 
     @Override

@@ -19,6 +19,12 @@ public class Api {
     private static final boolean DEBUGURL = AppBuildConfig.DEBUGURL;
 
 
+    public static final int LISTSTATEFIRST = 0x1004;
+
+    public static final int LISTSTATEREFRESH = 0x1005;
+
+    public static final int LISTSTATELOADMORE = 0x1006;
+
     public static String Root = Environment.getExternalStorageDirectory() + "/Sampling/";
     public static String VIDEO = Root.concat("video/");
     public static String SENCE = VIDEO.concat("sence/");

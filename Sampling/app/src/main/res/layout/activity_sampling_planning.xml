@@ -12,31 +12,54 @@
         android:visibility="visible" />
 
     <LinearLayout
+        android:id="@+id/id_planning_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_set_user_info"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:padding="@dimen/margin_padding10">
+        android:padding="@dimen/margin_padding20">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding4"
-            android:src="@mipmap/search"
-            android:visibility="invisible" />
 
-        <com.xiangxun.sampling.widget.clearedit.ClearEditText
+        <TextView
+            android:id="@+id/id_planning_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/margin_padding2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize20" />
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/id_planning_dept"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding4"
-            android:src="@mipmap/search" />
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/margin_padding2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize20" />
+
+        <TextView
+            android:id="@+id/id_planning_place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/margin_padding2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize20" />
+
+        <TextView
+            android:id="@+id/id_planning_tvs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/margin_padding2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize20" />
+
     </LinearLayout>
 
     <FrameLayout

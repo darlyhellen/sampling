@@ -37,6 +37,7 @@
     <string name="cssz">参数设置</string>
 
     <string name="st_loading">加载中……</string>
+    <string name="location_loading">定位中……</string>
 
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
