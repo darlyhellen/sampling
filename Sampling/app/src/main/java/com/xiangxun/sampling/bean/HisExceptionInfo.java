@@ -15,6 +15,7 @@ public class HisExceptionInfo {
     public String resDesc;
 
     public List<HisException> result;
+    public String regionId;
 
 
     public class HisException {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.amap.api.location.AMapLocation;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.HisExceptionInfo;
 import com.xiangxun.sampling.bean.HisExceptionInfo.HisException;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
@@ -76,9 +77,11 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
+    private String regionId;
+    private String location;
 
     private int currentPage = 1;
-    private int PageSize = 10;
+    private int PageSize = 20;
     private int totalSize = 0;
     private int listState = Api.LISTSTATEFIRST;
 
@@ -105,7 +108,8 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            presenter.hisList(currentPage, "绵竹市九龙镇");
+            location = "绵竹市九龙镇";
+            presenter.hisList(currentPage, location, regionId);
         } else {
             loading.show();
             LocationTools.getInstance().setLocationToolsListener(this);
@@ -147,9 +151,10 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
     }
 
     @Override
-    public void onDateSuccess(List<HisException> result) {
+    public void onDateSuccess(HisExceptionInfo result) {
+        regionId = result.regionId;
         stopXListView();
-        setWorkOrderData(result);
+        setWorkOrderData(result.result);
         if (xlist.getCount() > 1) {
             bg.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
@@ -180,7 +185,8 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
     public void locationSuccess(AMapLocation amapLocation) {
         //请求列表
         loading.dismiss();
-        presenter.hisList(currentPage, amapLocation.getAddress());
+        location = amapLocation.getAddress();
+        presenter.hisList(currentPage, location, regionId);
         DLog.i(amapLocation.getAddress());
     }
 
@@ -241,7 +247,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
     public void onRefresh(View v) {
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
-        presenter.hisList(currentPage, "绵竹市九龙镇");
+        presenter.hisList(currentPage, location, regionId);
     }
 
     @Override
@@ -252,7 +258,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
         } else {
             currentPage++;
             listState = Api.LISTSTATELOADMORE;
-            presenter.hisList(currentPage, "绵竹市九龙镇");
+            presenter.hisList(currentPage, location, regionId);
         }
     }
 

@@ -21,6 +21,7 @@ public class PlannningData {
         public int resCode;
         //时间戳
         public String resTime;
+        public String regionId;
 
     }
 

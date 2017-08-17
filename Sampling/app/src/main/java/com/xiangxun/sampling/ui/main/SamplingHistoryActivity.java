@@ -73,6 +73,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
     private SamplingHistoryPresenter presenter;
 
+    private String resID;
+
     private String hisName;
     private String location;
     private LoadDialog loading;
@@ -82,7 +84,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private int currentPage = 1;
-    private int PageSize = 10;
+    private int PageSize = 20;
     private int totalSize = 0;
     private int listState = Api.LISTSTATEFIRST;
 
@@ -108,7 +110,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
+            location = "绵竹市九龙镇";
+            presenter.getHistory(currentPage, hisName, resID, location);
         } else {
             loading.show();
             LocationTools.getInstance().setLocationToolsListener(this);
@@ -159,9 +162,11 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
 
     @Override
-    public void onLoginSuccess(List<PlannningData.Scheme> info) {
+    public void onLoginSuccess(PlannningData.ResultData info) {
+        resID = info.regionId;
         stopXListView();
-        setWorkOrderData(info);
+
+        setWorkOrderData(info.result);
         if (wlist.getCount() > 1) {
             bg.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
@@ -198,14 +203,14 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
         this.hisName = hisName;
-        presenter.getHistory(currentPage, hisName, location);
+        presenter.getHistory(currentPage, hisName, resID, location);
     }
 
     @Override
     public void locationSuccess(AMapLocation amapLocation) {
         loading.dismiss();
         location = amapLocation.getAddress();
-        presenter.getHistory(currentPage, hisName, amapLocation.getAddress());
+        presenter.getHistory(currentPage, hisName, resID, amapLocation.getAddress());
         DLog.i(amapLocation.getAddress());
     }
 
@@ -265,7 +270,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     public void onRefresh(View v) {
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
-        presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
+        presenter.getHistory(currentPage, hisName, resID, location);
     }
 
     @Override
@@ -276,7 +281,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         } else {
             currentPage++;
             listState = Api.LISTSTATELOADMORE;
-            presenter.getHistory(currentPage, hisName, "绵竹市九龙镇");
+            presenter.getHistory(currentPage, hisName, resID, location);
         }
     }
 

@@ -31,15 +31,15 @@ public class HisExceptionPresenter {
     /**
      * 列表展示。
      */
-    public void hisList(int page,String location) {
+    public void hisList(int page,String location,String regionId) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.hisExcList(page,location,new FrameListener<HisExceptionInfo>() {
+        userBiz.hisExcList(page,location,regionId,new FrameListener<HisExceptionInfo>() {
             @Override
             public void onSucces(HisExceptionInfo data) {
                 userBiz.onStop(loading);
                 main.setEnableClick();
-                main.onDateSuccess(data.result);
+                main.onDateSuccess(data);
             }
 
             @Override

@@ -30,9 +30,9 @@ public class SamplingHistoryPresenter {
     }
 
 
-    public void getHistory(int currentPage, String hisName, String loaction) {
+    public void getHistory(int currentPage, String hisName,String regionId, String loaction) {
         biz.onStart(loading);
-        biz.getHistory(currentPage, hisName,loaction, new FrameListener<ResultData>() {
+        biz.getHistory(currentPage, hisName,regionId,loaction, new FrameListener<ResultData>() {
             @Override
             public void onSucces(ResultData result) {
                 biz.onStop(loading);
@@ -41,7 +41,7 @@ public class SamplingHistoryPresenter {
                     view.onLoginFailed();
                 } else if (result.resCode == 1000) {
                     SharePreferHelp.putValue("ResultData", result);
-                    view.onLoginSuccess(result.result);
+                    view.onLoginSuccess(result);
                 }
             }
 

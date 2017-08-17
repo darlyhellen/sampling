@@ -9,15 +9,10 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.bean.PlannningData.ResultData;
-import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.LoginParamer;
-import com.xiangxun.sampling.common.retrofit.paramer.SamplingHistoryParamer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -41,11 +36,12 @@ public class SamplingHistoryListener implements FramePresenter {
 
     }
 
-    public void getHistory(int currentPage, String hisName, String loaction, final FrameListener<ResultData> listener) {
+    public void getHistory(int currentPage, String hisName, String regionId, String loaction, final FrameListener<ResultData> listener) {
         Map<String, String> para = new HashMap<String, String>();
-        para.put("name", hisName);
-        para.put("currentPageNo", currentPage + "");
+        para.put("missionName", hisName);
+        para.put("pageNo", currentPage + "");
         para.put("regionName", loaction);
+        para.put("regionId", regionId);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(para, "UTF-8"));
 
         //在这里进行数据请求
@@ -90,7 +86,7 @@ public class SamplingHistoryListener implements FramePresenter {
 
     public interface SamplingHistoryInterface extends FrameView {
 
-        void onLoginSuccess(List<Scheme> info);
+        void onLoginSuccess(ResultData info);
 
         void onLoginFailed();
 

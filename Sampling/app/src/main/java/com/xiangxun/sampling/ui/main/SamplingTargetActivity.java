@@ -75,6 +75,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     private TargetPresenter presenter;
 
     private String resID;
+    private String location;
     //样品名称
     private String sampleName;
     //指标名称
@@ -89,7 +90,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     };
 
     private int currentPage = 1;
-    private int PageSize = 10;
+    private int PageSize = 20;
     private int totalSize = 0;
     private int listState = Api.LISTSTATEFIRST;
 
@@ -117,7 +118,8 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            presenter.analysis(currentPage, "九龙镇", resID, sampleOver, sampleName, sampleTarget);
+            location = "九龙镇";
+            presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
         } else {
             loading.show();
             LocationTools.getInstance().setLocationToolsListener(this);
@@ -170,7 +172,8 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     public void locationSuccess(AMapLocation amapLocation) {
         //请求列表
         loading.dismiss();
-        presenter.analysis(currentPage, amapLocation.getAddress(), resID, sampleOver, sampleName, sampleTarget);
+        location = amapLocation.getAddress();
+        presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
         DLog.i(amapLocation.getAddress());
     }
 
@@ -267,7 +270,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         sampleName = samplename;
         sampleTarget = target;
         sampleOver = over;
-        presenter.analysis(currentPage, null, resID, sampleOver, sampleName, sampleTarget);
+        presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
     }
 
 
@@ -275,7 +278,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
     public void onRefresh(View v) {
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
-        presenter.analysis(currentPage, null, resID, sampleOver, sampleName, sampleTarget);
+        presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
     }
 
     @Override
@@ -286,7 +289,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         } else {
             currentPage++;
             listState = Api.LISTSTATELOADMORE;
-            presenter.analysis(currentPage, null, resID, sampleOver, sampleName, sampleTarget);
+            presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
         }
     }
 

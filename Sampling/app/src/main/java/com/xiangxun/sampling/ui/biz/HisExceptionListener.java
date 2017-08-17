@@ -41,12 +41,12 @@ public class HisExceptionListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void hisExcList(int page, String location, final FrameListener<HisExceptionInfo> listener) {
+    public void hisExcList(int page, String location, String regionId, final FrameListener<HisExceptionInfo> listener) {
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer(page, location, "", "", "", ""), "UTF-8"));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(new AnaylistParamer(page, location, regionId, "", "", ""), "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
                 .hisexc(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
@@ -86,7 +86,7 @@ public class HisExceptionListener implements FramePresenter {
 
     public interface HisExceptionInterface extends FrameView {
 
-        void onDateSuccess(List<HisExceptionInfo.HisException> result);
+        void onDateSuccess(HisExceptionInfo result);
 
         void onDateFailed(String info);
     }
