@@ -2,7 +2,6 @@ package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
-import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
-import com.xiangxun.sampling.bean.SamplingPlanning;
-import com.xiangxun.sampling.common.image.ImageLoaderUtil;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
 import java.util.List;
@@ -29,11 +25,11 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:展示计划组的适配器
  */
-public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHeadersAdapter {
+public class HistoryAdapter extends ParentAdapter<Scheme> implements StickyListHeadersAdapter {
     //是否現場採集 true 為現場
     private boolean isSence;
 
-    public StickyAdapter(List<Scheme> data, int resID, Context context, boolean isSence) {
+    public HistoryAdapter(List<Scheme> data, int resID, Context context, boolean isSence) {
         super(data, resID, context);
         this.isSence = isSence;
     }
@@ -53,53 +49,28 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-        if (isSence) {
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.missionName);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(s.sampleName);
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.quantity).concat("个"));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.position.setTextSize(14);
-            hocker.iv.setImageResource(R.mipmap.ic_sence_location);
-            hocker.iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    s.setUserSee(true);
-                    Intent intent = new Intent(context, ChaoTuActivity.class);
-                    intent.putExtra("isSence",isSence);
-                    intent.putExtra("Scheme", s);
-                    context.startActivity(intent);
-                    notifyDataSetChanged();
-                }
-            });
-        } else {
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.name);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(s.sampleName);
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(s.regionName);
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
-            hocker.position.setTextSize(14);
-            hocker.iv.setImageResource(R.mipmap.ic_sence_location);
-            hocker.iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    s.setUserSee(true);
-                    Intent intent = new Intent(context, ChaoTuActivity.class);
-                    intent.putExtra("isSence",isSence);
-                    intent.putExtra("Scheme", s);
-                    context.startActivity(intent);
-                    notifyDataSetChanged();
-                }
-            });
-        }
+        hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+        hocker.name.setText(s.missionName);
+        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setTextSize(14);
+        hocker.dept.setText(s.sampleName);
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setTextSize(14);
+        hocker.position.setText(s.regionName);
+        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setTextSize(14);
+        hocker.iv.setImageResource(R.mipmap.ic_sence_location);
+        hocker.iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                s.setUserSee(true);
+                Intent intent = new Intent(context, ChaoTuActivity.class);
+                intent.putExtra("isSence",true);
+                intent.putExtra("Scheme", s);
+                context.startActivity(intent);
+                notifyDataSetChanged();
+            }
+        });
         return view;
     }
 

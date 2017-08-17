@@ -65,7 +65,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
             ToastApp.showToast("传递参数错误");
             return;
         }
-        titleView.setTitle(planning.name);
+        titleView.setTitle(planning.missionName);
         //在这里根据方案ID请求点位信息。
         presenter = new SamplingPointHisPresenter(this);
         presenter.point(planning.missionId);

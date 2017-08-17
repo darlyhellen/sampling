@@ -65,10 +65,15 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         mapView.setClickable(true);
         mapView.getController().setZoom(3);
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
+        boolean isSence = getIntent().getBooleanExtra("isSence",false);
         if (planning == null) {
             titleView.setTitle("点位分布");
         } else {
-            titleView.setTitle(planning.name + "点位分布");
+            if (isSence) {
+                titleView.setTitle(planning.missionName + "点位分布");
+            }else {
+                titleView.setTitle(planning.name + "点位分布");
+            }
             Object ob = SharePreferHelp.getValue(planning.id);
             if (data == null) {
                 if (ob != null) {

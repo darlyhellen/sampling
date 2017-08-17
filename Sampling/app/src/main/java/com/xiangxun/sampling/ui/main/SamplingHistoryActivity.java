@@ -23,7 +23,7 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment;
 import com.xiangxun.sampling.ui.SearchWorkOrderDialogFragment.SearchListener;
-import com.xiangxun.sampling.ui.adapter.StickyAdapter;
+import com.xiangxun.sampling.ui.adapter.HistoryAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingHistoryListener.SamplingHistoryInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingHistoryPresenter;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
@@ -57,7 +57,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     @ViewsBinder(R.id.id_planning_text)
     private TextView textView;
     private List<PlannningData.Scheme> data;
-    private StickyAdapter adapter;
+    private HistoryAdapter adapter;
 
 
     @ViewsBinder(R.id.id_planning_linear)
@@ -97,7 +97,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         presenter = new SamplingHistoryPresenter(this);
         //初始化顶部标签
         bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-        name.setText("计划名称");
+        name.setText("任务名称");
         name.setTextColor(getResources().getColor(R.color.white));
         name.setTextSize(16);
         dept.setText("采样类型");
@@ -122,7 +122,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     @Override
     protected void loadData() {
         data = new ArrayList<PlannningData.Scheme>();
-        adapter = new StickyAdapter(null, R.layout.item_planning_list, this, false);
+        adapter = new HistoryAdapter(null, R.layout.item_planning_list, this, false);
         wlist.setAdapter(adapter);
     }
 
