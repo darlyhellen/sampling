@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -144,7 +145,8 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             name.setInfo("样品名称:", sugar.getName(), null);
             params.isEdit(true);
             params.setEditTextMaxLin(10);
-            params.setInfo("样品深度:", sugar.getDepth(), null);
+            params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
+            params.setInfo("样品深度(CM):", sugar.getDepth(), null);
             project.isEdit(false);
             project.setInfo("土壤类型:", sugar.getSoil_name(), null);
             project.setTag(sugar.getResult());
@@ -171,8 +173,9 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             name.setEditTextMaxLin(100);
             name.setInfo("样品名称:", " ", "请输入样品名称");
             params.isEdit(true);
+            params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
             params.setEditTextMaxLin(10);
-            params.setInfo("样品深度:", " ", "请输入样品深度");
+            params.setInfo("样品深度(CM):", " ", "请输入深度范围0~60");
             project.isEdit(false);
             project.setInfo("土壤类型:", " ", "请选择土壤类型");
             other.isEdit(true);
@@ -327,6 +330,10 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                 }
                 if (TextUtils.isEmpty(getparams())) {
                     ToastApp.showToast("请输入样品深度");
+                    return;
+                }
+                if (Double.parseDouble(getparams()) < 0 || Double.parseDouble(getparams()) > 60) {
+                    ToastApp.showToast("样品深度范围0~60cm,请重新输入");
                     return;
                 }
                 if (TextUtils.isEmpty(getproject())) {

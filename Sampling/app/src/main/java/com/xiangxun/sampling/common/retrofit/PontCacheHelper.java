@@ -60,7 +60,7 @@ public class PontCacheHelper {
                     }
                     SharePreferHelp.putValue("ResultData", resultsd);
                 }
-                data.result.addAll(poly);
+                data.result.addAll(0, poly);
             } else {
                 data.result = result.result;
                 //在这里更新方案缓存。修改方案的点位个数 。
