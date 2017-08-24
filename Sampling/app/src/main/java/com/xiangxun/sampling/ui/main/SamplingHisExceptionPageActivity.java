@@ -98,29 +98,16 @@ public class SamplingHisExceptionPageActivity extends BaseActivity implements HE
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //这里跳转不同的图片页面
                 String st = (String) parent.getItemAtPosition(position);
-                if (position == (images.size() - 1)) {
-                    if (ImageLoaderUtil.isCameraUseable()) {
-                        Intent intentCamera = new Intent(SamplingHisExceptionPageActivity.this, CameraActivity.class);
-                        intentCamera.putExtra("size", images.size());
-                        intentCamera.putExtra("file", Api.SENCE.concat("123"));
-                        intentCamera.setAction("Sence");
-                        intentCamera.putExtra("LOGO", false);//不打印水印
-                        startActivityForResult(intentCamera, 1);
-                    } else {
-                        ToastApp.showToast("需要调用摄像头权限，请在设置中打开摄像头权限");
-                    }
-                } else {
-                    Intent intent = new Intent(SamplingHisExceptionPageActivity.this, ShowImageViewActivity.class);
-                    intent.putExtra("position", position);
-                    int[] location = new int[2];
-                    view.getLocationOnScreen(location);
-                    intent.putExtra("locationX", location[0]);//必须
-                    intent.putExtra("locationY", location[1]);//必须
-                    intent.putExtra("url", st);
-                    intent.putExtra("width", view.getWidth());//必须
-                    intent.putExtra("height", view.getHeight());//必须
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(SamplingHisExceptionPageActivity.this, ShowImageViewActivity.class);
+                intent.putExtra("position", position);
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                intent.putExtra("locationX", location[0]);//必须
+                intent.putExtra("locationY", location[1]);//必须
+                intent.putExtra("url", st);
+                intent.putExtra("width", view.getWidth());//必须
+                intent.putExtra("height", view.getHeight());//必须
+                startActivity(intent);
             }
         });
     }
