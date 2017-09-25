@@ -97,4 +97,5 @@
     <color name="index_line">#e6e6e6</color>
     <color name="color_login_guide">#c5c4d4</color>
     <color name="sence_bg">#f2f2f2</color>
+    <color name="titlebar">#2A6463</color>
 </resources>

@@ -3,6 +3,8 @@ package com.xiangxun.sampling.base;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.binder.InitBinder;
@@ -46,6 +52,42 @@ public abstract class BaseActivity extends FragmentActivity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Window window = getWindow();
+        ViewGroup mContentView = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            //版本21(5.0)以上（包括5.0）
+            //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置状态栏颜色
+            window.setStatusBarColor(getResources().getColor(R.color.titlebar));
+            View mChildView = mContentView.getChildAt(0);
+            if (mChildView != null) {
+                //注意不是设置 ContentView 的 FitsSystemWindows, 而是设置 ContentView 的第一个子 View . 预留出系统 View 的空间.
+                ViewCompat.setFitsSystemWindows(mChildView, true);
+            }
+        }else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen","android");
+            int statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            DLog.i(getClass().getSimpleName(),"statusBarHeight--->"+statusBarHeight);
+            View mTopView = mContentView.getChildAt(0);
+            if (mTopView != null && mTopView.getLayoutParams() != null && mTopView.getLayoutParams().height == statusBarHeight) {
+                //避免重复添加 View
+                mTopView.setBackgroundColor(getResources().getColor(R.color.titlebar));
+                return;
+            }
+            //使 ChildView 预留空间
+            if (mTopView != null) {
+                ViewCompat.setFitsSystemWindows(mTopView, true);
+            }
+            //添加假 View
+            mTopView = new View(this);
+            mTopView.setBackgroundColor(getResources().getColor(R.color.titlebar));
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
+            mContentView.addView(mTopView, 0, lp);
+        }
         initGlobalVariable();
         initView(savedInstanceState);
         loadData();

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 
+import com.amap.api.location.AMapLocation;
 import com.supermap.android.commons.EventStatus;
 import com.supermap.android.maps.CoordinateReferenceSystem;
 import com.supermap.android.maps.DefaultItemizedOverlay;
@@ -21,6 +22,8 @@ import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.LocationTools;
+import com.xiangxun.sampling.common.LocationTools.LocationToolsListener;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
@@ -41,7 +44,7 @@ import java.util.List;
  * @TODO: 使用超图地图展示点位信息。
  */
 @ContentBinder(R.layout.activity_chaotu)
-public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface {
+public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface,LocationToolsListener {
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -52,6 +55,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     private com.supermap.android.maps.Point2D center;
 
     private SamplingPointPresenter presenter;
+
 
 
     @Override
@@ -84,6 +88,8 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
             presenter = new SamplingPointPresenter(this);
             presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
         }
+        LocationTools.getInstance().setLocationToolsListener(this);
+        LocationTools.getInstance().start();
     }
 
     @Override
@@ -91,13 +97,22 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     }
 
-    private void dats() {
+    private void dats(AMapLocation location) {
+        Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
+        Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_sence_down);
+        Drawable userPostion = getResources().getDrawable(R.mipmap.ic_user_location);
+        DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
+        if (location!=null){
+            //进行增加位置信息
+            com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(location.getLongitude(),location.getLatitude());
+            OverlayItem overlayItem = new OverlayItem(poind, "", "");
+            overlayItem.setMarker(userPostion);
+            overlay.addItem(overlayItem);
+        }
         if (data != null && data.size() != 0) {
             center = new com.supermap.android.maps.Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
             mapView.getController().setCenter(center);
-            Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
-            Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_sence_down);
-            DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
+
             for (PlannningData.Pointly point : data) {
                 com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.data.longitude, point.data.latitude);
                 OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
@@ -108,9 +123,9 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
                 }
                 overlay.addItem(overlayItem);
             }
-            mapView.getOverlays().add(overlay);
-            mapView.invalidate();
         }
+        mapView.getOverlays().add(overlay);
+        mapView.invalidate();
     }
 
     @Override
@@ -132,7 +147,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         if (s != null) {
             data = ((PlannningData.ResultPointData) s).result;
         }
-        dats();
+        dats(null);
     }
 
     @Override
@@ -141,7 +156,7 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         if (s != null) {
             data = ((PlannningData.ResultPointData) s).result;
         }
-        dats();
+        dats(null);
     }
 
     @Override
@@ -182,5 +197,15 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
             mapView.destroy();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void locationSuccess(AMapLocation amapLocation) {
+        dats(amapLocation);
+    }
+
+    @Override
+    public void locationFail() {
+
     }
 }
