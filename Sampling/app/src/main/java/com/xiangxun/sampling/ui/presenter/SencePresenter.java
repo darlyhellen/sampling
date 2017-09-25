@@ -90,7 +90,10 @@ public class SencePresenter {
         userBiz.upSampling(paramer, new FrameListener<PlannningData.ResultPointData>() {
             @Override
             public void onSucces(PlannningData.ResultPointData data) {
-                PontCacheHelper.cachePoint(planning.id, data);
+                //当时大气采样时，不需要整理缓存
+                if (!planning.sampleCode.equals("DQ")){
+                    PontCacheHelper.cachePoint(planning.id, data);
+                }
                 userBiz.onStop(loading);
                 main.setEnableClick();
                 //保存进入数据库，进行下次WIIF上传。

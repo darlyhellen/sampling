@@ -1,6 +1,5 @@
 package com.xiangxun.sampling.ui.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,23 +9,15 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
-import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
-import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
-import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
-import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.adapter.HistoryPointAdapter;
-import com.xiangxun.sampling.ui.adapter.PointAdapter;
-import com.xiangxun.sampling.ui.biz.SamplingPointHisListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointHisListener.SamplingPointHisInterface;
-import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPointHisPresenter;
-import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 

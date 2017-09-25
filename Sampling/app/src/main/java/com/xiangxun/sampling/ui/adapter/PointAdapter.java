@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
+import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
@@ -31,12 +32,16 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
 
     private boolean isSence;
 
+    //判断是哪个方案中的计划
+    private PlannningData.Scheme planning;
+
     private MsgDialog msgDialog;
 
     private SamplingPointListener.SamplingPointInterface main;
 
-    public PointAdapter(List<Pointly> data, int resID, Context context, boolean isSence, SamplingPointListener.SamplingPointInterface main) {
+    public PointAdapter(PlannningData.Scheme planning,List<Pointly> data, int resID, Context context, boolean isSence, SamplingPointListener.SamplingPointInterface main) {
         super(data, resID, context);
+        this.planning = planning;
         this.main = main;
         this.isSence = isSence;
     }
@@ -90,7 +95,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                                 @Override
                                 public void onClick(View v) {
                                     msgDialog.dismiss();
-                                    main.onItemImageClick(sugar, s.data);
+                                    main.onItemImageClick(planning,sugar, s.data);
                                 }
                             });
                             msgDialog.show();

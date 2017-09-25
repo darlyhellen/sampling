@@ -155,7 +155,7 @@ public class SamplingPointListener implements FramePresenter {
 
         void onUpFailed();
 
-        void onItemImageClick(SenceSamplingSugar point, PlannningData.Point dats);
+        void onItemImageClick(PlannningData.Scheme planning,SenceSamplingSugar point, PlannningData.Point dats);
 
     }
 

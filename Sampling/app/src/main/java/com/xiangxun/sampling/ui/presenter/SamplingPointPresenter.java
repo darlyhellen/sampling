@@ -74,7 +74,7 @@ public class SamplingPointPresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sampling(final SenceSamplingSugar point, final PlannningData.Point dats) {
+    public void sampling(final PlannningData.Scheme planning, final SenceSamplingSugar point, final PlannningData.Point dats) {
         if (point == null) {
             ToastApp.showToast("点位信息传递错误");
             return;
@@ -137,7 +137,6 @@ public class SamplingPointPresenter {
                         sugar.setType("image");
                         sugar.save();
                     }
-                    point.save();
                 }
                 //视频信息建表
                 if (point.getVideos() != null && point.getVideos().size() > 1) {
@@ -149,10 +148,14 @@ public class SamplingPointPresenter {
                         sugar.setType("video");
                         sugar.save();
                     }
-                    point.save();
                 }
+                point.save();
                 //将对应的缓存点位进行剔除操作。
-                PontCacheHelper.update(point.getSchemeId(), dats);
+                //当时大气采样时，不需要整理缓存
+                if (!planning.sampleCode.equals("DQ")){
+                    PontCacheHelper.update(point.getSchemeId(), dats);
+                }
+
                 view.onUpSuccess();
             }
 

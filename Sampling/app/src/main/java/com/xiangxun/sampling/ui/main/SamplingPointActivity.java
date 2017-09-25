@@ -81,7 +81,7 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                 data = ((ResultPointData) ob).result;
             }
         }
-        adapter = new PointAdapter(data, R.layout.item_planning_list, this, isSence, this);
+        adapter = new PointAdapter(planning,data, R.layout.item_planning_list, this, isSence, this);
         wlist.setAdapter(adapter);
         presenter.point(planning.id, ob == null ? null : ((ResultPointData) ob).resTime);
     }
@@ -95,7 +95,8 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                 onBackPressed();
             }
         });
-        if (!isSence) {
+        //大氣採樣或者是現場採樣都不展示右上角新增按鈕
+        if (!isSence&&!planning.sampleCode.equals("DQ")) {
             titleView.setRightViewRightTextOneListener("新增", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -126,10 +127,12 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
                     intent.putExtra("SamplingKey", point);
                     startActivityForResult(intent, 1000);
                 } else {
-                    Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
-                    intent.putExtra("Scheme", planning);
-                    intent.putExtra("SamplingKey", point);
-                    startActivityForResult(intent, 1000);
+                    if (!planning.sampleCode.equals("DQ")) {
+                        Intent intent = new Intent(SamplingPointActivity.this, AddNewPointPlanningActivity.class);
+                        intent.putExtra("Scheme", planning);
+                        intent.putExtra("SamplingKey", point);
+                        startActivityForResult(intent, 1000);
+                    }
                 }
             }
         });
@@ -192,9 +195,9 @@ public class SamplingPointActivity extends BaseActivity implements SamplingPoint
     }
 
     @Override
-    public void onItemImageClick(SenceSamplingSugar point, PlannningData.Point dats) {
+    public void onItemImageClick(PlannningData.Scheme planning,SenceSamplingSugar point, PlannningData.Point dats) {
         //点击item里面的图片。进行调用
-        presenter.sampling(point, dats);
+        presenter.sampling(planning,point, dats);
     }
 
     @Override
