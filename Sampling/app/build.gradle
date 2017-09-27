@@ -7,8 +7,8 @@ android {
         applicationId "com.xiangxun.sampling"
         minSdkVersion 15
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -26,7 +26,6 @@ dependencies {
     compile files('libs/httpmime-4.2.2.jar')
     compile 'com.google.code.gson:gson:2.8.1'
     compile files('libs/iclient_android_8.1.0.jar')
-    compile project(':VideoLib')
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.3'
@@ -38,4 +37,5 @@ dependencies {
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.yanzhenjie:permission:1.0.8'
     compile files('libs/AMap_Location_V3.5.0_20170731.jar')
+    compile project(':VideoLib')
 }

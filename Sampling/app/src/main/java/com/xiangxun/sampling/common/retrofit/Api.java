@@ -45,7 +45,7 @@ public class Api {
     }
 
     //测试环境 仅仅调整了定位问题。写死的经纬度
-    public static final boolean TESTING = false;
+    public static final boolean TESTING = true;
     //是否是虚拟机测试
     public static final boolean TESTPHONE = false;
     public static final double latitude = 31.320828804632135465;

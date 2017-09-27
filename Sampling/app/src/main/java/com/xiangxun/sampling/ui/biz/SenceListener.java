@@ -10,6 +10,7 @@ import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
 import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
@@ -17,7 +18,9 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import rx.Observer;
@@ -40,7 +43,7 @@ public class SenceListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void upSampling(SenceSamplingSugar paramer, final FrameListener<PlannningData.ResultPointData> listener) {
+    public void upSampling(SenceSamplingSugar paramer, final FrameListener<List<SenceInfo.SenceObj>> listener) {
         if (paramer == null) {
             listener.onFaild(0, "传递参数不能为空");
             return;
@@ -54,16 +57,16 @@ public class SenceListener implements FramePresenter {
                 .senceSamply(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, PlannningData.ResultPointData>() {
+                .map(new Func1<JsonObject, SenceInfo>() {
                     @Override
-                    public PlannningData.ResultPointData call(JsonObject s) {
+                    public SenceInfo call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        PlannningData.ResultPointData root = new Gson().fromJson(s, new TypeToken<PlannningData.ResultPointData>() {
+                        SenceInfo root = new Gson().fromJson(s, new TypeToken<SenceInfo>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<PlannningData.ResultPointData>() {
+                .subscribe(new Observer<SenceInfo>() {
                                @Override
                                public void onCompleted() {
 
@@ -75,9 +78,9 @@ public class SenceListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(PlannningData.ResultPointData data) {
+                               public void onNext(SenceInfo data) {
                                    if (data != null && data.resCode == 1000) {
-                                       listener.onSucces(data);
+                                       listener.onSucces(data.result);
                                    } else {
                                        listener.onFaild(0, "解析错误");
                                    }
@@ -122,6 +125,51 @@ public class SenceListener implements FramePresenter {
                 );
     }
 
+    //根據不同選擇進行不同請求
+    public void getTypese(String code,int mold,final FrameListener<SenceLandRegion> listener) {
+        if (code == null) {
+            listener.onFaild(0, "采样类型不能为空");
+            return;
+        }
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
+        Map<String,String> paramer = new HashMap<String ,String >();
+        paramer.put("sampleCode",code);
+        paramer.put("mold",String.valueOf(mold));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post().getSample(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, SenceLandRegion>() {
+                    @Override
+                    public SenceLandRegion call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        SenceLandRegion root = new Gson().fromJson(s, new TypeToken<SenceLandRegion>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<SenceLandRegion>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   listener.onFaild(1, "网络连接异常，请检查网络");
+                               }
+
+                               @Override
+                               public void onNext(SenceLandRegion data) {
+                                   listener.onSucces(data);
+                               }
+                           }
+
+                );
+    }
 
     public void region(final FrameListener<SenceLandRegion> listener) {
         RxjavaRetrofitRequestUtil.getInstance().get().region()
@@ -157,41 +205,47 @@ public class SenceListener implements FramePresenter {
     }
 
     public interface SenceInterface extends FrameView {
-
-        void onLoginSuccess();
-
-        void onLoginFailed(String info);
-
-        void onTypeRegionSuccess(String title, SenceLandRegion result);
-
-        //位置名称
-        String getaddress();
-
-        //经度
-        String getlatitude();
-
-        //纬度
-        String getlongitude();
+        //背景土壤采样内容和展示内容
+        void BackSoilSamply();
+        //农作物采样内容和展示内容
+        void FarmSamply();
+        //大气采样内容和展示内容
+        void OxsSamply();
+        //水采样内容和展示内容
+        void WaterSamply();
+        //肥料内容和展示内容
+        void ManureSamply();
+        //土壤采样内容和展示内容
+       void SoilSamply();
 
         //采样类型
-        SenceLandRegion.LandRegion gettype();
+        SenceLandRegion.LandRegion sence_typeed();
 
+        String gettype();
         //样品名称
         String getname();
-
         //样品深度
         String getparams();
-
         //待测项目
-        String getproject();
-
+        SenceLandRegion.LandRegion sence_project();
         //其他說明
         String getother();
 
+        //空采样内容和展示内容
+        void NullSamply();
+        //位置名称
+        String getaddress();
+        //经度
+        String getlatitude();
+        //纬度
+        String getlongitude();
+        //图片
         List<String> getImages();
-
+        //视频
         List<String> getVideos();
-
+        void onLoginSuccess();
+        void onLoginFailed(String info);
+        void onTypeRegionSuccess(String title, SenceLandRegion result);
         void end();
     }
 }

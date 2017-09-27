@@ -26,6 +26,7 @@ public class PlannningData {
     }
 
     public class Scheme implements Serializable {
+
         public String id;
         //计划ID
         public String planId;
@@ -35,6 +36,8 @@ public class PlannningData {
         public String sampleCode;
         //采样类型
         public String sampleName;
+        //是否有子類型選擇Y/N
+        public String subtype;
         //方案编号
         public String code;
         //方案名称
@@ -58,6 +61,8 @@ public class PlannningData {
         public String missionName;
         //点位个数
         public int quantity;
+        //已经采样的个数
+        public int regNum;
         //是否查看过
         private boolean userSee;
 

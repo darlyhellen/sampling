@@ -50,12 +50,6 @@
         android:paddingTop="@dimen/margin_padding10" />
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/margin_padding10"
-        android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/index_line" />
 
     <com.xiangxun.sampling.widget.groupview.DetailView
         android:id="@+id/id_user_sence_lat"
@@ -66,12 +60,6 @@
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/margin_padding10"
-        android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/index_line" />
 
     <com.xiangxun.sampling.widget.groupview.DetailView
         android:id="@+id/id_user_sence_lont"
@@ -82,11 +70,5 @@
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/margin_padding10"
-        android:layout_marginRight="@dimen/margin_padding10"
-        android:background="@color/index_line" />
 
 </LinearLayout>

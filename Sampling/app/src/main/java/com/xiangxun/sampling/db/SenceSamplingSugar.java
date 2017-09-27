@@ -30,15 +30,7 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //任务ID
     @Column(name = "missionId")
     private String missionId;
-    //位置名称
-    @Column(name = "region_id")
-    private String region_id;
-    //经度
-    @Column(name = "longitude")
-    private String longitude;
-    //纬度
-    @Column(name = "latitude")
-    private String latitude;
+
     //样品类型编码
     @Column(name = "soil_type")
     private String soil_type;
@@ -54,7 +46,56 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //采样类型
     @Column(name = "test_item")
     private String test_item;
+    //進行其他參數補充。
+    //背景土壤
+    @Column(name = "ambient")
+    private String ambient;//周围环境
+    @Column(name = "years")
+    private String years;//成墙年份
+    @Column(name = "wallSource")
+    private String wallSource;//墙土来源下拉选
+    @Column(name = "typeCode")
+    private String typeCode;//样品类型下拉选
+    //农作物
+    @Column(name = "position")
+    private String position;//采样部位
+    //样品名称
+    @Column(name = "samplingType")
+    private String samplingType;//样品类型
+    //农田土壤
+    //采样深度
+    //样品名称
+    //(下拉选)样品类型
+    //水采样
+    //(下拉选)类型
+    //样品类型
+    @Column(name = "riversName")
+    private String riversName;//河流名称
+    //大气
+    @Column(name = "containerVolume")
+    private String containerVolume;//容器体积
+    @Column(name = "collectVolume")
+    private String collectVolume;//收集量
 
+    //肥料
+    @Column(name = "shopName")
+    private String shopName;//店名
+    @Column(name = "shopkeeper")
+    private String shopkeeper;//店主
+    @Column(name = "tel")
+    private String tel;//联系方式
+    @Column(name = "dealManure")
+    private String dealManure;//经营肥料
+
+    //位置名称
+    @Column(name = "region_id")
+    private String region_id;
+    //经度
+    @Column(name = "longitude")
+    private String longitude;
+    //纬度
+    @Column(name = "latitude")
+    private String latitude;
     //图片信息
     private List<String> images;
     //视频信息
@@ -162,6 +203,111 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
     public void setMissionId(String missionId) {
         this.missionId = missionId;
+    }
+
+
+    public String getAmbient() {
+        return ambient;
+    }
+
+    public void setAmbient(String ambient) {
+        this.ambient = ambient;
+    }
+
+    public String getYears() {
+        return years;
+    }
+
+    public void setYears(String years) {
+        this.years = years;
+    }
+
+    public String getWallSource() {
+        return wallSource;
+    }
+
+    public void setWallSource(String wallSource) {
+        this.wallSource = wallSource;
+    }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getSamplingType() {
+        return samplingType;
+    }
+
+    public void setSamplingType(String samplingType) {
+        this.samplingType = samplingType;
+    }
+
+    public String getRiversName() {
+        return riversName;
+    }
+
+    public void setRiversName(String riversName) {
+        this.riversName = riversName;
+    }
+
+    public String getContainerVolume() {
+        return containerVolume;
+    }
+
+    public void setContainerVolume(String containerVolume) {
+        this.containerVolume = containerVolume;
+    }
+
+    public String getCollectVolume() {
+        return collectVolume;
+    }
+
+    public void setCollectVolume(String collectVolume) {
+        this.collectVolume = collectVolume;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopkeeper() {
+        return shopkeeper;
+    }
+
+    public void setShopkeeper(String shopkeeper) {
+        this.shopkeeper = shopkeeper;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getDealManure() {
+        return dealManure;
+    }
+
+    public void setDealManure(String dealManure) {
+        this.dealManure = dealManure;
     }
 
     public List<String> getImages() {

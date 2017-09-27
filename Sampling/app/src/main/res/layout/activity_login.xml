@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/id_login_login"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/id_login_bg"
         android:layout_marginTop="@dimen/margin_padding10"
         android:orientation="vertical"
@@ -124,17 +124,17 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/view_height40"
             android:layout_marginTop="@dimen/margin_padding5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_padding20"
+            android:text="Copyright © 西安翔迅科技有限责任公司"
+            android:textColor="@color/login_edit_text"
+            android:textSize="@dimen/textSize22" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:paddingBottom="@dimen/margin_padding20"
-        android:text="Copyright © 西安翔迅科技有限责任公司"
-        android:textColor="@color/login_edit_text"
-        android:textSize="16sp" />
+
 
 </RelativeLayout>

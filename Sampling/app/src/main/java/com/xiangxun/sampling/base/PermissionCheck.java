@@ -26,7 +26,7 @@ public class PermissionCheck {
     // 判断权限集合
     public boolean lacksPermissions(String... permissions) {
         // 一个list，用来存放没有被授权的权限
-        ArrayList<String> denidArray = new ArrayList<>();
+        ArrayList<String> denidArray = new ArrayList<String>();
         // 遍历PERMISSIONS_GROUP，将没有被授权的权限存放进denidArray
         for (String permission : permissions) {
             int grantCode = ActivityCompat.checkSelfPermission(mContext, permission);

@@ -10,6 +10,7 @@ import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.bean.PlannningData.ResultData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
+import com.xiangxun.sampling.bean.SamplingSenceGroup;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
@@ -79,7 +80,52 @@ public class SamplingPlanningListener implements FramePresenter {
 
     }
 
+    public void findPlanning(final FrameListener<List<SamplingSenceGroup.SenceGroup>> listener) {
+
+
+        //在这里进行数据请求
+        RxjavaRetrofitRequestUtil.getInstance().get().planningscene().
+                subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, SamplingSenceGroup.SamplingSence>() {
+                    @Override
+                    public SamplingSenceGroup.SamplingSence call(JsonObject jsonObject) {
+                        DLog.json("Func1", jsonObject.toString());
+                        SamplingSenceGroup.SamplingSence root = new Gson().fromJson(jsonObject, new TypeToken<SamplingSenceGroup.SamplingSence>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<SamplingSenceGroup.SamplingSence>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFaild(1, "网络连接异常，请检查网络");
+                    }
+
+                    @Override
+                    public void onNext(SamplingSenceGroup.SamplingSence data) {
+                        if (data != null) {
+                            if (data.resCode == 1000 && data.result != null) {
+                                listener.onSucces(data.result);
+                            } else {
+                                listener.onFaild(0, data.resDesc);
+                            }
+                        } else {
+                            listener.onFaild(0, "解析错误");
+                        }
+                    }
+                });
+
+    }
+
     public interface SamplingPlanningInterface extends FrameView {
+
+        void onLoginSuccessV1(List<SamplingSenceGroup.SenceGroup> result);
 
         void onLoginSuccess(List<Scheme> info);
 

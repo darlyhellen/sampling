@@ -10,6 +10,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.ResultData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
+import com.xiangxun.sampling.bean.SamplingSenceGroup;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
@@ -95,6 +96,11 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onLoginSuccessV1(List<SamplingSenceGroup.SenceGroup> result) {
+
     }
 
     //实现整个View操作

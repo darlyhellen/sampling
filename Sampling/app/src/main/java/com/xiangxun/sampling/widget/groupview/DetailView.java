@@ -231,4 +231,8 @@ public class DetailView extends LinearLayout {
             edit.setText(text);
         }
     }
+
+    public String getHint(){
+        return value.getHint().toString().trim();
+    }
 }

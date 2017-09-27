@@ -49,6 +49,12 @@ public interface HttpRetrofitInterface {
      */
     @GET("/samply/server/land/sheme/queryByFinish")
     Observable<JsonObject> planning(@Query("resTime") String resTime);
+    /**
+     * @return
+     * @TODO:获取计划列表接口
+     */
+    @GET("/samply/server/land/sheme/scene")
+    Observable<JsonObject> planningscene();
 
     /**
      * @return
@@ -80,6 +86,12 @@ public interface HttpRetrofitInterface {
      */
     @GET("/samply/server/land/type/queryAll")
     Observable<JsonObject> landType();
+
+    /**
+     * @TODO: 現場採樣下拉選框整體請求
+     */
+    @POST("/samply/server/reg/getSample")
+    Observable<JsonObject> getSample(@Body RequestBody body);
 
     /**
      * @TODO:现场采集页面地区类型接口

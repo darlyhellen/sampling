@@ -6,13 +6,17 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData;
+import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.retrofit.PontCacheHelper;
+import com.xiangxun.sampling.db.MediaSugar;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SenceListener;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
+
+import java.util.List;
 
 
 /**
@@ -35,76 +39,121 @@ public class SencePresenter {
         isave = false;
     }
 
+    public void checkWhichToSamply(PlannningData.Scheme planning){
+        if (planning==null){
+            ToastApp.showToast("参数传递错误");
+            return;
+        }
+        if (planning.sampleCode.equals("BJTR")){//背景土壤
+            main.BackSoilSamply();
+        }else if (planning.sampleCode.equals("SD")){//农作物
+            main.FarmSamply();
+        }else if (planning.sampleCode.equals("NTTR")){//农田土壤
+            main.SoilSamply();
+        }else if (planning.sampleCode.equals("WATER")){//水采样
+            main.WaterSamply();
+        }else if (planning.sampleCode.equals("DQ")){//大气沉降物
+            main.OxsSamply();
+        }else if (planning.sampleCode.equals("FL")){//肥料
+            main.ManureSamply();
+        }else {
+            //其他错误的采样信息
+            main.NullSamply();
+        }
+    }
+
 
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sampling(final PlannningData.Scheme planning, PlannningData.Point point) {
-        if (point == null || TextUtils.isEmpty(point.id) || TextUtils.isEmpty(point.schemeId)) {
+    public void sampling(final PlannningData.Scheme planning, final SenceSamplingSugar point) {
+        if (planning==null){
+            ToastApp.showToast("参数传递错误");
+            return;
+        }
+        if (point == null) {
             ToastApp.showToast("点位信息传递错误");
             return;
         }
+        if (planning.sampleCode.equals("BJTR")){//背景土壤(判断参数)
 
-        if (TextUtils.isEmpty(main.gettype().code)) {
-            ToastApp.showToast("采样类型不能为空");
+        }else if (planning.sampleCode.equals("SD")){//农作物(判断参数)
+        }else if (planning.sampleCode.equals("NTTR")){//农田土壤(判断参数)
+            if (TextUtils.isEmpty(point.getMissionId())) {
+                ToastApp.showToast("任务ID不能为空");
+                return;
+            }
+            if (TextUtils.isEmpty(point.getRegion_id())) {
+                ToastApp.showToast("地址信息不能为空");
+                return;
+            }
+            if (TextUtils.isEmpty(point.getDepth())) {
+                ToastApp.showToast("采样深度不能为空");
+                return;
+            }
+            if (point.getResult()==null) {
+                ToastApp.showToast("采样类型不能为空");
+                return;
+            }
+        }else if (planning.sampleCode.equals("WATER")){//水采样(判断参数)
+        }else if (planning.sampleCode.equals("DQ")){//大气沉降物(判断参数)
+        }else if (planning.sampleCode.equals("FL")){//肥料(判断参数)
+        }else {
+            //其他错误的采样信息
+        }
+        if (TextUtils.isEmpty(point.getMissionId())) {
+            ToastApp.showToast("任务ID不能为空");
             return;
         }
 
-        if (TextUtils.isEmpty(main.getname())) {
-            ToastApp.showToast("样品名称不能为空");
-            return;
-        }
-        if (TextUtils.isEmpty(main.getparams())) {
-            ToastApp.showToast("样品深度不能为空");
-            return;
-        }
-        if (TextUtils.isEmpty(main.getproject())) {
-            ToastApp.showToast("待测项目不能为空");
-            return;
-        }
-        if (TextUtils.isEmpty(main.getaddress())) {
-            ToastApp.showToast("地址信息不能为空");
-            return;
-        }
-        if (TextUtils.isEmpty(main.getlongitude())) {
+        if (TextUtils.isEmpty(point.getLongitude())) {
             ToastApp.showToast("经度不能为空");
             return;
         }
-        if (TextUtils.isEmpty(main.getlatitude())) {
+        if (TextUtils.isEmpty(point.getLatitude())) {
             ToastApp.showToast("纬度不能为空");
             return;
         }
-        final SenceSamplingSugar paramer = new SenceSamplingSugar();
-        paramer.setPointId(point.id);
-        paramer.setSchemeId(point.schemeId);
-        paramer.setRegion_id(main.getaddress());
-        paramer.setLongitude(main.getlongitude());
-        paramer.setLatitude(main.getlatitude());
-        paramer.setSoil_type(main.gettype().code);
-        paramer.setName(main.getname());
-        paramer.setDepth(main.getparams());
-        paramer.setTest_item(main.getproject());
-        paramer.setMissionId(planning.missionId);
         userBiz.onStart(loading);
-        main.setDisableClick();
-        userBiz.upSampling(paramer, new FrameListener<PlannningData.ResultPointData>() {
+        userBiz.upSampling(point, new FrameListener<List<SenceInfo.SenceObj>>() {
             @Override
-            public void onSucces(PlannningData.ResultPointData data) {
-                //当时大气采样时，不需要整理缓存
-                if (!planning.sampleCode.equals("DQ")){
-                    PontCacheHelper.cachePoint(planning.id, data);
-                }
+            public void onSucces(List<SenceInfo.SenceObj> data) {
                 userBiz.onStop(loading);
-                main.setEnableClick();
-                //保存进入数据库，进行下次WIIF上传。
-                // paramer.save();
+                //将返回的数据和传递的数据进行合并并保存进数据库。
+                if (data != null) {
+                    if (data.size() == 1) {
+                        point.setSamplingId(data.get(0).id);
+                    }
+                }
+                //图片信息建表
+                if (point.getImages() != null && point.getImages().size() > 1) {
+                    point.getImages().remove(point.getImages().size() - 1);
+                    for (String image : point.getImages()) {
+                        MediaSugar sugar = new MediaSugar();
+                        sugar.setSamplingId(point.getSamplingId());
+                        sugar.setUrl(image);
+                        sugar.setType("image");
+                        sugar.save();
+                    }
+                }
+                //视频信息建表
+                if (point.getVideos() != null && point.getVideos().size() > 1) {
+                    point.getVideos().remove(point.getVideos().size() - 1);
+                    for (String image : point.getVideos()) {
+                        MediaSugar sugar = new MediaSugar();
+                        sugar.setSamplingId(point.getSamplingId());
+                        sugar.setUrl(image);
+                        sugar.setType("video");
+                        sugar.save();
+                    }
+                }
+                point.save();
                 main.onLoginSuccess();
             }
 
             @Override
             public void onFaild(int code, String info) {
                 userBiz.onStop(loading);
-                main.setEnableClick();
                 main.onLoginFailed(info);
                 ToastApp.showToast(info);
             }
@@ -128,6 +177,54 @@ public class SencePresenter {
             }
         });
     }
+    //类型选项
+    public void getTypes(final String title,String code) {
+        int mold =0;
+        if (code.equals("BJTR")||code.equals("NTTR")||code.equals("SD")||code.equals("WATER")){//农田土壤 农作物 水采样
+            mold= 2;
+        }
+        main.setDisableClick();
+        userBiz.getTypese(code,mold,new FrameListener<SenceLandRegion>() {
+            @Override
+            public void onSucces(SenceLandRegion result) {
+                main.setEnableClick();
+                main.onTypeRegionSuccess(title, result);
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
+                main.setEnableClick();
+            }
+        });
+    }
+
+    //其他选项
+    public void getOtherType(final String title,String code) {
+        int mold =0;
+        if (code.equals("BJTR")){//背景土壤
+            mold= 3;
+        }else if (code.equals("WATER")){
+            mold= 1;
+        }else if (code.equals("DQ")){
+            mold= 4;
+        }
+        main.setDisableClick();
+        userBiz.getTypese(code,mold,new FrameListener<SenceLandRegion>() {
+            @Override
+            public void onSucces(SenceLandRegion result) {
+                main.setEnableClick();
+                main.onTypeRegionSuccess(title, result);
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
+                main.setEnableClick();
+            }
+        });
+    }
+
 
     //地区请求
     public void region(final String title) {

@@ -4,11 +4,14 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData.ResultData;
+import com.xiangxun.sampling.bean.SamplingSenceGroup;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
+
+import java.util.List;
 
 
 /**
@@ -57,4 +60,23 @@ public class SamplingPlanningPresenter {
 
     }
 
+    public void findPlanning() {
+        biz.onStart(loading);
+        biz.findPlanning( new FrameListener<List<SamplingSenceGroup.SenceGroup>>() {
+            @Override
+            public void onSucces(List<SamplingSenceGroup.SenceGroup> result) {
+                view.onLoginSuccessV1(result);
+                biz.onStop(loading);
+            }
+
+            @Override
+            public void onFaild(int code, String info) {
+                ToastApp.showToast(info);
+                //请求失败也加载缓存
+                view.onLoginFailed();
+                biz.onStop(loading);
+            }
+        });
+
+    }
 }

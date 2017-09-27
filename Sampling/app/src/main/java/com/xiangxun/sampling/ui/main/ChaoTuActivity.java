@@ -189,7 +189,12 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     public void onBackPressed() {
         super.onBackPressed();
     }
-
+    @Override
+    protected void onPause() {
+        DLog.d(getClass().getSimpleName(), "onPause()");
+        LocationTools.getInstance().stop();
+        super.onPause();
+    }
     @Override
     protected void onDestroy() {
         if (mapView != null) {
