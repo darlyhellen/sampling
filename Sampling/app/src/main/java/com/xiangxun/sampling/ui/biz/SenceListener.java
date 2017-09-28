@@ -91,6 +91,56 @@ public class SenceListener implements FramePresenter {
 
     }
 
+    public void senceSampy(SenceSamplingSugar paramer, final FrameListener<List<SenceInfo.SenceObj>> listener) {
+        if (paramer == null) {
+            listener.onFaild(0, "传递参数不能为空");
+            return;
+        }
+        if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
+            listener.onFaild(0, "网络异常,请检查网络");
+            return;
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
+        RxjavaRetrofitRequestUtil.getInstance().post()
+                .senceSamplyV(body)
+                .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<JsonObject, SenceInfo>() {
+                    @Override
+                    public SenceInfo call(JsonObject s) {
+                        DLog.json("Func1", s.toString());
+                        SenceInfo root = new Gson().fromJson(s, new TypeToken<SenceInfo>() {
+                        }.getType());
+                        return root;
+                    }
+                })
+                .subscribe(new Observer<SenceInfo>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
+                               @Override
+                               public void onError(Throwable e) {
+                                   listener.onFaild(1, "网络连接异常，请检查网络");
+                               }
+                               @Override
+                               public void onNext(SenceInfo data) {
+                                   if (data.resCode == 1000){
+                                       if (data != null) {
+                                           listener.onSucces(data.result);
+                                       } else {
+                                           listener.onFaild(0, "解析失败");
+                                       }
+                                   }else {
+                                       listener.onFaild(0, data.resDesc);
+                                   }
+                               }
+                           }
+
+                );
+
+    }
+
     //地块选择列表请求接口
     public void landType(final FrameListener<SenceLandRegion> listener) {
         RxjavaRetrofitRequestUtil.getInstance().get().landType()
@@ -243,7 +293,7 @@ public class SenceListener implements FramePresenter {
         List<String> getImages();
         //视频
         List<String> getVideos();
-        void onLoginSuccess();
+        void onLoginSuccess(List<SenceInfo.SenceObj> data);
         void onLoginFailed(String info);
         void onTypeRegionSuccess(String title, SenceLandRegion result);
         void end();

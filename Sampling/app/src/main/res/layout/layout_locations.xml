@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--现场采样首页展示-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_user_locations"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_padding10"

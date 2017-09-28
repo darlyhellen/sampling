@@ -1,5 +1,6 @@
 package com.xiangxun.sampling.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -51,8 +52,6 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
 
     @Override
     protected void loadData() {
-        adapter = new SamplingSenceAdapter(this, data);
-        wlist.setAdapter(adapter);
        // presenter.planning(null/*s == null ? null : ((ResultData) s).resTime*/);
         presenter.findPlanning();
     }
@@ -85,6 +84,11 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
                 Scheme data = (Scheme) adapter.getChild(groupPosition, childPosition);
                 DLog.i(getClass().getSimpleName(), groupPosition + "---" + childPosition + "---" + data);
                 //到现场采集页面.
+                if (data!=null&&data.sampleCode.equals("DQ")){
+                    if (data.regNum >= data.quantity){
+                        return false;
+                    }
+                }
                 Intent intent = new Intent(SamplingSenceActivity.this, SenceActivity.class);
                 intent.putExtra("Scheme", data);
                 startActivityForResult(intent, 1000);
@@ -99,7 +103,8 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
         if (data != null && data.size() > 0) {
             wlist.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            adapter.setData(data);
+            adapter = new SamplingSenceAdapter(this, data);
+            wlist.setAdapter(adapter);
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
@@ -154,4 +159,14 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
 
     }
 
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent datas) {
+        super.onActivityResult(requestCode, resultCode, datas);
+        if (resultCode == Activity.RESULT_OK && requestCode == 1000) {
+            data.clear();
+            presenter.findPlanning();
+        }
+    }
 }

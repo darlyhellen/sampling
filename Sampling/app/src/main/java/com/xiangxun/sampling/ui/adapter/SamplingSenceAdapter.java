@@ -1,6 +1,7 @@
 package com.xiangxun.sampling.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SamplingSenceGroup;
+import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
 
     public void setData(List<SamplingSenceGroup.SenceGroup> groupData) {
         this.groupData = groupData;
-        this.notifyDataSetChanged();
+        this.notifyDataSetInvalidated();
     }
 
     @Override
@@ -165,19 +167,27 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
         } else {
             hocker = (ChildViewHolder) view.getTag();
         }
-        PlannningData.Scheme s = groupData.get(groupPosition).result.get(childPosition);
-
-            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-            hocker.name.setText(s.code);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.login_edit_text));
-            hocker.name.setTextSize(14);
-            hocker.dept.setText(s.missionName);
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.login_edit_text));
-            hocker.dept.setTextSize(14);
-            hocker.position.setText(String.valueOf(s.regNum+"/"+s.quantity));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.login_edit_text));
-            hocker.position.setTextSize(14);
-        hocker.iv.setVisibility(View.GONE);
+        final PlannningData.Scheme s = groupData.get(groupPosition).result.get(childPosition);
+        hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.exp_child));
+        hocker.name.setText(s.code);
+        hocker.name.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.name.setTextSize(14);
+        hocker.dept.setText(s.missionName);
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.dept.setTextSize(14);
+        hocker.position.setText(String.valueOf(s.regNum+"/"+s.quantity));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.position.setTextSize(14);
+        hocker.iv.setImageResource(R.mipmap.ic_sence_location);
+        hocker.iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChaoTuActivity.class);
+                intent.putExtra("isSence",true);
+                intent.putExtra("Scheme", s);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 

@@ -14,6 +14,7 @@ import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SamplingDBListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
+import com.xiangxun.sampling.widget.timeselecter.option.TextUtil;
 
 import java.util.List;
 
@@ -56,13 +57,28 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
 
         //未采样进行展示 ,已采集不进行展示
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-        hocker.name.setText(s.getTest_item());
+        hocker.name.setText(s.getCode());
         hocker.name.setTextColor(context.getResources().getColor(R.color.black));
         hocker.name.setTextSize(14);
-        hocker.dept.setText(String.valueOf(s.getName()));
         hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
         hocker.dept.setTextSize(14);
-        hocker.position.setText(String.valueOf(s.getSoil_name()));
+        if ("BJTR".equals(s.getSamplingCode())){//背景土壤
+            hocker.dept.setText(String.valueOf("背景土壤"));
+        }else if ("SD".equals(s.getSamplingCode())){//农作物
+            hocker.dept.setText(String.valueOf("农作物"));
+        }else if ("NTTR".equals(s.getSamplingCode())){//农田土壤
+            hocker.dept.setText(String.valueOf("农田土壤"));
+        }else if ("WATER".equals(s.getSamplingCode())){//水采样
+            hocker.dept.setText(String.valueOf("水样底泥"));
+        }else if ("DQ".equals(s.getSamplingCode())){//大气沉降物
+            hocker.dept.setText(String.valueOf("大气沉降"));
+        }else if ("FL".equals(s.getSamplingCode())){//肥料
+            hocker.dept.setText(String.valueOf("肥料"));
+        }else {
+            //其他错误的采样信息
+            hocker.dept.setText(String.valueOf("其他"));
+        }
+        hocker.position.setText(TextUtil.isEmpty(s.getRegion_id())?"":s.getRegion_id());
         hocker.position.setTextColor(context.getResources().getColor(R.color.black));
         hocker.position.setTextSize(14);
         //这个点位已经有了草稿，可以进行提交
@@ -83,7 +99,7 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
                     @Override
                     public void onClick(View v) {
                         msgDialog.dismiss();
-                        main.onItemImageClick(s.getSamplingId(),s.getPointId());
+                        main.onItemImageClick(s.getSamplingId(),false);
                     }
                 });
                 msgDialog.show();
@@ -109,13 +125,13 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
         }
 
         hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-        hocker.name.setText("采样类型");
+        hocker.name.setText("采样编号");
         hocker.name.setTextColor(context.getResources().getColor(R.color.white));
         hocker.name.setTextSize(16);
-        hocker.dept.setText("样品名称");
+        hocker.dept.setText("采样类型");
         hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
         hocker.dept.setTextSize(16);
-        hocker.position.setText("样品类型");
+        hocker.position.setText("采样地址");
         hocker.position.setTextColor(context.getResources().getColor(R.color.white));
         hocker.position.setTextSize(16);
         return view;

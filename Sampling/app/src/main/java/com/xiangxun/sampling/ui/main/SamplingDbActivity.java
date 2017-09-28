@@ -13,6 +13,7 @@ import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
+import com.xiangxun.sampling.ui.StaticListener;
 import com.xiangxun.sampling.ui.adapter.SamplingDBAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingDBPresenter;
@@ -20,6 +21,7 @@ import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.xlistView.ItemClickListenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -93,7 +95,16 @@ public class SamplingDbActivity extends BaseActivity implements SamplingDBInterf
     @Override
     public void onUpSuccess() {
         data = SugarRecord.listAll(SenceSamplingSugar.class);
-        adapter.setData(data);
+        if (data != null && data.size() != 0) {
+            adapter.setData(data);
+            wlist.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
+        } else {
+            wlist.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+            textView.setText("没有提交的现场采样信息");
+        }
+        StaticListener.getInstance().getRefreshMainUIListener().refreshMainUI(null);
     }
 
     @Override
@@ -104,10 +115,12 @@ public class SamplingDbActivity extends BaseActivity implements SamplingDBInterf
     private MsgDialog msgDialog;
 
     @Override
-    public void onItemImageClick(final String id, final String pointId) {
+    public void onItemImageClick(final String id, final boolean pointId) {
         //判断是否WiFi环境。否则给用户提示。
+        final List<String > ids = new ArrayList<String>();
+        ids.add(id);
         if (NetUtils.isWifi(this)) {
-            presenter.upAll(id, pointId);
+            presenter.upAll(ids, pointId);
         } else {
             msgDialog = new MsgDialog(this);
             msgDialog.setTiele("您当前不是WIFI环境,是否确认使用流量上传视频图片文件？");
@@ -121,7 +134,7 @@ public class SamplingDbActivity extends BaseActivity implements SamplingDBInterf
                 @Override
                 public void onClick(View v) {
                     msgDialog.dismiss();
-                    presenter.upAll(id, pointId);
+                    presenter.upAll(ids, pointId);
                 }
             });
             msgDialog.show();

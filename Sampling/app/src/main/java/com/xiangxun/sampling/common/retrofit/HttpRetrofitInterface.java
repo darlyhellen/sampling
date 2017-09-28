@@ -80,6 +80,11 @@ public interface HttpRetrofitInterface {
      */
     @POST("/samply/server/land/reg/collect")
     Observable<JsonObject> senceSamply(@Body RequestBody body);
+    /**
+     * @TODO:现场采样页面进行提交接口。
+     */
+    @POST("/samply/server/reg/add")
+    Observable<JsonObject> senceSamplyV(@Body RequestBody body);
 
     /**
      * @TODO:现场采集页面土壤类型接口

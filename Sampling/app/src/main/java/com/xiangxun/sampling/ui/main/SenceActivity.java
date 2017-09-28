@@ -3,9 +3,11 @@ package com.xiangxun.sampling.ui.main;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,13 +16,16 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
+import com.xiangxun.sampling.bean.SenceInfo;
 import com.xiangxun.sampling.bean.SenceLandRegion;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
@@ -39,9 +44,13 @@ import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
 import com.xiangxun.sampling.ui.presenter.SencePresenter;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog;
+import com.xiangxun.sampling.widget.dialog.UpdateDialog;
+import com.xiangxun.sampling.widget.dialog.UserCodeDialog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
 import com.xiangxun.sampling.widget.listview.WholeGridView;
+import com.xiangxun.sampling.widget.timeselecter.TimeSelector;
+import com.xiangxun.sampling.widget.timeselecter.option.TextUtil;
 import com.xiangxun.video.camera.VCamera;
 import com.xiangxun.video.ui.WechatRecoderActivity;
 import com.yanzhenjie.permission.AndPermission;
@@ -50,7 +59,9 @@ import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,6 +83,8 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
     @ViewsBinder(R.id.id_user_sence_description)
     private TextView id_user_sence_description;
     //位置信息
+    @ViewsBinder(R.id.id_user_locations)
+    private LinearLayout id_user_locations;
     @ViewsBinder(R.id.id_user_sence_address)
     private DetailView address;
     @ViewsBinder(R.id.id_user_sence_lat)
@@ -135,6 +148,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             Manifest.permission.RECORD_AUDIO
     };
 
+    private TimeSelector timeSelector;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -142,7 +156,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
-        id_user_sence_description.setText("您正在对 "+ planning.sampleName+ " 进行采样");
+        id_user_sence_description.setText("您正在对 " + planning.sampleName + " 进行采样");
         //新需求下，Pointly参数为空。不进行传递点位信息。
 //        point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
 //        sugar = (SenceSamplingSugar) SharePreferHelp.getValue("sugar" + point.data.id);
@@ -202,18 +216,20 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         imageGrid.setAdapter(imageAdapter);
         videoAdapter = new SenceVideoAdapter(videos, R.layout.item_main_detail_video_adapter, this, this);
         videoGrid.setAdapter(videoAdapter);
-        //啟動定位
-        if (Api.TESTING) {
-            //测试环境下，经纬度写死。手动让其修改。
-            latitude.isEdit(true);
-            latitude.setInfo("*纬度：", String.valueOf(Api.latitude), "");
-            longitude.isEdit(true);
-            longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
-            address.isEdit(false);
-            address.setInfo("*位置：", String.valueOf("绵竹市九龙镇"), "");
-        } else {
-            LocationTools.getInstance().setLocationToolsListener(this);
-            LocationTools.getInstance().start();
+        //啟動定位 大气采样不需要定位。
+        if (!planning.sampleCode.equals("DQ")){
+            if (Api.TESTING) {
+                //测试环境下，经纬度写死。手动让其修改。
+                latitude.isEdit(true);
+                latitude.setInfo("*纬度：", String.valueOf(Api.latitude), "");
+                longitude.isEdit(true);
+                longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
+                address.isEdit(false);
+                address.setInfo("*位置：", String.valueOf("绵竹市九龙镇"), "");
+            } else {
+                LocationTools.getInstance().setLocationToolsListener(this);
+                LocationTools.getInstance().start();
+            }
         }
 //        }
     }
@@ -255,7 +271,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     if (ImageLoaderUtil.isCameraUseable()) {
                         Intent intentCamera = new Intent(SenceActivity.this, CameraActivity.class);
                         intentCamera.putExtra("size", images.size());
-                        intentCamera.putExtra("file", Api.SENCE.concat(planning.id));
+                        intentCamera.putExtra("file", Api.SENCE.concat(planning.missionId));
                         intentCamera.setAction("Sence");
                         intentCamera.putExtra("LOGO", false);//不打印水印
                         startActivityForResult(intentCamera, 1);
@@ -285,7 +301,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     if (ImageLoaderUtil.isCameraUseable()) {
                         //跳转到视频录制页面
                         //设置对应根据点位的ID生成的文件夹，进行视频文件的保存
-                        File root = new File(Api.SENCE.concat(planning.id));
+                        File root = new File(Api.SENCE.concat(planning.missionId));
                         if (!root.exists()) {
                             root.mkdir();
                         }
@@ -313,67 +329,68 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             public void onClick(View v) {
                 paramer = new SenceSamplingSugar();
                 if (planning.sampleCode.equals("BJTR")) {//背景土壤
-                    if (planning.subtype.equals("Y")) {
-                        //有採樣子菜單
-                        if (sence_project() == null) {
-                            ToastApp.showToast("请选择采样类型");
-                            return;
-                        }else {
-                            paramer.setResult(sence_project());
-                        }
-                    } else {
-                        //无子菜单
-                        if (TextUtils.isEmpty(gettype())) {
-                            ToastApp.showToast("请输入样品深度");
-                            return;
-                        }else {
-                            //设置单一属性
-                        }
-                    }
-                    if (TextUtils.isEmpty(getparams())){
+                    if (sence_typeed()==null){
+                        ToastApp.showToast("请选择墙土来源");
                         return;
                     }
-                } else if (planning.sampleCode.equals("SD")) {//农作物
+                    if (TextUtil.isEmpty(getname())){
+                        ToastApp.showToast("请输入周围环境");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(getparams())) {
+                        ToastApp.showToast("请选择成墙年份");
+                        return;
+                    }
                     if (planning.subtype.equals("Y")) {
                         //有採樣子菜單
                         if (sence_project() == null) {
-                            ToastApp.showToast("请选择采样类型");
+                            ToastApp.showToast("请选择背景土壤类型");
                             return;
-                        }else {
-                            paramer.setResult(sence_project());
+                        } else {
+                            paramer.setSamplingType(sence_project().code);
+                            paramer.setSamplingCode(planning.sampleCode);
+                            paramer.setTypesamply(sence_project());
                         }
                     } else {
-                        //无子菜单
-                        if (TextUtils.isEmpty(gettype())) {
-                            ToastApp.showToast("请输入样品深度");
-                            return;
-                        }else {
-                            //设置单一属性
-                        }
+                        //设置单一属性
+                        paramer.setSamplingType(planning.sampleCode);
+                        paramer.setSamplingCode(planning.sampleCode);
+                        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+                        region.code = planning.sampleCode;
+                        region.name = planning.sampleName;
+                        paramer.setTypesamply(region);
                     }
+                    paramer.setAmbient(getname());
+                    paramer.setYears(getparams());
+                    paramer.setOtherType(sence_typeed().code);
+                    paramer.setOthersamply(sence_typeed());
+                } else if (planning.sampleCode.equals("SD")) {//农作物
                     if (TextUtils.isEmpty(getparams())) {
                         ToastApp.showToast("请输入采样部位");
                         return;
                     }
-                    paramer.setPosition(getparams());
-                } else if (planning.sampleCode.equals("NTTR")) {//农田土壤
                     if (planning.subtype.equals("Y")) {
                         //有採樣子菜單
                         if (sence_project() == null) {
                             ToastApp.showToast("请选择采样类型");
                             return;
-                        }else {
-                            paramer.setResult(sence_project());
+                        } else {
+                            paramer.setSamplingType(sence_project().code);
+                            paramer.setSamplingCode(planning.sampleCode);
+                            paramer.setTypesamply(sence_project());
                         }
                     } else {
                         //无子菜单
-                        if (TextUtils.isEmpty(gettype())) {
-                            ToastApp.showToast("请输入样品深度");
-                            return;
-                        }else {
-                            //设置单一属性
-                        }
+                        paramer.setSamplingType(planning.sampleCode);
+                        paramer.setSamplingCode(planning.sampleCode);
+                        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+                        region.code = planning.sampleCode;
+                        region.name = planning.sampleName;
+                        paramer.setTypesamply(region);
                     }
+
+                    paramer.setPosition(getparams());
+                } else if (planning.sampleCode.equals("NTTR")) {//农田土壤
                     if (TextUtils.isEmpty(getparams())) {
                         ToastApp.showToast("请输入样品深度");
                         return;
@@ -382,93 +399,122 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                         ToastApp.showToast("样品深度范围0~60cm,请重新输入");
                         return;
                     }
+                    if (planning.subtype.equals("Y")) {
+                        //有採樣子菜單
+                        if (sence_project() == null) {
+                            ToastApp.showToast("请选择采样类型");
+                            return;
+                        } else {
+                            paramer.setSamplingType(sence_project().code);
+                            paramer.setSamplingCode(planning.sampleCode);
+                            paramer.setTypesamply(sence_project());
+                        }
+                    } else {
+                        //设置单一属性
+                        paramer.setSamplingType(planning.sampleCode);
+                        paramer.setSamplingCode(planning.sampleCode);
+                        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+                        region.code = planning.sampleCode;
+                        region.name = planning.sampleName;
+                        paramer.setTypesamply(region);
+                    }
                     paramer.setDepth(getparams());
-                } else if (planning.sampleCode.equals("DBS")) {//水采样
+                } else if (planning.sampleCode.equals("WATER")) {//水采样
+                    if (sence_typeed() == null) {
+                        ToastApp.showToast("请选择样品来源");
+                        return;
+                    }
+                    if (TextUtil.isEmpty(getname())) {
+                        ToastApp.showToast("河流名称不能为空");
+                        return;
+                    }
                     if (planning.subtype.equals("Y")) {
                         //有採樣子菜單
                         if (sence_project() == null) {
                             ToastApp.showToast("请选择采样类型");
                             return;
-                        }else {
-                            paramer.setResult(sence_project());
+                        } else {
+                            paramer.setSamplingType(sence_project().code);
+                            paramer.setSamplingCode(planning.sampleCode);
+                            paramer.setTypesamply(sence_project());
                         }
                     } else {
                         //无子菜单
-                        if (TextUtils.isEmpty(gettype())) {
-                            ToastApp.showToast("请输入样品深度");
-                            return;
-                        }else {
-                            //设置单一属性
-                        }
+                        paramer.setSamplingType(planning.sampleCode);
+                        paramer.setSamplingCode(planning.sampleCode);
+                        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+                        region.code = planning.sampleCode;
+                        region.name = planning.sampleName;
+                        paramer.setTypesamply(region);
                     }
+                    paramer.setOtherType(sence_typeed().code);
+                    paramer.setRiversName(getname());
+                    paramer.setOthersamply(sence_typeed());
                 } else if (planning.sampleCode.equals("DQ")) {//大气沉降物
-                    if (planning.subtype.equals("Y")) {
-                        //有採樣子菜單
-                        if (sence_project() == null) {
-                            ToastApp.showToast("请选择采样类型");
-                            return;
-                        }else {
-                            paramer.setResult(sence_project());
-                        }
-                    } else {
-                        //无子菜单
-                        if (TextUtils.isEmpty(gettype())) {
-                            ToastApp.showToast("请输入样品深度");
-                            return;
-                        }else {
-                            //设置单一属性
-                        }
+                    if (sence_typeed() == null) {
+                        ToastApp.showToast("请选择采样点位");
+                        return;
                     }
-                    if (TextUtils.isEmpty(getname())){
+                    if (TextUtils.isEmpty(getname())) {
                         ToastApp.showToast("请输入容器体积");
                         return;
                     }
-                    if (TextUtils.isEmpty(getparams())){
+                    if (TextUtils.isEmpty(getparams())) {
                         ToastApp.showToast("请输入收集量");
                         return;
                     }
+                    paramer.setOtherType(sence_typeed().code);
+                    paramer.setSamplingCode(planning.sampleCode);
                     paramer.setContainerVolume(getname());
                     paramer.setCollectVolume(getparams());
+                    paramer.setOthersamply(sence_typeed());
                 } else if (planning.sampleCode.equals("FL")) {//肥料
-
-                    if (TextUtils.isEmpty(gettype())){
-                        ToastApp.showToast("店面名称不能为空");
+                    if (TextUtils.isEmpty(gettype())) {
+                        ToastApp.showToast("请输入店面名称");
                         return;
                     }
-                    if (sence_typeed()==null){
-                        ToastApp.showToast("请选择经营肥料");
+                    if (TextUtils.isEmpty(getname())) {
+                        ToastApp.showToast("请输入店主姓名");
                         return;
                     }
-                    if (TextUtils.isEmpty(getname())){
-                        ToastApp.showToast("店主姓名不能为空");
+                    if (TextUtils.isEmpty(getparams())) {
+                        ToastApp.showToast("请输入店主联系电话");
                         return;
                     }
-                    if (TextUtils.isEmpty(getparams())){
-                        ToastApp.showToast("店主联系方式不能为空");
+                    String rex = "(010\\d{8})|(0[2-9]\\d{9})|(13\\d{9})|(14[57]\\d{8})|(15[0-35-9]\\d{8})|(18[0-35-9]\\d{8})";
+                    if (!getparams().matches(rex)){
+                        ToastApp.showToast("请输入正确的电话号码");
                         return;
                     }
-                    paramer.setResult(sence_typeed());
+                    if (TextUtils.isEmpty(getother())) {
+                        ToastApp.showToast("请输入经营肥料");
+                        return;
+                    }
+                    paramer.setSamplingCode(planning.sampleCode);
+                    paramer.setDealManure(getother());
                     paramer.setShopName(gettype());
                     paramer.setShopkeeper(getname());
                     paramer.setTel(getparams());
                 } else {//其他错误的采样信息
-                }
 
-                if (TextUtils.isEmpty(getaddress())) {
-                    ToastApp.showToast("请输入地址信息");
-                    return;
                 }
-                if (TextUtils.isEmpty(getlongitude())) {
-                    ToastApp.showToast("请输入经度");
-                    return;
+                if (!planning.sampleCode.equals("DQ")) {
+                    if (TextUtils.isEmpty(getaddress())) {
+                        ToastApp.showToast("请输入地址信息");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(getlongitude())) {
+                        ToastApp.showToast("请输入经度");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(getlatitude())) {
+                        ToastApp.showToast("请输入纬度");
+                        return;
+                    }
+                    paramer.setRegion_id(getaddress());
+                    paramer.setLongitude(getlongitude());
+                    paramer.setLatitude(getlatitude());
                 }
-                if (TextUtils.isEmpty(getlatitude())) {
-                    ToastApp.showToast("请输入纬度");
-                    return;
-                }
-                paramer.setRegion_id(getaddress());
-                paramer.setLongitude(getlongitude());
-                paramer.setLatitude(getlatitude());
                 paramer.setMissionId(planning.missionId);
                 paramer.setImages(getImages());
                 paramer.setVideos(getVideos());
@@ -496,8 +542,6 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     }
                 });
                 msgDialog.show();
-
-
             }
         });
     }
@@ -510,7 +554,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             type.setVisibility(View.GONE);
             id_user_sence_project_show.setVisibility(View.VISIBLE);
             id_user_sence_project.isEdit(false);
-            id_user_sence_project.setInfo("*采样类型:", " ", "请选择采样类型");
+            id_user_sence_project.setInfo("*采样类型:", " ", "请选择背景土壤类型");
         } else {
             //无子菜单
             type.setVisibility(View.VISIBLE);
@@ -526,7 +570,20 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         name.setInfo("*周围环境:", " ", "请输入周围环境");
         params.isEdit(false);
         params.setInfo("*成墙年份:", " ", "请选择成墙年份");
-
+        params.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //这里背景土壤年份选择功能，弹出选择年份列表
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm");
+                timeSelector = new TimeSelector(SenceActivity.this, new TimeSelector.ResultHandler() {
+                    @Override
+                    public void handle(String time) {
+                        params.setInfo("*成墙年份:", time.split("-")[0], null);
+                    }
+                }, "1970-01-01 00:00", sdf.format(new Date()));
+                timeSelector.show();
+            }
+        });
     }
 
     //农作物采样内容和展示内容
@@ -549,8 +606,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         name.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         params.isEdit(true);
-        params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
-        params.setEditTextMaxLin(10);
+        params.setEditTextMaxLin(100);
         params.setInfo("*采样部位:", " ", "请输入采样部位");
 
     }
@@ -558,20 +614,10 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
     //大气采样内容和展示内容
     @Override
     public void OxsSamply() {
-        if (planning.subtype.equals("Y")) {
-            //有採樣子菜單
-            type.setVisibility(View.GONE);
-            id_user_sence_project_show.setVisibility(View.VISIBLE);
-            id_user_sence_project.isEdit(false);
-            id_user_sence_project.setInfo("*点位信息:", " ", "请选择采样点位");
-        } else {
-            //无子菜单
-            type.setVisibility(View.VISIBLE);
-            id_user_sence_project_show.setVisibility(View.GONE);
-            type.isEdit(false);
-            type.setInfo("*点位信息:", planning.sampleName, "");
-        }
-        id_user_sence_typeed_show.setVisibility(View.GONE);
+        type.setVisibility(View.GONE);
+        id_user_sence_project_show.setVisibility(View.GONE);
+        id_user_sence_typeed.isEdit(false);
+        id_user_sence_typeed.setInfo("*点位信息:", " ", "请选择采样点位");
         other.setVisibility(View.GONE);
         name.isEdit(true);
         name.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
@@ -581,7 +627,8 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
         params.setEditTextMaxLin(10);
         params.setInfo("*收集量:", " ", "请输入收集量");
-
+        //大氣採樣隱藏定位信息。
+        id_user_locations.setVisibility(View.GONE);
     }
 
     //水采样内容和展示内容
@@ -600,43 +647,31 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
             type.isEdit(false);
             type.setInfo("*采样类型:", planning.sampleName, "");
         }
-        id_user_sence_typeed_show.setVisibility(View.GONE);
+        id_user_sence_typeed.isEdit(false);
+        id_user_sence_typeed.setInfo("*样品来源:", " ", "请选择样品来源");
         params.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         name.isEdit(true);
         name.setEditTextMaxLin(20);
         name.setInfo("*河流名称:", " ", "请输入河流名称");
-
     }
 
     //肥料内容和展示内容
     @Override
     public void ManureSamply() {
-
-        if (planning.subtype.equals("Y")) {
-            //有採樣子菜單
-            type.setVisibility(View.GONE);
-            id_user_sence_typeed_show.setVisibility(View.VISIBLE);
-            id_user_sence_typeed.isEdit(false);
-            id_user_sence_typeed.setInfo("*经营肥料:", " ", "请选择经营肥料");
-        } else {
-            //无子菜单
-            type.setVisibility(View.VISIBLE);
-            id_user_sence_typeed_show.setVisibility(View.GONE);
-            type.isEdit(false);
-            type.setInfo("*经营肥料:", planning.sampleName, "");
-        }
         id_user_sence_project_show.setVisibility(View.GONE);
-        other.setVisibility(View.GONE);
-        type.isEdit(false);
-        type.setInfo("*店名:",  " ", "请输入店面名称");
+        id_user_sence_typeed_show.setVisibility(View.GONE);
+        type.isEdit(true);
+        type.setInfo("*店名:", " ", "请输入店面名称");
         name.isEdit(true);
         name.setEditTextMaxLin(20);
         name.setInfo("*店主:", " ", "请输入店主姓名");
         params.isEdit(true);
-        params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
-        params.setEditTextMaxLin(11);
+        params.setEditTextInputMode(InputType.TYPE_CLASS_PHONE);
         params.setInfo("*联系方式:", " ", "请输入店主联系方式");
+        other.isEdit(true);
+        other.setEditTextMaxLin(20);
+        other.setInfo("*经营肥料:", " ", "请输入经营肥料");
 
     }
 
@@ -704,7 +739,6 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         params.setEditTextInputMode(InputType.TYPE_CLASS_NUMBER);
         params.setEditTextMaxLin(10);
         params.setInfo("*样品深度(CM):", " ", "请输入深度范围0~60");
-
 //        }
     }
 
@@ -713,11 +747,11 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         return (SenceLandRegion.LandRegion) id_user_sence_typeed.getTag();
     }
 
-
     @Override
-    public String  gettype() {
+    public String gettype() {
         return type.getText();
     }
+
     @Override
     public String getname() {
         return name.getText();
@@ -732,6 +766,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
     public SenceLandRegion.LandRegion sence_project() {
         return (SenceLandRegion.LandRegion) id_user_sence_project.getTag();
     }
+
     @Override
     public String getother() {
         return other.getText();
@@ -781,9 +816,27 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
 
 
     @Override
-    public void onLoginSuccess() {
-        setResult(Activity.RESULT_OK);
-        onBackPressed();
+    public void onLoginSuccess(List<SenceInfo.SenceObj> data) {
+        //在这里给用户提示CODE，并让用户进行登记记录。
+        StringBuilder builder = new StringBuilder();
+        for (SenceInfo.SenceObj obj:data             ) {
+            builder.append(obj.code);
+            builder.append("\r\n");
+        }
+        final UserCodeDialog notDialog = new UserCodeDialog(this);
+        notDialog.setTiele("采样CODE值，请您记录");
+        notDialog.setMsg(builder.toString());
+        notDialog.setOnlyOneBut();
+        notDialog.setButRightListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notDialog.dismiss();
+                setResult(Activity.RESULT_OK);
+                onBackPressed();
+            }
+        });
+        notDialog.show();
+
     }
 
     @Override
@@ -844,11 +897,11 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         switch (v.getId()) {
             case R.id.id_user_sence_project:
                 //进行类型选择
-                presenter.getTypes(id_user_sence_project.getHint(),planning.sampleCode);
+                presenter.getTypes(id_user_sence_project.getHint(), planning.sampleCode);
                 break;
             case R.id.id_user_sence_typeed:
                 //进行土壤类型请求
-                presenter.getOtherType(id_user_sence_typeed.getHint(),planning.sampleCode);
+                presenter.getOtherType(id_user_sence_typeed.getHint(), planning.sampleCode);
                 break;
             case R.id.id_user_sence_location:
                 //啟動定位
@@ -931,16 +984,23 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
 
     @Override
     public void resultOnClick(SenceLandRegion.LandRegion result, String title) {
-        if (id_user_sence_project.getHint().equals(title)) {
+        if (id_user_sence_project_show.getVisibility() != View.GONE && title.equals(id_user_sence_project.getHint())) {
             id_user_sence_project.isEdit(false);
-            id_user_sence_project.setInfo("*采样类型:", result.name, null);
+            id_user_sence_project.setInfo(id_user_sence_project.getName(), result.name, null);
             id_user_sence_project.setTag(result);
         }
+        if (id_user_sence_typeed_show.getVisibility() != View.GONE && title.equals(id_user_sence_typeed.getHint())) {
+            id_user_sence_typeed.isEdit(false);
+            id_user_sence_typeed.setInfo(id_user_sence_typeed.getName(), result.name, null);
+            id_user_sence_typeed.setTag(result);
+        }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
     @Override
     protected void onPause() {
         DLog.d(getClass().getSimpleName(), "onPause()");

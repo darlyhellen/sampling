@@ -221,7 +221,19 @@ public class DetailView extends LinearLayout {
     }
 
     public String getText() {
-        return edit.getText().toString().trim();
+        if (flag){
+            if (edit ==null){
+                return null;
+            }else {
+                return edit.getText().toString().trim();
+            }
+        }else {
+            if (value ==null){
+                return null;
+            }else {
+                return value.getText().toString().trim();
+            }
+        }
     }
 
     public void setEditText(String text) {
@@ -233,6 +245,16 @@ public class DetailView extends LinearLayout {
     }
 
     public String getHint(){
+        if (value ==null){
+            return null;
+        }
         return value.getHint().toString().trim();
+    }
+
+    public String getName(){
+        if (name ==null){
+            return null;
+        }
+        return name.getText().toString().trim();
     }
 }

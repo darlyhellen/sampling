@@ -30,8 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/login_edit_text"
+            android:dividerHeight="@dimen/margin_padding1"
             android:groupIndicator="@null"
-            android:dividerHeight="0.5dp"
+            android:childDivider="@color/login_edit_text"
             android:scrollbars="none" />
     </FrameLayout>
 </LinearLayout>

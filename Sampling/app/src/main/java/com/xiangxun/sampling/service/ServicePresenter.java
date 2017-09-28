@@ -1,10 +1,6 @@
 package com.xiangxun.sampling.service;
 
-import android.text.TextUtils;
-
 import com.orm.SugarRecord;
-import com.xiangxun.sampling.R;
-import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
 import com.xiangxun.sampling.common.ToastApp;
@@ -12,8 +8,6 @@ import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.db.MediaSugar;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.biz.SamplingDBListener;
-import com.xiangxun.sampling.ui.biz.SamplingDBListener.SamplingDBInterface;
-import com.xiangxun.sampling.widget.dialog.LoadDialog;
 
 import java.io.File;
 import java.util.List;
@@ -41,10 +35,10 @@ public class ServicePresenter {
         for (MediaSugar media : sugar) {
             File file = new File(media.getUrl());
             if ("image".equals(media.getType())) {
-                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + media.getSamplingCode() + "@" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             }
             if ("video".equals(media.getType())) {
-                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
+                builder.addFormDataPart(media.getType(), media.getSamplingId() + "@" + media.getSamplingCode() + "@" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
             }
         }
         RequestBody body = builder.build();

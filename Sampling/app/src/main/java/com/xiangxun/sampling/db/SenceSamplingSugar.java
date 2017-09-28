@@ -21,6 +21,9 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //上传成功后获取的现场采样id
     @Column(name = "samplingId")
     private String samplingId;
+    //上传返回的唯一编码
+    @Column(name = "code")
+    private String code;
     //点位id
     @Column(name = "pointId")
     private String pointId;
@@ -30,7 +33,6 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //任务ID
     @Column(name = "missionId")
     private String missionId;
-
     //样品类型编码
     @Column(name = "soil_type")
     private String soil_type;
@@ -61,7 +63,10 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     private String position;//采样部位
     //样品名称
     @Column(name = "samplingType")
-    private String samplingType;//样品类型
+    private String samplingType;//已选择的采样类型编号
+    @Column(name = "samplingCode")
+    private String samplingCode;//服务端返回的采样类型编号
+    private String otherType;//其他选项选择的编号
     //农田土壤
     //采样深度
     //样品名称
@@ -101,10 +106,14 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
     //视频信息
     private List<String> videos;
 
-
-    private SenceLandRegion.LandRegion result;
-
-
+    @Column(name = "typesamplyName")
+    private String typesamplyName;
+    @Column(name = "typesamplyCode")
+    private String typesamplyCode;
+    @Column(name = "othersamplyName")
+    private String othersamplyName;
+    @Column(name = "othersamplyCode")
+    private String othersamplyCode;
     public SenceSamplingSugar() {
     }
 
@@ -114,6 +123,14 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
     public void setSamplingId(String samplingId) {
         this.samplingId = samplingId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getPointId() {
@@ -154,23 +171,6 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
-    }
-
-    public String getSoil_type() {
-        return soil_type;
-    }
-
-    public void setSoil_type(String soil_type) {
-        this.soil_type = soil_type;
-    }
-
-
-    public String getSoil_name() {
-        return soil_name;
-    }
-
-    public void setSoil_name(String soil_name) {
-        this.soil_name = soil_name;
     }
 
     public String getName() {
@@ -250,8 +250,24 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
         return samplingType;
     }
 
+    public String getSamplingCode() {
+        return samplingCode;
+    }
+
+    public void setSamplingCode(String samplingCode) {
+        this.samplingCode = samplingCode;
+    }
+
     public void setSamplingType(String samplingType) {
         this.samplingType = samplingType;
+    }
+
+    public String getOtherType() {
+        return otherType;
+    }
+
+    public void setOtherType(String otherType) {
+        this.otherType = otherType;
     }
 
     public String getRiversName() {
@@ -326,12 +342,76 @@ public class SenceSamplingSugar extends SugarRecord implements Serializable {
         this.videos = videos;
     }
 
-
-    public SenceLandRegion.LandRegion getResult() {
-        return result;
+    public String getSoil_type() {
+        return soil_type;
     }
 
-    public void setResult(SenceLandRegion.LandRegion result) {
-        this.result = result;
+    public void setSoil_type(String soil_type) {
+        this.soil_type = soil_type;
+    }
+
+    public String getSoil_name() {
+        return soil_name;
+    }
+
+    public void setSoil_name(String soil_name) {
+        this.soil_name = soil_name;
+    }
+
+
+    public String getTypesamplyName() {
+        return typesamplyName;
+    }
+
+    public void setTypesamplyName(String typesamplyName) {
+        this.typesamplyName = typesamplyName;
+    }
+
+    public String getTypesamplyCode() {
+        return typesamplyCode;
+    }
+
+    public void setTypesamplyCode(String typesamplyCode) {
+        this.typesamplyCode = typesamplyCode;
+    }
+
+    public String getOthersamplyName() {
+        return othersamplyName;
+    }
+
+    public void setOthersamplyName(String othersamplyName) {
+        this.othersamplyName = othersamplyName;
+    }
+
+    public String getOthersamplyCode() {
+        return othersamplyCode;
+    }
+
+    public void setOthersamplyCode(String othersamplyCode) {
+        this.othersamplyCode = othersamplyCode;
+    }
+
+    public SenceLandRegion.LandRegion getTypesamply() {
+        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+        region.code = getTypesamplyCode();
+        region.name = getTypesamplyName();
+        return region;
+    }
+
+    public void setTypesamply(SenceLandRegion.LandRegion typesamply) {
+        setTypesamplyCode(typesamply.code);
+        setTypesamplyName(typesamply.name);
+    }
+
+    public SenceLandRegion.LandRegion getOthersamply() {
+        SenceLandRegion.LandRegion region = new SenceLandRegion().new LandRegion();
+        region.code = getOthersamplyCode();
+        region.name = getOthersamplyName();
+        return region;
+    }
+
+    public void setOthersamply(SenceLandRegion.LandRegion othersamply) {
+        setOthersamplyCode(othersamply.code);
+        setOthersamplyName(othersamply.name);
     }
 }

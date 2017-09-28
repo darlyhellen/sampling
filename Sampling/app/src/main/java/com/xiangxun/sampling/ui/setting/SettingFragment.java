@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.orm.SugarRecord;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.SamplingPlanning;
 import com.xiangxun.sampling.bean.UpdateData;
 import com.xiangxun.sampling.common.NetUtils;
 import com.xiangxun.sampling.common.ToastApp;
@@ -23,6 +24,8 @@ import com.xiangxun.sampling.fun.BaseFunctionList;
 import com.xiangxun.sampling.fun.Function;
 import com.xiangxun.sampling.fun.InfoCache;
 import com.xiangxun.sampling.ui.LoginActivity;
+import com.xiangxun.sampling.ui.StaticListener;
+import com.xiangxun.sampling.ui.StaticListener.RefreshMainUIListener;
 import com.xiangxun.sampling.ui.biz.SettingFragmentListener.SettingFragmentInterface;
 import com.xiangxun.sampling.ui.biz.VersionListener.VersionInterface;
 import com.xiangxun.sampling.ui.main.SamplingDbActivity;
@@ -33,9 +36,10 @@ import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.UpdateDialog;
 
 import java.io.File;
+import java.util.List;
 
 
-public class SettingFragment extends BaseFunctionList implements SettingFragmentInterface, VersionInterface {
+public class SettingFragment extends BaseFunctionList implements SettingFragmentInterface, VersionInterface ,RefreshMainUIListener {
     private int isNoLoginFlag;
     private View mParentView = null;
     private ListView functionListView;
@@ -91,20 +95,19 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
     @Override
     public void initData() {
         super.initData();
-
+        upload();
         if (1 == isNoLoginFlag) {
             setFunctions(functionsNoLogin);
         } else {
             setFunctions(functions);
             showNew();
         }
-
-        upload();
     }
 
     @Override
     public void initListener() {
         super.initListener();
+        StaticListener.getInstance().setRefreshMainUIListener(this);
         if (1 == isNoLoginFlag) {
 
             functionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,6 +146,8 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
         int size = SugarRecord.listAll(SenceSamplingSugar.class).size();
         if (size != 0) {
             functions[2].setDescription(" New! " + size);
+        }else {
+            functions[2].setDescription("在WiFi情况下上传采样图片视频");
         }
     }
 
@@ -300,5 +305,11 @@ public class SettingFragment extends BaseFunctionList implements SettingFragment
             mUpdateDialog.setOnlyOneBut();
         }
         mUpdateDialog.show();
+    }
+
+    @Override
+    public void refreshMainUI(List<SamplingPlanning> planningList) {
+        //刷新UI
+        initData();
     }
 }

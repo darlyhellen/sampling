@@ -17,6 +17,7 @@ public class SenceInfo {
 
     public class SenceObj {
         public String missionId;
+        public String samplingCode;
         public String id;
         public String createTime;
         public String checkStatus;

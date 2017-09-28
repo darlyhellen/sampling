@@ -100,7 +100,7 @@ public class SamplingDBListener implements FramePresenter {
 
         void onUpFailed();
 
-        void onItemImageClick(String id, String pointId);
+        void onItemImageClick(String id, boolean pointId);
 
     }
 

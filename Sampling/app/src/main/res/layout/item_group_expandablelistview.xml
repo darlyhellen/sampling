@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:background="@color/exp_group"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/id_item_equip_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
+        android:layout_width="25dp"
+        android:layout_height="25dp"/>
 
     <TextView
         android:id="@+id/id_item_equip_name"
@@ -29,5 +30,5 @@
         android:layout_marginRight="@dimen/margin_padding20"
         android:textColor="@color/red"
         android:textStyle="italic"
-        android:textSize="@dimen/textSize16" />
+        android:textSize="@dimen/textSize14" />
 </LinearLayout>

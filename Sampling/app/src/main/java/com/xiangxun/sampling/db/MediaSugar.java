@@ -23,7 +23,8 @@ public class MediaSugar extends SugarRecord implements Serializable {
     private String samplingId;
     @Column(name = "type")
     private String type;
-
+    @Column(name = "samplingCode")
+    private String samplingCode;
     //图片视频资源
     @Column(name = "url")
     private String url;
@@ -50,5 +51,13 @@ public class MediaSugar extends SugarRecord implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getSamplingCode() {
+        return samplingCode;
+    }
+
+    public void setSamplingCode(String samplingCode) {
+        this.samplingCode = samplingCode;
     }
 }

@@ -88,8 +88,11 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
             presenter = new SamplingPointPresenter(this);
             presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
         }
-        LocationTools.getInstance().setLocationToolsListener(this);
-        LocationTools.getInstance().start();
+
+        if (!Api.TESTING) {
+            LocationTools.getInstance().setLocationToolsListener(this);
+            LocationTools.getInstance().start();
+        }
     }
 
     @Override
@@ -102,17 +105,22 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         Drawable drawablenormal = getResources().getDrawable(R.mipmap.ic_sence_down);
         Drawable userPostion = getResources().getDrawable(R.mipmap.ic_user_location);
         DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);
-        if (location!=null){
+        if (Api.TESTING){
+            //测试定位
+            center = new com.supermap.android.maps.Point2D(Api.longitude,Api.latitude);
+            mapView.getController().setCenter(center);
+            OverlayItem overlayItem = new OverlayItem(center, "", "");
+            overlayItem.setMarker(userPostion);
+            overlay.addItem(overlayItem);
+        }else if (location!=null){
             //进行增加位置信息
-            com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(location.getLongitude(),location.getLatitude());
-            OverlayItem overlayItem = new OverlayItem(poind, "", "");
+            center = new com.supermap.android.maps.Point2D(location.getLongitude(),location.getLatitude());
+            mapView.getController().setCenter(center);
+            OverlayItem overlayItem = new OverlayItem(center, "", "");
             overlayItem.setMarker(userPostion);
             overlay.addItem(overlayItem);
         }
         if (data != null && data.size() != 0) {
-            center = new com.supermap.android.maps.Point2D(data.get(0).data.longitude, data.get(0).data.latitude);
-            mapView.getController().setCenter(center);
-
             for (PlannningData.Pointly point : data) {
                 com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.data.longitude, point.data.latitude);
                 OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);

@@ -64,7 +64,7 @@ public class WechatRecoderActivity extends Activity implements MediaRecorderBase
     /**
      * 录制最长时间
      */
-    public static int RECORD_TIME_MAX = 30 * 1000;
+    public static int RECORD_TIME_MAX = 10 * 1000;
     /**
      * 录制最小时间
      */
