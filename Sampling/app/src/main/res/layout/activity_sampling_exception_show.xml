@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="地块选择："
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray"
                         android:textSize="@dimen/textSize16" />
 
                     <TextView
@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="异常类型："
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray"
                         android:textSize="@dimen/textSize16" />
 
                     <TextView
@@ -148,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="异常描述："
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray"
                         android:textSize="@dimen/textSize16" />
                 </LinearLayout>
 
@@ -192,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="现场采样照片："
-                        android:textColor="@color/black"
+                        android:textColor="@color/green"
                         android:textSize="@dimen/textSize16" />
 
                     <ImageView

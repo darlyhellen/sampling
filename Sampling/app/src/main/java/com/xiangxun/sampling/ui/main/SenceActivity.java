@@ -3,11 +3,9 @@ package com.xiangxun.sampling.ui.main;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.xiangxun.sampling.R;
@@ -44,7 +41,6 @@ import com.xiangxun.sampling.ui.biz.SenceListener.SenceInterface;
 import com.xiangxun.sampling.ui.presenter.SencePresenter;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
 import com.xiangxun.sampling.widget.dialog.SelectTypeRegionDialog;
-import com.xiangxun.sampling.widget.dialog.UpdateDialog;
 import com.xiangxun.sampling.widget.dialog.UserCodeDialog;
 import com.xiangxun.sampling.widget.groupview.DetailView;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -156,6 +152,10 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
+        if (planning ==null){
+            ToastApp.showToast("系统错误，请重新登陆！");
+            return;
+        }
         id_user_sence_description.setText("您正在对 " + planning.sampleName + " 进行采样");
         //新需求下，Pointly参数为空。不进行传递点位信息。
 //        point = (Pointly) getIntent().getSerializableExtra("SamplingKey");
@@ -225,7 +225,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                 longitude.isEdit(true);
                 longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
                 address.isEdit(false);
-                address.setInfo("*位置：", String.valueOf("绵竹市九龙镇"), "");
+                address.setInfo("*位置：", String.valueOf("绵竹市齐天镇"), "");
             } else {
                 LocationTools.getInstance().setLocationToolsListener(this);
                 LocationTools.getInstance().start();
@@ -580,7 +580,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     public void handle(String time) {
                         params.setInfo("*成墙年份:", time.split("-")[0], null);
                     }
-                }, "1970-01-01 00:00", sdf.format(new Date()));
+                }, "1900-01-01 00:00", sdf.format(new Date()));
                 timeSelector.show();
             }
         });
@@ -606,7 +606,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         name.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         params.isEdit(true);
-        params.setEditTextMaxLin(100);
+        params.setEditTextMaxLin(30);
         params.setInfo("*采样部位:", " ", "请输入采样部位");
 
     }
@@ -652,7 +652,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         params.setVisibility(View.GONE);
         other.setVisibility(View.GONE);
         name.isEdit(true);
-        name.setEditTextMaxLin(20);
+        name.setEditTextMaxLin(100);
         name.setInfo("*河流名称:", " ", "请输入河流名称");
     }
 
@@ -662,6 +662,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         id_user_sence_project_show.setVisibility(View.GONE);
         id_user_sence_typeed_show.setVisibility(View.GONE);
         type.isEdit(true);
+        type.setEditTextMaxLin(50);
         type.setInfo("*店名:", " ", "请输入店面名称");
         name.isEdit(true);
         name.setEditTextMaxLin(20);
@@ -670,7 +671,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         params.setEditTextInputMode(InputType.TYPE_CLASS_PHONE);
         params.setInfo("*联系方式:", " ", "请输入店主联系方式");
         other.isEdit(true);
-        other.setEditTextMaxLin(20);
+        other.setEditTextMaxLin(50);
         other.setInfo("*经营肥料:", " ", "请输入经营肥料");
 
     }
@@ -821,7 +822,6 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         StringBuilder builder = new StringBuilder();
         for (SenceInfo.SenceObj obj:data             ) {
             builder.append(obj.code);
-            builder.append("\r\n");
         }
         final UserCodeDialog notDialog = new UserCodeDialog(this);
         notDialog.setTiele("采样CODE值，请您记录");
@@ -897,11 +897,11 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
         switch (v.getId()) {
             case R.id.id_user_sence_project:
                 //进行类型选择
-                presenter.getTypes(id_user_sence_project.getHint(), planning.sampleCode);
+                presenter.getTypes(id_user_sence_project.getHint(), planning.sampleCode,planning.missionId);
                 break;
             case R.id.id_user_sence_typeed:
                 //进行土壤类型请求
-                presenter.getOtherType(id_user_sence_typeed.getHint(), planning.sampleCode);
+                presenter.getOtherType(id_user_sence_typeed.getHint(), planning.sampleCode,planning.missionId);
                 break;
             case R.id.id_user_sence_location:
                 //啟動定位
@@ -912,7 +912,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     longitude.isEdit(true);
                     longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
                     address.isEdit(false);
-                    address.setInfo("*位置：", String.valueOf("绵竹市九龙镇"), "");
+                    address.setInfo("*位置：", String.valueOf("绵竹市齐天镇"), "");
                 } else {
                     LocationTools.getInstance().start();
                 }

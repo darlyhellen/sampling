@@ -88,7 +88,7 @@ public class SenceVideoAdapter extends ParentAdapter<String> implements OnPrepar
             if (position == (data.size() - 1)) {
                 hocker.videoView.setVisibility(View.GONE);
                 hocker.image.setVisibility(View.VISIBLE);
-                hocker.image.setImageResource(R.drawable.add_publish_image);
+                hocker.image.setImageResource(R.drawable.add_publish_video);
                 hocker.image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 hocker.close.setVisibility(View.GONE);
             } else {

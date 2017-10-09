@@ -56,13 +56,13 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
         if (isSence) {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
             hocker.name.setText(s.missionName);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.name.setTextSize(14);
             hocker.dept.setText(s.sampleName);
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.dept.setTextSize(14);
             hocker.position.setText(String.valueOf(s.quantity).concat("个"));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.position.setTextSize(14);
             hocker.iv.setImageResource(R.mipmap.ic_sence_location);
             hocker.iv.setOnClickListener(new View.OnClickListener() {
@@ -79,26 +79,26 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
         } else {
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
             hocker.name.setText(s.name);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.name.setTextSize(14);
             hocker.dept.setText(s.sampleName);
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.dept.setTextSize(14);
             hocker.position.setText(s.regionName);
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.position.setTextSize(14);
-            hocker.iv.setImageResource(R.mipmap.ic_sence_location);
-            hocker.iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    s.setUserSee(true);
-                    Intent intent = new Intent(context, ChaoTuActivity.class);
-                    intent.putExtra("isSence",isSence);
-                    intent.putExtra("Scheme", s);
-                    context.startActivity(intent);
-                    notifyDataSetChanged();
-                }
-            });
+                hocker.iv.setImageResource(R.mipmap.ic_sence_location);
+                hocker.iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        s.setUserSee(true);
+                        Intent intent = new Intent(context, ChaoTuActivity.class);
+                        intent.putExtra("isSence", isSence);
+                        intent.putExtra("Scheme", s);
+                        context.startActivity(intent);
+                        notifyDataSetChanged();
+                    }
+                });
         }
         return view;
     }
@@ -119,7 +119,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
             hocker = (ViewHocker) view.getTag();
         }
         if (isSence) {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("任务名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
@@ -130,7 +130,7 @@ public class StickyAdapter extends ParentAdapter<Scheme> implements StickyListHe
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
         } else {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("方案名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);

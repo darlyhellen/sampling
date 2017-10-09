@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
+import com.xiangxun.sampling.bean.HisPlanningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
@@ -45,7 +46,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
     private Scheme planning;
     private HistoryPointAdapter adapter;
 
-    private List<Pointly> data;
+    private List<HisPlanningData.HisPoint> data;
 
     private SamplingPointHisPresenter presenter;
 
@@ -59,7 +60,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
         titleView.setTitle(planning.missionName);
         //在这里根据方案ID请求点位信息。
         presenter = new SamplingPointHisPresenter(this);
-        presenter.point(planning.missionId);
+        presenter.point(planning.missionId,planning.sampleCode);
     }
 
     @Override
@@ -82,12 +83,13 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
             public void NoDoubleItemClickListener(AdapterView<?> parent, View view, int position, long id) {
                 //到现场采集页面.
                 DLog.i("到现场采集页面--" + position);
-                Pointly pointly = (Pointly) parent.getItemAtPosition(position);
-                if (!TextUtils.isEmpty(pointly.data.id)) ;
-                {
+
+                HisPlanningData.HisPoint pointly = (HisPlanningData.HisPoint) parent.getItemAtPosition(position);
+                if (pointly!=null){
                     Intent intent = new Intent(SamplingHisPointActivity.this, HisSenceActivity.class);
-                    intent.putExtra("ID", pointly.data.id);
-                    intent.putExtra("missionId", planning.id);
+                    intent.putExtra("ID", pointly.id);
+                    intent.putExtra("missionId", pointly.missionId);
+                    intent.putExtra("tableName",pointly.tableName);
                     startActivity(intent);
                 }
 
@@ -98,7 +100,7 @@ public class SamplingHisPointActivity extends BaseActivity implements SamplingPo
 
     //点位解析回调
     @Override
-    public void onLoginSuccess(List<Pointly> info) {
+    public void onLoginSuccess(List<HisPlanningData.HisPoint> info) {
         data = info;
         if (data != null && data.size() > 0) {
             adapter.setData(data);

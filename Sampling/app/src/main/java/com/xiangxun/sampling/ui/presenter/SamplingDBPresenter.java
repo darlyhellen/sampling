@@ -79,29 +79,33 @@ public class SamplingDBPresenter {
         biz.upAll(body, new FrameListener<ResultPointData>() {
             @Override
             public void onSucces(ResultPointData result) {
-                //上传成功后，删除本地数据库信息
-                for (String id:ids) {
-                    if (TextUtils.isEmpty(id)){
-                        //假如中间一个id为空，则跳出继续下个id查找。
-                        continue;
-                    }
-                    List<MediaSugar> sugar = SugarRecord.find(MediaSugar.class, "samplingId = ?", id);
-                    //上传成功后，删除图片数据库里面的信息。
-                    if (sugar != null && sugar.size() != 0) {
-                        for (MediaSugar media : sugar) {
-                            media.delete();
-                        }
-                    }
-                    List<SenceSamplingSugar> sence = SugarRecord.find(SenceSamplingSugar.class, "samplingId = ?", id);
-                    if (sence != null && sence.size() != 0) {
-                        for (SenceSamplingSugar media : sence) {
-                            media.delete();
-                        }
-                    }
-                }
                 if (isAll){
+                    //上传成功后，删除本地数据库信息
+                    SugarRecord.deleteAll(MediaSugar.class);
+                    SugarRecord.deleteAll(SenceSamplingSugar.class);
                     //删除文件信息
                     RecursionDeleteFile(new File(Api.VIDEO));
+                }else {
+                    //上传成功后，删除本地数据库信息
+                    for (String id : ids) {
+                        if (TextUtils.isEmpty(id)) {
+                            //假如中间一个id为空，则跳出继续下个id查找。
+                            continue;
+                        }
+                        List<MediaSugar> sugar = SugarRecord.find(MediaSugar.class, "samplingId = ?", id);
+                        //上传成功后，删除图片数据库里面的信息。
+                        if (sugar != null && sugar.size() != 0) {
+                            for (MediaSugar media : sugar) {
+                                media.delete();
+                            }
+                        }
+                        List<SenceSamplingSugar> sence = SugarRecord.find(SenceSamplingSugar.class, "samplingId = ?", id);
+                        if (sence != null && sence.size() != 0) {
+                            for (SenceSamplingSugar media : sence) {
+                                media.delete();
+                            }
+                        }
+                    }
                 }
                 biz.onStop(loading);
                 view.onUpSuccess();

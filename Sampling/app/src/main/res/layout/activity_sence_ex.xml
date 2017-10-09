@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="没有新任务"
-            android:textColor="@color/black"
+            android:textColor="@color/color999999"
             android:textSize="@dimen/textSize20"
             android:visibility="gone" />
 
@@ -29,10 +29,10 @@
             android:id="@+id/id_sence_wlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/login_edit_text"
+            android:divider="@color/white"
             android:dividerHeight="@dimen/margin_padding1"
             android:groupIndicator="@null"
-            android:childDivider="@color/login_edit_text"
+            android:childDivider="@color/white"
             android:scrollbars="none" />
     </FrameLayout>
 </LinearLayout>

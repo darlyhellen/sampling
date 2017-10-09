@@ -13,6 +13,8 @@ import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.bean.SamplingSenceGroup;
 import com.xiangxun.sampling.binder.ContentBinder;
 import com.xiangxun.sampling.binder.ViewsBinder;
+import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.ui.adapter.SamplingSenceAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;
@@ -69,13 +71,39 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
         wlist.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (parent.isGroupExpanded(groupPosition)) {
-                    parent.collapseGroup(groupPosition);
-                } else {
-                    //第二个参数false表示展开时是否触发默认滚动动画
-                    parent.expandGroup(groupPosition, false);
+                SamplingSenceGroup.SenceGroup groupData = (SamplingSenceGroup.SenceGroup) adapter.getGroup(groupPosition);
+                if (groupData ==  null){
+                    return false;
                 }
-                return true;
+                if ("背景土壤".equals(groupData.regType)){//背景土壤
+                   ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return true;
+                }else if ("农作物".equals(groupData.regType)){//农作物
+                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return false;
+                }else if ("农田土壤".equals(groupData.regType)){//农田土壤
+                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return false;
+                }else if ("水样底泥".equals(groupData.regType)){//水采样
+                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return true;
+                }else if ("大气沉降".equals(groupData.regType)){//大气沉降物
+                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return false;
+                }else if ("肥料".equals(groupData.regType)){//肥料
+                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return true;
+                }else {
+                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                    return true;
+                }
+
+//                if (parent.isGroupExpanded(groupPosition)) {
+//                    parent.collapseGroup(groupPosition);
+//                } else {
+//                    //第二个参数false表示展开时是否触发默认滚动动画
+//                    parent.expandGroup(groupPosition, false);
+//                }
             }
         });
         wlist.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -86,9 +114,15 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
                 //到现场采集页面.
                 if (data!=null&&data.sampleCode.equals("DQ")){
                     if (data.regNum >= data.quantity){
+                        ToastApp.showToast("任务："+data.missionName+"下的点位已采样完成");
                         return false;
                     }
                 }
+                //進行數據緩存，并可以實現點擊標註
+                SharePreferHelp.putValue("SenceActivity",data);
+                SharePreferHelp.putValue("groupPosition",groupPosition);
+                wlist.collapseGroup(groupPosition);
+                wlist.expandGroup(groupPosition);
                 Intent intent = new Intent(SamplingSenceActivity.this, SenceActivity.class);
                 intent.putExtra("Scheme", data);
                 startActivityForResult(intent, 1000);
@@ -105,6 +139,7 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
             textView.setVisibility(View.GONE);
             adapter = new SamplingSenceAdapter(this, data);
             wlist.setAdapter(adapter);
+            refreshList();
         } else {
             wlist.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
@@ -117,7 +152,6 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
     public void onLoginSuccess(List<Scheme> info) {
         //data = info;
         data = new ArrayList<SamplingSenceGroup.SenceGroup>();
-
         SamplingSenceGroup.SenceGroup daqi = new SamplingSenceGroup().new SenceGroup();
         daqi.regType = "大气采样";
         daqi.result = info;
@@ -146,12 +180,10 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
 
     @Override
     public void end() {
-
     }
 
     @Override
     public void setDisableClick() {
-
     }
 
     @Override
@@ -165,8 +197,18 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
     public void onActivityResult(int requestCode, int resultCode, Intent datas) {
         super.onActivityResult(requestCode, resultCode, datas);
         if (resultCode == Activity.RESULT_OK && requestCode == 1000) {
-            data.clear();
             presenter.findPlanning();
+        }
+    }
+
+
+    private void refreshList(){
+        if (wlist!=null){
+            for (int i=0; i<wlist.getCount(); i++) {
+                if (i == SharePreferHelp.getValue("groupPosition",-1)) {
+                    wlist.expandGroup(i);
+                }
+            }
         }
     }
 }

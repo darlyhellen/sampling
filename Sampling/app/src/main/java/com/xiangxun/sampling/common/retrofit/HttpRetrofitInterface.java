@@ -140,6 +140,7 @@ public interface HttpRetrofitInterface {
     @POST("/samply/server/land/sheme/query")
     Observable<JsonObject> hisence(@Body RequestBody body);
 
+
     /**
      * @TODO:历史采样现场采样列表接口
      */
@@ -151,6 +152,17 @@ public interface HttpRetrofitInterface {
      */
     @POST("/samply/server/land/reg/showView")
     Observable<JsonObject> sencehispage(@Body RequestBody body);
+    /**
+     * @TODO:新版本下到历史采样点位列表接口
+     */
+    @POST("/samply/server/reg/query")
+    Observable<JsonObject> hisencepointlist(@Body RequestBody body);
+    /**
+     * @TODO:新版本下到采样页面接口
+     */
+    @POST("/samply/server/reg/view")
+    Observable<JsonObject> hisencepointpage(@Body RequestBody body);
+
 
     /**
      * @TODO:现场采样后续图片和视频上传接口

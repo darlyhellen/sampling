@@ -76,6 +76,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     private String resID;
 
     private String hisName;
+    private String samplyName;
+
     private String location;
     private LoadDialog loading;
     //权限问题
@@ -96,7 +98,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
 
         presenter = new SamplingHistoryPresenter(this);
         //初始化顶部标签
-        bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        bg.setBackgroundResource(R.mipmap.title_bg);
         name.setText("任务名称");
         name.setTextColor(getResources().getColor(R.color.white));
         name.setTextSize(16);
@@ -110,8 +112,8 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "绵竹市九龙镇";
-            presenter.getHistory(currentPage, hisName, resID, location);
+            location = "绵竹市齐天镇";
+            presenter.getHistory(currentPage, hisName,samplyName, resID, location);
         } else {
             loading.show();
             LocationTools.getInstance().setLocationToolsListener(this);
@@ -143,6 +145,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
                 Bundle bundle = new Bundle();
                 bundle.putString("CLASS", "SamplingHistoryActivity");
                 bundle.putString("hisName", hisName);
+                bundle.putString("samplyName", samplyName);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "SearchWorkOrderDialogFragment");
             }
@@ -165,7 +168,6 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     public void onLoginSuccess(PlannningData.ResultData info) {
         resID = info.regionId;
         stopXListView();
-
         setWorkOrderData(info.result);
         if (wlist.getCount() > 1) {
             bg.setVisibility(View.VISIBLE);
@@ -203,14 +205,15 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
         this.hisName = hisName;
-        presenter.getHistory(currentPage, hisName, resID, location);
+        this.samplyName = target;
+        presenter.getHistory(currentPage, hisName,samplyName, resID, location);
     }
 
     @Override
     public void locationSuccess(AMapLocation amapLocation) {
         loading.dismiss();
         location = amapLocation.getAddress();
-        presenter.getHistory(currentPage, hisName, resID, amapLocation.getAddress());
+        presenter.getHistory(currentPage, hisName,samplyName, resID, amapLocation.getAddress());
         DLog.i(amapLocation.getAddress());
     }
 
@@ -270,7 +273,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
     public void onRefresh(View v) {
         currentPage = 1;
         listState = Api.LISTSTATEREFRESH;
-        presenter.getHistory(currentPage, hisName, resID, location);
+        presenter.getHistory(currentPage, hisName,samplyName, resID, location);
     }
 
     @Override
@@ -281,7 +284,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         } else {
             currentPage++;
             listState = Api.LISTSTATELOADMORE;
-            presenter.getHistory(currentPage, hisName, resID, location);
+            presenter.getHistory(currentPage, hisName,samplyName, resID, location);
         }
     }
 

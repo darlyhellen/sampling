@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="没有新任务"
-            android:textColor="@color/black"
+            android:textColor="@color/color999999"
             android:textSize="@dimen/textSize20"
             android:visibility="gone" />
 
@@ -33,5 +33,39 @@
             android:dividerHeight="0.5dp"
             android:listSelector="@null"
             android:scrollbars="none" />
+
+        <LinearLayout
+            android:id="@+id/id_sence_db_ll"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="bottom"
+            android:background="@mipmap/ic_db_updateall"
+            android:orientation="horizontal">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/margin_padding5"
+                android:layout_height="match_parent"
+                >
+            <TextView
+                android:id="@+id/id_sence_db_tv"
+                android:layout_width="0dp"
+                android:paddingLeft="@dimen/margin_padding20"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size_16"
+                android:textColor="@color/color333333"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/id_sence_db_bt"
+                android:layout_width="wrap_content"
+                android:background="@color/db_update"
+                android:paddingLeft="@dimen/margin_padding10"
+                android:paddingRight="@dimen/margin_padding10"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_16"
+                android:text="一键上传"/>
+            </TableRow>
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

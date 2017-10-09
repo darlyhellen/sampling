@@ -101,7 +101,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         loading.setTitle(R.string.location_loading);
         presenter = new TargetPresenter(this);
         //初始化顶部标签
-        bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        bg.setBackgroundResource(R.mipmap.title_bg);
         name.setText("样品名称");
         name.setTextColor(getResources().getColor(R.color.white));
         name.setTextSize(16);
@@ -118,7 +118,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "九龙镇";
+            location = "齐天镇";
             presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
         } else {
             loading.show();

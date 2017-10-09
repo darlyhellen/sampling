@@ -10,11 +10,9 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.HisPlanningData;
 import com.xiangxun.sampling.bean.HisSencePageInfo;
-import com.xiangxun.sampling.bean.SimplingTarget;
-import com.xiangxun.sampling.bean.SimplingTargetResult;
 import com.xiangxun.sampling.common.NetUtils;
-import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
 import com.xiangxun.sampling.widget.timeselecter.option.TextUtil;
@@ -31,9 +29,9 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * @author zhangyh2 LoginUser 下午3:42:16 TODO 历史现场展示页面
+ * @author zhangyh2 LoginUser 下午3:42:16 TODO 超图新版本下调用接口
  */
-public class HisSenceListener implements FramePresenter {
+public class ChaoTuListener implements FramePresenter {
     @Override
     public void onStart(Dialog loading) {
         if (loading != null) loading.show();
@@ -44,39 +42,35 @@ public class HisSenceListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void sencehispage(String id,String missionId,String tableName, final FrameListener<HisSencePageInfo> listener) {
+    public void postHisPoint(String id, String code, final FrameListener<List<HisPlanningData.HisPoint>> listener) {
+
+        if (TextUtils.isEmpty(id) || TextUtils.isEmpty(id)) {
+            listener.onFaild(0, "方案id不能为空");
+            return;
+        }
         if (!NetUtils.isNetworkAvailable(XiangXunApplication.getInstance())) {
             listener.onFaild(0, "网络异常,请检查网络");
             return;
         }
-        if (TextUtils.isEmpty(id)) {
-            listener.onFaild(0, "id不能为空");
-            return;
-        }
-        if (TextUtil.isEmpty(tableName)){
-            listener.onFaild(0, "数据传递错误");
-            return;
-        }
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put("id", id);
-        map.put("missionId", missionId);
-        map.put("tableName", tableName);
+        map.put("missionId", id);
+        map.put("sampleCode",code);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(map, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .hisencepointpage(body)
+                .hisencepointlist(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, HisSencePageInfo>() {
+                .map(new Func1<JsonObject, HisPlanningData.HisPointData>() {
                     @Override
-                    public HisSencePageInfo call(JsonObject s) {
+                    public HisPlanningData.HisPointData call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        HisSencePageInfo root = new Gson().fromJson(s, new TypeToken<HisSencePageInfo>() {
+                        HisPlanningData.HisPointData root = new Gson().fromJson(s, new TypeToken<HisPlanningData.HisPointData>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<HisSencePageInfo>() {
+                .subscribe(new Observer<HisPlanningData.HisPointData>() {
                                @Override
                                public void onCompleted() {
 
@@ -88,26 +82,27 @@ public class HisSenceListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(HisSencePageInfo data) {
-                                   if (data != null){
-                                       if (data.resCode == 1000){
-                                           listener.onSucces(data);
+                               public void onNext(HisPlanningData.HisPointData data) {
+                                   if (data != null) {
+                                       if (data.resCode == 1000&&data.result!=null) {
+                                           listener.onSucces(data.result);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
                                        }
-                                   }else {
-
-                                       listener.onFaild(0, "解析异常");
+                                   } else {
+                                       listener.onFaild(0, "解析错误");
                                    }
                                }
                            }
 
                 );
+
+
     }
 
-    public interface HisSenceInterface extends FrameView {
 
-        void onDateSuccess(HisSencePageInfo.HisSencePage result);
+    public interface ChaoTuInterface {
+        void onDateSuccess(List<HisPlanningData.HisPoint> info);
 
         void onDateFailed(String info);
     }

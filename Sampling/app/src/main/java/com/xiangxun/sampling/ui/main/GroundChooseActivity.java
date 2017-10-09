@@ -97,12 +97,12 @@ public class GroundChooseActivity extends BaseActivity implements OnClickListene
 
     private void datas() {
         if (data != null && data.size() > 0) {
-            Point2D[] pts = new Point2D[data.size()];
-            for (int i = 0; i < data.size(); i++) {
-                Point2D s = new Point2D((float) data.get(i).longitude, (float) data.get(i).latitude);
-                pts[i] = s;
-            }
-            Measure_Area(pts);
+//            Point2D[] pts = new Point2D[data.size()];
+//            for (int i = 0; i < data.size(); i++) {
+//                Point2D s = new Point2D((float) data.get(i).longitude, (float) data.get(i).latitude);
+//                pts[i] = s;
+//            }
+//            Measure_Area(pts);
 
             Drawable drawableBlue = getResources().getDrawable(R.mipmap.ic_sence_undown);
             DefaultItemizedOverlay overlay = new DefaultItemizedOverlay(drawableBlue);

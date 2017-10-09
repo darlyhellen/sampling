@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SamplingSenceGroup;
+import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
 import java.util.List;
@@ -110,40 +112,61 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
         }
         SamplingSenceGroup.SenceGroup groupData = this.groupData.get(groupPosition);
         holder.tv_name.setText(groupData.regType);
-        if (groupData.shemeNum == 0){
-            holder.tv_num.setText("任务"+groupData.shemeNum+"个");
-            holder.tv_num.setTextColor(context.getResources().getColor(R.color.login_edit_text));
-        }else {
-            holder.tv_num.setText("任务"+groupData.shemeNum+"个");
-            holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
-        }
+
 
         if (groupData.regType.equals("水样底泥")){
+            holder.tv_num.setText("暂未开通");
+            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
             holder.img.setImageResource(R.mipmap.dbssymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.dbssymbol);
             }
         }else if (groupData.regType.equals("大气沉降")){
+            if (groupData.shemeNum == 0){
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+            }else {
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+            }
             holder.img.setImageResource(R.mipmap.dqcjsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.dqcjsymbol);
             }
          }else if (groupData.regType.equals("农作物")){
+            if (groupData.shemeNum == 0){
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+            }else {
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+            }
             holder.img.setImageResource(R.mipmap.nzwsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.nzwsymbol);
             }
         }else  if (groupData.regType.equals("农田土壤")){
+            if (groupData.shemeNum == 0){
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+            }else {
+                holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+            }
             holder.img.setImageResource(R.mipmap.nttrsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.nttrsymbol);
             }
         }else if (groupData.regType.equals("肥料")){
+            holder.tv_num.setText("暂未开通");
+            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
             holder.img.setImageResource(R.mipmap.flsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.flsymbol);
             }
         }else if (groupData.regType.equals("背景土壤")){
+            holder.tv_num.setText("暂未开通");
+            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
             holder.img.setImageResource(R.mipmap.bjtrsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.bjtrsymbol);
@@ -156,7 +179,7 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
         ChildViewHolder hocker = null;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_planning_list, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_child_expandablelistview, parent, false);
             hocker = new ChildViewHolder();
             hocker.name = (TextView) view.findViewById(R.id.id_item_planning_name);
             hocker.dept = (TextView) view.findViewById(R.id.id_item_planning_dept);
@@ -167,16 +190,21 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
         } else {
             hocker = (ChildViewHolder) view.getTag();
         }
+        PlannningData.Scheme tag = (PlannningData.Scheme) SharePreferHelp.getValue("SenceActivity");
         final PlannningData.Scheme s = groupData.get(groupPosition).result.get(childPosition);
-        hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.exp_child));
+        if (tag != null&&tag.code.equals(s.code)){
+            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.index_line));
+        }else {
+            hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
         hocker.name.setText(s.code);
-        hocker.name.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.name.setTextColor(context.getResources().getColor(R.color.color999999));
         hocker.name.setTextSize(14);
         hocker.dept.setText(s.missionName);
-        hocker.dept.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.color999999));
         hocker.dept.setTextSize(14);
         hocker.position.setText(String.valueOf(s.regNum+"/"+s.quantity));
-        hocker.position.setTextColor(context.getResources().getColor(R.color.login_edit_text));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.color999999));
         hocker.position.setTextSize(14);
         hocker.iv.setImageResource(R.mipmap.ic_sence_location);
         hocker.iv.setOnClickListener(new View.OnClickListener() {

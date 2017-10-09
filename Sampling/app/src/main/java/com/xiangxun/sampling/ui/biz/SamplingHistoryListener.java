@@ -36,12 +36,29 @@ public class SamplingHistoryListener implements FramePresenter {
 
     }
 
-    public void getHistory(int currentPage, String hisName, String regionId, String loaction, final FrameListener<ResultData> listener) {
+    public void getHistory(int currentPage, String hisName, String samplyName, String regionId, String loaction, final FrameListener<ResultData> listener) {
+
+
         Map<String, String> para = new HashMap<String, String>();
         para.put("missionName", hisName);
         para.put("pageNo", currentPage + "");
         para.put("regionName", loaction);
         para.put("regionId", regionId);
+        if ("背景土壤".equals(samplyName)) {
+            para.put("sampleCode", "BJTR");
+        } else if ("农作物".equals(samplyName)) {
+            para.put("sampleCode", "SD");
+        } else if ("水样底泥".equals(samplyName)) {
+            para.put("sampleCode", "WATER");
+        } else if ("大气沉降".equals(samplyName)) {
+            para.put("sampleCode", "DQ");
+        } else if ("肥料".equals(samplyName)) {
+            para.put("sampleCode", "FL");
+        } else if ("农田土壤".equals(samplyName)) {
+            para.put("sampleCode", "NTTR");
+        } else {
+            para.put("sampleCode", "");
+        }
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(para, "UTF-8"));
 
         //在这里进行数据请求

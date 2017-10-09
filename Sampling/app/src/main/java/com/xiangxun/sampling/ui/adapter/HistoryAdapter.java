@@ -51,13 +51,13 @@ public class HistoryAdapter extends ParentAdapter<Scheme> implements StickyListH
         }
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
         hocker.name.setText(s.missionName);
-        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.name.setTextSize(14);
         hocker.dept.setText(s.sampleName);
-        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.dept.setTextSize(14);
         hocker.position.setText(s.regionName);
-        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.position.setTextSize(14);
         hocker.iv.setImageResource(R.mipmap.ic_sence_location);
         hocker.iv.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +90,7 @@ public class HistoryAdapter extends ParentAdapter<Scheme> implements StickyListH
             hocker = (ViewHocker) view.getTag();
         }
         if (isSence) {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("任务名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
@@ -101,7 +101,7 @@ public class HistoryAdapter extends ParentAdapter<Scheme> implements StickyListH
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
         } else {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("方案名称");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);

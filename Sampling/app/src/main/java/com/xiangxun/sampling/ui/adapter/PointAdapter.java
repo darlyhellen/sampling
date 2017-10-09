@@ -67,13 +67,13 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
                 view.setVisibility(View.VISIBLE);
                 hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
                 hocker.name.setText(s.data.code);
-                hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
                 hocker.name.setTextSize(14);
                 hocker.dept.setText(String.valueOf(s.data.longitude));
-                hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
                 hocker.dept.setTextSize(14);
                 hocker.position.setText(String.valueOf(s.data.latitude));
-                hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+                hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
                 hocker.position.setTextSize(14);
                 final SenceSamplingSugar sugar = (SenceSamplingSugar) SharePreferHelp.getValue("sugar" + s.data.id);
                 if (sugar != null) {
@@ -113,15 +113,15 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             view.setVisibility(View.VISIBLE);
             hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
             hocker.name.setText(s.data.code);
-            hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.name.setTextSize(14);
             hocker.dept.setText(String.valueOf(s.data.longitude));
-            hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.dept.setTextSize(14);
             hocker.position.setText(String.valueOf(s.data.latitude));
-            hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+            hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
             hocker.position.setTextSize(14);
-            if (s.data.isSampling == 0) {
+            if (s.data.isSampling == 0&&!"DQ".equals(planning.sampleCode)) {
                 hocker.iv.setImageResource(R.mipmap.ic_point_mark);
                 hocker.iv.setVisibility(View.VISIBLE);
             } else {
@@ -148,7 +148,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
         }
 
         if (isSence) {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("点位编号");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);
@@ -159,7 +159,7 @@ public class PointAdapter extends ParentAdapter<Pointly> implements StickyListHe
             hocker.position.setTextColor(context.getResources().getColor(R.color.white));
             hocker.position.setTextSize(16);
         } else {
-            hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+            hocker.bg.setBackgroundResource(R.mipmap.title_bg);
             hocker.name.setText("点位编号");
             hocker.name.setTextColor(context.getResources().getColor(R.color.white));
             hocker.name.setTextSize(16);

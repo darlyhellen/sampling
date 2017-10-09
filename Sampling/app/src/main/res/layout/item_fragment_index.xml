@@ -18,7 +18,7 @@
         android:layout_alignParentBottom="true"
         android:padding="@dimen/margin_padding10"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSize16" />
+        android:textColor="@color/gray"
+        android:textSize="@dimen/textSize18" />
 
 </RelativeLayout>

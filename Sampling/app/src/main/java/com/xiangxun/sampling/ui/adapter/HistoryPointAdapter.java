@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
+import com.xiangxun.sampling.bean.HisPlanningData;
 import com.xiangxun.sampling.bean.PlannningData.Pointly;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
@@ -27,15 +28,15 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  *
  * @TODO:历史点位展示
  */
-public class HistoryPointAdapter extends ParentAdapter<Pointly> implements StickyListHeadersAdapter {
+public class HistoryPointAdapter extends ParentAdapter<HisPlanningData.HisPoint> implements StickyListHeadersAdapter {
 
 
-    public HistoryPointAdapter(List<Pointly> data, int resID, Context context) {
+    public HistoryPointAdapter(List<HisPlanningData.HisPoint> data, int resID, Context context) {
         super(data, resID, context);
     }
 
     @Override
-    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final Pointly s) {
+    public View HockView(int position, View view, ViewGroup parent, int resID, final Context context, final HisPlanningData.HisPoint s) {
         ViewHocker hocker = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(resID, null);
@@ -53,14 +54,14 @@ public class HistoryPointAdapter extends ParentAdapter<Pointly> implements Stick
         //未采样进行展示 ,已采集不进行展示
         view.setVisibility(View.VISIBLE);
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
-        hocker.name.setText(s.data.code);
-        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setText(s.code);
+        hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.name.setTextSize(14);
-        hocker.dept.setText(String.valueOf(s.data.longitude));
-        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setText(String.valueOf(s.SampleName));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.dept.setTextSize(14);
-        hocker.position.setText(String.valueOf(s.data.latitude));
-        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setText(String.valueOf(s.samplingSource));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.position.setTextSize(14);
         hocker.iv.setVisibility(View.INVISIBLE);
         return view;
@@ -82,14 +83,14 @@ public class HistoryPointAdapter extends ParentAdapter<Pointly> implements Stick
             hocker = (ViewHocker) view.getTag();
         }
 
-        hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
-        hocker.name.setText("点位编号");
+        hocker.bg.setBackgroundResource(R.mipmap.title_bg);
+        hocker.name.setText("采样编号");
         hocker.name.setTextColor(context.getResources().getColor(R.color.white));
         hocker.name.setTextSize(16);
-        hocker.dept.setText("经度");
+        hocker.dept.setText("采样类型");
         hocker.dept.setTextColor(context.getResources().getColor(R.color.white));
         hocker.dept.setTextSize(16);
-        hocker.position.setText("纬度");
+        hocker.position.setText("采样来源");
         hocker.position.setTextColor(context.getResources().getColor(R.color.white));
         hocker.position.setTextSize(16);
         return view;

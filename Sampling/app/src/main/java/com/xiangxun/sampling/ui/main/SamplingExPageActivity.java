@@ -144,7 +144,7 @@ public class SamplingExPageActivity extends BaseActivity implements LocationTool
             longitude.isEdit(true);
             longitude.setInfo("经度：", String.valueOf(Api.longitude), "");
             address.isEdit(false);
-            address.setInfo("位置：", String.valueOf("绵竹市九龙镇"), "");
+            address.setInfo("位置：", String.valueOf("绵竹市齐天镇"), "");
         } else {
             LocationTools.getInstance().setLocationToolsListener(this);
             LocationTools.getInstance().start();

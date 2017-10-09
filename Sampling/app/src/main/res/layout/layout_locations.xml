@@ -23,15 +23,15 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin_padding4"
             android:layout_marginRight="@dimen/margin_padding4"
-            android:src="@mipmap/ic_sence_title_gb" />
+            android:src="@mipmap/ic_sence_slocation" />
 
         <TextView
             android:id="@+id/id_user_locations_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="现场采样定位："
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize16" />
+            android:textColor="@color/gray"
+            android:textSize="@dimen/textSize20" />
 
         <ImageView
             android:id="@+id/id_user_sence_location"
@@ -45,7 +45,7 @@
         android:id="@+id/id_user_sence_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_padding4"
+        android:paddingBottom="@dimen/margin_padding8"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
@@ -56,7 +56,7 @@
         android:id="@+id/id_user_sence_lat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_padding4"
+        android:paddingBottom="@dimen/margin_padding8"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />
@@ -66,7 +66,7 @@
         android:id="@+id/id_user_sence_lont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_padding4"
+        android:paddingBottom="@dimen/margin_padding8"
         android:paddingLeft="@dimen/margin_padding10"
         android:paddingRight="@dimen/margin_padding10"
         android:paddingTop="@dimen/margin_padding10" />

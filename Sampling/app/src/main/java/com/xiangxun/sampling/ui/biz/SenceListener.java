@@ -176,7 +176,7 @@ public class SenceListener implements FramePresenter {
     }
 
     //根據不同選擇進行不同請求
-    public void getTypese(String code,int mold,final FrameListener<SenceLandRegion> listener) {
+    public void getTypese(String code,int mold, String missionId,final FrameListener<SenceLandRegion> listener) {
         if (code == null) {
             listener.onFaild(0, "采样类型不能为空");
             return;
@@ -188,6 +188,7 @@ public class SenceListener implements FramePresenter {
         Map<String,String> paramer = new HashMap<String ,String >();
         paramer.put("sampleCode",code);
         paramer.put("mold",String.valueOf(mold));
+        paramer.put("missionId",String.valueOf(missionId));
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(paramer, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post().getSample(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())

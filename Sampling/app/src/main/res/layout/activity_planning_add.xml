@@ -30,12 +30,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_projecdept"
@@ -46,12 +40,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_projectposition"
@@ -62,12 +50,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_type"
@@ -78,12 +60,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_longitude"
@@ -94,12 +70,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_latitude"
@@ -110,12 +80,6 @@
             android:paddingRight="@dimen/margin_padding10"
             android:paddingTop="@dimen/margin_padding10" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/margin_padding10"
-            android:background="@color/index_line"
-            android:paddingBottom="@dimen/margin_padding4" />
 
         <com.xiangxun.sampling.widget.groupview.DetailView
             android:id="@+id/id_add_desc"

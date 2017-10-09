@@ -101,4 +101,6 @@
 
     <color name="exp_group">#fbf0f0</color>
     <color name="exp_child">#fdf9f9</color>
+    <color name="exp_back">#fafafa</color>
+    <color name="db_update">#2CC18A</color>
 </resources>

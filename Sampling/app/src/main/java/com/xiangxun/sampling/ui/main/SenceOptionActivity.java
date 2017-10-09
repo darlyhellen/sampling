@@ -105,7 +105,6 @@ public class SenceOptionActivity extends BaseActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         titleView.setTitle("现场采样");
         locationname.setText("现场采样定位：");
-        id_user_sence_description.setVisibility(View.GONE);
         sugar = (SenceSamplingSugar) getIntent().getSerializableExtra("SenceSamplingSugar");
     }
 
@@ -114,6 +113,7 @@ public class SenceOptionActivity extends BaseActivity {
     protected void loadData() {
         //根據sugar中的simplyCode進行判斷展示。
         if (sugar != null) {
+            id_user_sence_description.setText("您的采样编码为： " + sugar.getCode());
             if (sugar.getSamplingCode().equals("BJTR")){//背景土壤
                 id_user_sence_project_show.setVisibility(View.GONE);
                 type.isEdit(false);

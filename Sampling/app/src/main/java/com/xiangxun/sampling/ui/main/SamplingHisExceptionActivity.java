@@ -94,7 +94,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
         loading = new LoadDialog(this);
         loading.setTitle(R.string.location_loading);
         //初始化顶部标签
-        bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        bg.setBackgroundResource(R.mipmap.title_bg);
         name.setText("地块名称");
         name.setTextColor(getResources().getColor(R.color.white));
         name.setTextSize(16);
@@ -108,7 +108,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "绵竹市九龙镇";
+            location = "绵竹市齐天镇";
             presenter.hisList(currentPage, location, regionId);
         } else {
             loading.show();

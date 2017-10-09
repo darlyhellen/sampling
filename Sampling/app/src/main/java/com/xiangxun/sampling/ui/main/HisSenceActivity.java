@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -44,22 +45,45 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
     private TitleView titleView;
     @ViewsBinder(R.id.id_user_locations_name)
     private TextView locationname;
+    //顶部描述
+    @ViewsBinder(R.id.id_user_sence_description)
+    private TextView id_user_sence_description;
+    //位置信息
+    @ViewsBinder(R.id.id_user_locations)
+    private LinearLayout id_user_locations;
     @ViewsBinder(R.id.id_user_sence_address)
     private DetailView address;
     @ViewsBinder(R.id.id_user_sence_lat)
     private DetailView latitude;
     @ViewsBinder(R.id.id_user_sence_lont)
     private DetailView longitude;
+    //选项一
     @ViewsBinder(R.id.id_user_sence_type)
     private DetailView type;
+    //下拉选项一
+    @ViewsBinder(R.id.id_user_sence_typeed_show)
+    private RelativeLayout id_user_sence_typeed_show;
+    @ViewsBinder(R.id.id_user_sence_typeed)
+    private DetailView id_user_sence_typeed;
+    //选项二
     @ViewsBinder(R.id.id_user_sence_name)
     private DetailView name;
+    //选项三
     @ViewsBinder(R.id.id_user_sence_params)
     private DetailView params;
-    @ViewsBinder(R.id.id_user_sence_project)
-    private DetailView project;
+    //选项四
     @ViewsBinder(R.id.id_user_sence_other)
     private DetailView other;
+    //下拉选项二
+    @ViewsBinder(R.id.id_user_sence_project_show)
+    private RelativeLayout id_user_sence_project_show;
+    @ViewsBinder(R.id.id_user_sence_project)
+    private DetailView id_user_sence_project;
+    @ViewsBinder(R.id.id_user_sence_location)
+    private ImageView loca;
+    @ViewsBinder(R.id.id_user_sence_video_submit)
+    private Button submit;
+
     @ViewsBinder(R.id.id_user_sence_image_grid)
     private WholeGridView imageGrid;
     @ViewsBinder(R.id.id_user_sence_video)
@@ -80,30 +104,14 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
         video.setVisibility(View.GONE);
         String id = getIntent().getStringExtra("ID");
         String missionId = getIntent().getStringExtra("missionId");
+        String tableName = getIntent().getStringExtra("tableName");
         presenter = new HisSencePresenter(this);
-        presenter.sencehispage(id, missionId);
+        presenter.sencehispage(id, missionId,tableName);
     }
 
 
     @Override
     protected void loadData() {
-        //已经有草稿状态。直接进行全参数设置
-        type.isEdit(false);
-        type.setInfo("采样类型:", " ", "");
-        name.isEdit(false);
-        name.setInfo("样品名称:", " ", null);
-        params.isEdit(false);
-        params.setInfo("样品深度:", " ", null);
-        project.isEdit(false);
-        project.setInfo("土壤类型:", " ", null);
-        other.isEdit(false);
-        other.setInfo("其他說明:", "", null);
-        address.isEdit(false);
-        address.setInfo("采样地点：", " ", null);
-        latitude.isEdit(false);
-        latitude.setInfo("经度：", " ", null);
-        longitude.isEdit(false);
-        longitude.setInfo("纬度：", " ", null);
         //初始化图片和视频信息所在位置。
         images = new ArrayList<String>();
         imageAdapter = new ImageAdapter(images, R.layout.item_main_detail_image_adapter, this);
@@ -141,22 +149,86 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
     @Override
     public void onDateSuccess(HisSencePageInfo.HisSencePage result) {
         if (result != null) {
-            type.isEdit(false);
-            type.setInfo("采样类型:", result.sampleName, "");
-            name.isEdit(false);
-            name.setInfo("样品名称:", result.name, null);
-            params.isEdit(false);
-            params.setInfo("样品深度:", result.depth, null);
-            project.isEdit(false);
-            project.setInfo("土壤类型:", result.soilName, null);
-            other.isEdit(false);
-            other.setInfo("其他說明:", "", null);
-            address.isEdit(false);
-            address.setInfo("采样地点：", result.regionName, null);
-            latitude.isEdit(false);
-            latitude.setInfo("经度：", result.longitude, null);
-            longitude.isEdit(false);
-            longitude.setInfo("纬度：", result.latitude, null);
+            id_user_sence_description.setText("已采样的CODE："+result.code);
+                if (result.samplingCode.equals("BJTR")){//背景土壤
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    type.isEdit(false);
+                    type.setInfo("*采样类型:", result.typesamplyName, "");
+                    id_user_sence_typeed.isEdit(false);
+                    id_user_sence_typeed.setInfo("*墙土来源:",  result.othersamplyName, null);
+                    other.setVisibility(View.GONE);
+                    name.isEdit(false);
+                    name.setInfo("*周围环境:", result.ambient,null);
+                    params.isEdit(false);
+                    params.setInfo("*成墙年份:",result.years, null);
+                }else if (result.samplingCode.equals("SD")){//农作物
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    type.isEdit(false);
+                    type.setInfo("*采样类型:", result.typesamplyName, "");
+                    id_user_sence_typeed_show.setVisibility(View.GONE);
+                    name.setVisibility(View.GONE);
+                    other.setVisibility(View.GONE);
+                    params.isEdit(false);
+                    params.setInfo("*采样部位:", result.position, null);
+                }else if (result.samplingCode.equals("NTTR")){//农田土壤
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    type.isEdit(false);
+                    type.setInfo("*采样类型:", result.typesamplyName, "");
+                    id_user_sence_typeed_show.setVisibility(View.GONE);
+                    name.setVisibility(View.GONE);
+                    other.setVisibility(View.GONE);
+                    params.isEdit(false);
+                    params.setInfo("*样品深度(CM):", result.depth, null);
+                }else if (result.samplingCode.equals("WATER")){//水采样
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    type.isEdit(false);
+                    type.setInfo("*采样类型:", result.typesamplyName, "");
+                    id_user_sence_typeed.isEdit(false);
+                    id_user_sence_typeed.setInfo("*样品来源:", result.othersamplyName, "");
+                    params.setVisibility(View.GONE);
+                    other.setVisibility(View.GONE);
+                    name.isEdit(false);
+                    name.setInfo("*河流名称:",result.riversName, "");
+                }else if (result.samplingCode.equals("DQ")){//大气沉降物
+                    type.setVisibility(View.GONE);
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    id_user_sence_typeed.isEdit(false);
+                    id_user_sence_typeed.setInfo("*点位信息:", result.othersamplyName, "");
+                    other.setVisibility(View.GONE);
+                    name.isEdit(false);
+                    name.setInfo("*容器体积(L):",result.containerVolume, "");
+                    params.isEdit(false);
+                    params.setInfo("*收集量:",result.collectVolume, "");
+                    //大氣採樣隱藏定位信息。
+                    id_user_locations.setVisibility(View.GONE);
+                }else if (result.samplingCode.equals("FL")){//肥料
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    id_user_sence_typeed_show.setVisibility(View.GONE);
+                    type.isEdit(false);
+                    type.setInfo("*店名:",result.shopName, "");
+                    name.isEdit(false);
+                    name.setInfo("*店主:",result.shopkeeper, "");
+                    params.isEdit(false);
+                    params.setInfo("*联系方式:",result.tel, "");
+                    other.isEdit(false);
+                    other.setInfo("*经营肥料:",result.dealManure, "");
+                }else {
+                    //其他错误的采样信息
+                    id_user_sence_project_show.setVisibility(View.GONE);
+                    type.setVisibility(View.GONE);
+                    id_user_sence_typeed_show.setVisibility(View.GONE);
+                    name.setVisibility(View.GONE);
+                    params.setVisibility(View.GONE);
+                    other.setVisibility(View.GONE);
+                }
+                if (!result.samplingCode.equals("DQ")) {
+                    address.isEdit(false);
+                    address.setInfo("*采样地点：",result.regionName, null);
+                    latitude.isEdit(false);
+                    latitude.setInfo("*经度：",result.longitude, null);
+                    longitude.isEdit(false);
+                    longitude.setInfo("*纬度：",result.latitude, null);
+                }
             if (result.file != null && result.file.size() > 0) {
                 for (HisSencePageInfo.FileList fils : result.file) {
                     if (!fils.filePath.endsWith(".mp4")) {
@@ -165,12 +237,26 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
                 }
                 imageAdapter.setData(images);
             }
+        }else {
+            id_user_sence_project_show.setVisibility(View.GONE);
+            type.setVisibility(View.GONE);
+            id_user_sence_typeed_show.setVisibility(View.GONE);
+            name.setVisibility(View.GONE);
+            params.setVisibility(View.GONE);
+            other.setVisibility(View.GONE);
+            id_user_locations.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onDateFailed(String info) {
-
+        id_user_sence_project_show.setVisibility(View.GONE);
+        type.setVisibility(View.GONE);
+        id_user_sence_typeed_show.setVisibility(View.GONE);
+        name.setVisibility(View.GONE);
+        params.setVisibility(View.GONE);
+        other.setVisibility(View.GONE);
+        id_user_locations.setVisibility(View.GONE);
     }
 
     @Override

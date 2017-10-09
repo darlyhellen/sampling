@@ -18,6 +18,7 @@ import com.supermap.services.components.commontypes.Point2D;
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.BaseActivity;
 import com.xiangxun.sampling.base.XiangXunApplication;
+import com.xiangxun.sampling.bean.HisPlanningData;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.PlannningData.Scheme;
 import com.xiangxun.sampling.binder.ContentBinder;
@@ -29,7 +30,10 @@ import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
 import com.xiangxun.sampling.ui.StaticListener;
+import com.xiangxun.sampling.ui.biz.ChaoTuListener;
+import com.xiangxun.sampling.ui.biz.ChaoTuListener.ChaoTuInterface;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener.SamplingPointInterface;
+import com.xiangxun.sampling.ui.presenter.ChaoTuPresenter;
 import com.xiangxun.sampling.ui.presenter.SamplingPointPresenter;
 import com.xiangxun.sampling.widget.dialog.LoadDialog;
 import com.xiangxun.sampling.widget.header.TitleView;
@@ -44,7 +48,7 @@ import java.util.List;
  * @TODO: 使用超图地图展示点位信息。
  */
 @ContentBinder(R.layout.activity_chaotu)
-public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface,LocationToolsListener {
+public class ChaoTuActivity extends BaseActivity implements SamplingPointInterface,LocationToolsListener,ChaoTuInterface {
     @ViewsBinder(R.id.id_chaotu_title)
     private TitleView titleView;
     @ViewsBinder(R.id.id_chaotu_mapview)
@@ -52,9 +56,13 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
     private Scheme planning;
     private List<PlannningData.Pointly> data;
 
+    private List<HisPlanningData.HisPoint> info;
+
     private com.supermap.android.maps.Point2D center;
 
     private SamplingPointPresenter presenter;
+    private ChaoTuPresenter chaoTuPresenter;
+    private  boolean isSence;
 
 
 
@@ -69,24 +77,28 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
         mapView.setClickable(true);
         mapView.getController().setZoom(3);
         planning = (Scheme) getIntent().getSerializableExtra("Scheme");
-        boolean isSence = getIntent().getBooleanExtra("isSence",false);
+        isSence = getIntent().getBooleanExtra("isSence",false);
         if (planning == null) {
             titleView.setTitle("点位分布");
         } else {
+
             if (isSence) {
                 titleView.setTitle(planning.missionName + "点位分布");
+                //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
+                chaoTuPresenter = new ChaoTuPresenter(this);
+                chaoTuPresenter.point(planning.missionId,planning.sampleCode);
             }else {
                 titleView.setTitle(planning.name + "点位分布");
-            }
-            Object ob = SharePreferHelp.getValue(planning.id);
-            if (data == null) {
-                if (ob != null) {
-                    data = ((PlannningData.ResultPointData) ob).result;
+                Object ob = SharePreferHelp.getValue(planning.id);
+                if (data == null) {
+                    if (ob != null) {
+                        data = ((PlannningData.ResultPointData) ob).result;
+                    }
                 }
+                //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
+                presenter = new SamplingPointPresenter(this);
+                presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
             }
-            //在这里先查看是否有缓存文件，有缓存点位文件，进行展示，然后请求更新点位。
-            presenter = new SamplingPointPresenter(this);
-            presenter.point(planning.id, ob == null ? null : ((PlannningData.ResultPointData) ob).resTime);
         }
 
         if (!Api.TESTING) {
@@ -120,16 +132,27 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
             overlayItem.setMarker(userPostion);
             overlay.addItem(overlayItem);
         }
-        if (data != null && data.size() != 0) {
-            for (PlannningData.Pointly point : data) {
-                com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.data.longitude, point.data.latitude);
-                OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
-                if (point.data.isSampling != 0) {
+        if (isSence){
+            if (info != null && info.size() != 0) {
+                for (HisPlanningData.HisPoint point : info) {
+                    com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.longitude, point.latitude);
+                    OverlayItem overlayItem = new OverlayItem(poind, "", point.id);
                     overlayItem.setMarker(drawablenormal);
-                } else {
-                    overlayItem.setMarker(drawableBlue);
+                    overlay.addItem(overlayItem);
                 }
-                overlay.addItem(overlayItem);
+            }
+        }else {
+            if (data != null && data.size() != 0) {
+                for (PlannningData.Pointly point : data) {
+                    com.supermap.android.maps.Point2D poind = new com.supermap.android.maps.Point2D(point.data.longitude, point.data.latitude);
+                    OverlayItem overlayItem = new OverlayItem(poind, "", point.data.id);
+                    if (point.data.isSampling != 0) {
+                        overlayItem.setMarker(drawablenormal);
+                    } else {
+                        overlayItem.setMarker(drawableBlue);
+                    }
+                    overlay.addItem(overlayItem);
+                }
             }
         }
         mapView.getOverlays().add(overlay);
@@ -219,6 +242,17 @@ public class ChaoTuActivity extends BaseActivity implements SamplingPointInterfa
 
     @Override
     public void locationFail() {
+
+    }
+
+    @Override
+    public void onDateSuccess(List<HisPlanningData.HisPoint> info) {
+        this.info = info;
+        dats(null);
+    }
+
+    @Override
+    public void onDateFailed(String info) {
 
     }
 }

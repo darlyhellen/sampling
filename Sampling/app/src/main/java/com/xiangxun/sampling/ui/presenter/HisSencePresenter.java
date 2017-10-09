@@ -31,10 +31,10 @@ public class HisSencePresenter {
     /**
      * 上传现场采集点位功能。简单参数上传。
      */
-    public void sencehispage(String id,String missionId) {
+    public void sencehispage(String id,String missionId,String tableName) {
         userBiz.onStart(loading);
         main.setDisableClick();
-        userBiz.sencehispage(id,missionId, new FrameListener<HisSencePageInfo>() {
+        userBiz.sencehispage(id,missionId,tableName, new FrameListener<HisSencePageInfo>() {
             @Override
             public void onSucces(HisSencePageInfo data) {
                 userBiz.onStop(loading);

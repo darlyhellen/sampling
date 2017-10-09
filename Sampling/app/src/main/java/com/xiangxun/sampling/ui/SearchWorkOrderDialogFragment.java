@@ -50,6 +50,8 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
     //历史信息
     private LinearLayout hiSearch;
     private EditText hisName;
+    private LinearLayout samplyNameClick;
+    private TextView samplyName;
 
     private SearchListener listener;
 
@@ -90,12 +92,13 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
 
         hiSearch = (LinearLayout) view.findViewById(R.id.id_his);
         hisName = (EditText) view.findViewById(R.id.id_his_name);
+        samplyNameClick = (LinearLayout) view.findViewById(R.id.id_his_samplyname_click);
+        samplyName = (TextView) view.findViewById(R.id.id_his_samplyname);
         if ("SamplingTargetActivity".equals(cla)) {
             //展现切换开关
             targetSearch.setVisibility(View.VISIBLE);
             hiSearch.setVisibility(View.GONE);
             name.setText(getArguments().getString("SampleName"));
-
 
             over = getArguments().getString("Over");
             String targets = getArguments().getString("Target");
@@ -128,7 +131,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
             targetSearch.setVisibility(View.GONE);
             hiSearch.setVisibility(View.VISIBLE);
             hisName.setText(getArguments().getString("hisName"));
-
+            samplyName.setText(getArguments().getString("samplyName"));
         }
     }
 
@@ -181,7 +184,8 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
                 if ("SamplingHistoryActivity".equals(cla)) {
                     //进入历史信息搜索
                     String hisname = hisName.getText().toString().trim();
-                    ((SearchListener) getActivity()).findParamers(hisname, null, null);
+                    String sam = samplyName.getText().toString().trim();
+                    ((SearchListener) getActivity()).findParamers(hisname, sam, null);
 
                 }
 
@@ -190,6 +194,7 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
         });
 
         tagerClick.setOnClickListener(this);
+        samplyNameClick.setOnClickListener(this);
     }
 
 
@@ -202,13 +207,24 @@ public class SearchWorkOrderDialogFragment extends DialogFragment implements Vie
                 dialog.setSelectResultItemClick(this);
                 dialog.show();
                 break;
+            case R.id.id_his_samplyname_click:
+                //点击获取下拉列表.
+                SelectItemDialog samply = new SelectItemDialog(getActivity(), new String[]{"全部","背景土壤", "农作物", "水样底泥","大气沉降", "肥料", "农田土壤"}, "请选择类型");
+                samply.setSelectResultItemClick(this);
+                samply.show();
+                break;
         }
     }
 
 
     @Override
     public void resultOnClick(String result, String title) {
-        tager.setText(result);
+        if ("请选择指标".equals(title)) {
+            tager.setText(result);
+        }
+        if ("请选择类型".equals(title)){
+            samplyName.setText(result);
+        }
     }
 
 }

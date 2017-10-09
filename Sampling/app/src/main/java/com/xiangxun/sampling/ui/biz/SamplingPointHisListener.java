@@ -10,15 +10,10 @@ import com.xiangxun.sampling.base.FrameListener;
 import com.xiangxun.sampling.base.FramePresenter;
 import com.xiangxun.sampling.base.FrameView;
 import com.xiangxun.sampling.base.XiangXunApplication;
-import com.xiangxun.sampling.bean.PlannningData;
-import com.xiangxun.sampling.bean.PlannningData.ResultPointData;
-import com.xiangxun.sampling.bean.SenceInfo;
+import com.xiangxun.sampling.bean.HisPlanningData;
 import com.xiangxun.sampling.common.NetUtils;
-import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
 import com.xiangxun.sampling.common.retrofit.RxjavaRetrofitRequestUtil;
-import com.xiangxun.sampling.common.retrofit.paramer.SamPointParamer;
-import com.xiangxun.sampling.db.SenceSamplingSugar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +40,7 @@ public class SamplingPointHisListener implements FramePresenter {
         if (loading != null) loading.dismiss();
     }
 
-    public void postHisPoint(String id, String strTime, final FrameListener<ResultPointData> listener) {
+    public void postHisPoint(String id, String code, final FrameListener<List<HisPlanningData.HisPoint>> listener) {
 
         if (TextUtils.isEmpty(id) || TextUtils.isEmpty(id)) {
             listener.onFaild(0, "方案id不能为空");
@@ -58,21 +53,22 @@ public class SamplingPointHisListener implements FramePresenter {
 
         Map<String, String> map = new HashMap<String, String>();
         map.put("missionId", id);
+        map.put("sampleCode",code);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), RxjavaRetrofitRequestUtil.getParamers(map, "UTF-8"));
         RxjavaRetrofitRequestUtil.getInstance().post()
-                .hispoint(body)
+                .hisencepointlist(body)
                 .subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<JsonObject, ResultPointData>() {
+                .map(new Func1<JsonObject, HisPlanningData.HisPointData>() {
                     @Override
-                    public ResultPointData call(JsonObject s) {
+                    public HisPlanningData.HisPointData call(JsonObject s) {
                         DLog.json("Func1", s.toString());
-                        ResultPointData root = new Gson().fromJson(s, new TypeToken<ResultPointData>() {
+                        HisPlanningData.HisPointData root = new Gson().fromJson(s, new TypeToken<HisPlanningData.HisPointData>() {
                         }.getType());
                         return root;
                     }
                 })
-                .subscribe(new Observer<ResultPointData>() {
+                .subscribe(new Observer<HisPlanningData.HisPointData>() {
                                @Override
                                public void onCompleted() {
 
@@ -84,10 +80,10 @@ public class SamplingPointHisListener implements FramePresenter {
                                }
 
                                @Override
-                               public void onNext(ResultPointData data) {
+                               public void onNext(HisPlanningData.HisPointData data) {
                                    if (data != null) {
-                                       if (data.result != null) {
-                                           listener.onSucces(data);
+                                       if (data.resCode == 1000&&data.result!=null) {
+                                           listener.onSucces(data.result);
                                        } else {
                                            listener.onFaild(0, data.resDesc);
                                        }
@@ -104,7 +100,7 @@ public class SamplingPointHisListener implements FramePresenter {
 
     public interface SamplingPointHisInterface extends FrameView {
 
-        void onLoginSuccess(List<PlannningData.Pointly> info);
+        void onLoginSuccess(List<HisPlanningData.HisPoint> info);
 
         void onLoginFailed();
 

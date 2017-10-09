@@ -131,8 +131,8 @@
             android:gravity="center"
             android:paddingBottom="@dimen/margin_padding20"
             android:text="Copyright © 西安翔迅科技有限责任公司"
-            android:textColor="@color/login_edit_text"
-            android:textSize="@dimen/textSize22" />
+            android:textColor="@color/color666666"
+            android:textSize="@dimen/textSize20" />
     </LinearLayout>
 
 

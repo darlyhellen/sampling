@@ -246,13 +246,13 @@ public class SencePresenter {
         });
     }
     //类型选项
-    public void getTypes(final String title,String code) {
+    public void getTypes(final String title, String code, String missionId) {
         int mold =0;
         if (code.equals("BJTR")||code.equals("NTTR")||code.equals("SD")||code.equals("WATER")){//农田土壤 农作物 水采样
             mold= 2;
         }
         main.setDisableClick();
-        userBiz.getTypese(code,mold,new FrameListener<SenceLandRegion>() {
+        userBiz.getTypese(code,mold,missionId,new FrameListener<SenceLandRegion>() {
             @Override
             public void onSucces(SenceLandRegion result) {
                 main.setEnableClick();
@@ -268,7 +268,7 @@ public class SencePresenter {
     }
 
     //其他选项
-    public void getOtherType(final String title,String code) {
+    public void getOtherType(final String title, String code, String missionId) {
         int mold =0;
         if (code.equals("BJTR")){//背景土壤
             mold= 3;
@@ -278,7 +278,7 @@ public class SencePresenter {
             mold= 4;
         }
         main.setDisableClick();
-        userBiz.getTypese(code,mold,new FrameListener<SenceLandRegion>() {
+        userBiz.getTypese(code,mold,missionId,new FrameListener<SenceLandRegion>() {
             @Override
             public void onSucces(SenceLandRegion result) {
                 main.setEnableClick();

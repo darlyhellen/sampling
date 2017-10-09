@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.base.ParentAdapter;
+import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.db.SenceSamplingSugar;
+import com.xiangxun.sampling.service.ServicePresenter;
 import com.xiangxun.sampling.ui.biz.SamplingDBListener;
 import com.xiangxun.sampling.ui.biz.SamplingPointListener;
 import com.xiangxun.sampling.widget.dialog.MsgDialog;
@@ -58,9 +60,9 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
         //未采样进行展示 ,已采集不进行展示
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
         hocker.name.setText(s.getCode());
-        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.name.setTextSize(14);
-        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.dept.setTextSize(14);
         if ("BJTR".equals(s.getSamplingCode())){//背景土壤
             hocker.dept.setText(String.valueOf("背景土壤"));
@@ -79,32 +81,33 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
             hocker.dept.setText(String.valueOf("其他"));
         }
         hocker.position.setText(TextUtil.isEmpty(s.getRegion_id())?"":s.getRegion_id());
-        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.position.setTextSize(14);
-        //这个点位已经有了草稿，可以进行提交
-        hocker.iv.setImageResource(R.mipmap.lighton);
-        hocker.iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //进行提示弹窗，询问用户是否确认修改上传状态。
-                msgDialog = new MsgDialog(context);
-                msgDialog.setTiele("是否确认上传状态信息？");
-                msgDialog.setButLeftListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        msgDialog.dismiss();
-                    }
-                });
-                msgDialog.setButRightListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        msgDialog.dismiss();
-                        main.onItemImageClick(s.getSamplingId(),false);
-                    }
-                });
-                msgDialog.show();
-            }
-        });
+        hocker.iv.setVisibility(View.GONE);
+//        //这个点位已经有了草稿，可以进行提交
+//        hocker.iv.setImageResource(R.mipmap.lighton);
+//        hocker.iv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //进行提示弹窗，询问用户是否确认修改上传状态。
+//                msgDialog = new MsgDialog(context);
+//                msgDialog.setTiele("是否确认上传状态信息？");
+//                msgDialog.setButLeftListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        msgDialog.dismiss();
+//                    }
+//                });
+//                msgDialog.setButRightListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        msgDialog.dismiss();
+//                        main.onItemImageClick(s.getSamplingId(),false);
+//                    }
+//                });
+//                msgDialog.show();
+//            }
+//        });
         return view;
     }
 
@@ -124,7 +127,7 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
             hocker = (ViewHocker) view.getTag();
         }
 
-        hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        hocker.bg.setBackgroundResource(R.mipmap.title_bg);
         hocker.name.setText("采样编号");
         hocker.name.setTextColor(context.getResources().getColor(R.color.white));
         hocker.name.setTextSize(16);
@@ -134,6 +137,32 @@ public class SamplingDBAdapter extends ParentAdapter<SenceSamplingSugar> impleme
         hocker.position.setText("采样地址");
         hocker.position.setTextColor(context.getResources().getColor(R.color.white));
         hocker.position.setTextSize(16);
+        hocker.desc.setVisibility(View.GONE);
+//        hocker.desc.setText("一键上传");
+//        hocker.desc.setTextSize(16);
+//        hocker.desc.setTextColor(context.getResources().getColor(R.color.white));
+//        hocker.desc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //进行提示弹窗，询问用户是否确认修改上传状态。
+//                msgDialog = new MsgDialog(context);
+//                msgDialog.setTiele("是否确认上传所有状态信息？");
+//                msgDialog.setButLeftListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        msgDialog.dismiss();
+//                    }
+//                });
+//                msgDialog.setButRightListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        msgDialog.dismiss();
+//                        main.onAllUpdateClick();
+//                    }
+//                });
+//                msgDialog.show();
+//            }
+//        });
         return view;
     }
 

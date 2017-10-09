@@ -30,26 +30,19 @@ public class SamplingHistoryPresenter {
     }
 
 
-    public void getHistory(int currentPage, String hisName,String regionId, String loaction) {
+    public void getHistory(int currentPage, String hisName, String samplyName,String regionId, String loaction) {
         biz.onStart(loading);
-        biz.getHistory(currentPage, hisName,regionId,loaction, new FrameListener<ResultData>() {
+        biz.getHistory(currentPage, hisName,samplyName,regionId,loaction, new FrameListener<ResultData>() {
             @Override
             public void onSucces(ResultData result) {
                 biz.onStop(loading);
-                if (result.resCode == 2000) {
-                    //使用缓存
-                    view.onLoginFailed();
-                } else if (result.resCode == 1000) {
-                    SharePreferHelp.putValue("ResultData", result);
-                    view.onLoginSuccess(result);
-                }
+                view.onLoginSuccess(result);
             }
 
             @Override
             public void onFaild(int code, String info) {
                 biz.onStop(loading);
                 ToastApp.showToast(info);
-                //请求失败也加载缓存
                 view.onLoginFailed();
             }
         });

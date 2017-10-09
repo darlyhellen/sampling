@@ -47,13 +47,13 @@ public class SamplingHisExceptionAdapter extends ParentAdapter<HisException> imp
         }
         hocker.bg.setBackgroundColor(context.getResources().getColor(R.color.white));
         hocker.name.setText(info.landBlockName);
-        hocker.name.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.name.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.name.setTextSize(14);
         hocker.dept.setText(String.valueOf(info.errorTime));
-        hocker.dept.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.dept.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.dept.setTextSize(14);
         hocker.position.setText(String.valueOf(info.describe));
-        hocker.position.setTextColor(context.getResources().getColor(R.color.black));
+        hocker.position.setTextColor(context.getResources().getColor(R.color.gray));
         hocker.position.setTextSize(14);
         return view;
     }
@@ -73,7 +73,7 @@ public class SamplingHisExceptionAdapter extends ParentAdapter<HisException> imp
         } else {
             hocker = (ViewHocker) view.getTag();
         }
-        hocker.bg.setBackgroundResource(R.mipmap.ic_set_user_info);
+        hocker.bg.setBackgroundResource(R.mipmap.title_bg);
         hocker.name.setText("地块名称");
         hocker.name.setTextColor(context.getResources().getColor(R.color.white));
         hocker.name.setTextSize(16);

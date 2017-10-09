@@ -102,6 +102,8 @@ public class SamplingDBListener implements FramePresenter {
 
         void onItemImageClick(String id, boolean pointId);
 
+        void onAllUpdateClick();
+
     }
 
 

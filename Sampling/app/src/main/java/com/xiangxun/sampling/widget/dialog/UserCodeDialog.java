@@ -118,12 +118,14 @@ public class UserCodeDialog extends Dialog {
 	public void setMsg(CharSequence text) {
 		mTvDiaMsg.setVisibility(View.VISIBLE);
 		mTvDiaMsg.setText(text);
+		mTvDiaMsg.setTextColor(mContext.getResources().getColor(R.color.colordf7b39));
 		mTvDiaMsg.setTextSize(24);
 	}
 
 	public void setMsg(int text) {
 		mTvDiaMsg.setVisibility(View.VISIBLE);
 		mTvDiaMsg.setText(text);
+		mTvDiaMsg.setTextColor(mContext.getResources().getColor(R.color.colordf7b39));
 		mTvDiaMsg.setTextSize(24);
 	}
 	

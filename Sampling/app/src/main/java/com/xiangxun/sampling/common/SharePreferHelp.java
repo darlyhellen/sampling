@@ -46,8 +46,17 @@ public class SharePreferHelp {
     public void setSETTINGOBJECT(String SETTINGOBJECT) {
         this.SETTINGOBJECT = SETTINGOBJECT;
     }
-
-
+    public static void putValue(String key, int postion) {
+        Editor sp = context.getSharedPreferences(getInstance().getSETTINGOBJECT(), Context.MODE_PRIVATE)
+                .edit();
+        sp.putInt(key, postion);
+        sp.commit();
+    }
+    public static int getValue(String key,int df) {
+        SharedPreferences sp = context.getSharedPreferences(getInstance().getSETTINGOBJECT(),
+                Context.MODE_PRIVATE);
+        return sp.getInt(key,df);
+    }
 
     /**
      * desc:保存对象
