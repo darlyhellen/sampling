@@ -28,5 +28,6 @@ public class SenceInfo {
         public String code;
         public String depth;
         public String createId;
+        public String regionName;
     }
 }

@@ -186,6 +186,7 @@ public class SencePresenter {
                     //将返回的数据和传递的数据进行合并并保存进数据库。
                     point.setSamplingId(obj.id);
                     point.setCode(obj.code);
+                    point.setRegion_id(obj.regionName);
                     //图片信息建表
                     if (point.getImages() != null && point.getImages().size() > 1) {
                         point.getImages().remove(point.getImages().size() - 1);
