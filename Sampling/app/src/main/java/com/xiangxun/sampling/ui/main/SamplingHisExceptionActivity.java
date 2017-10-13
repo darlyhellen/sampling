@@ -108,7 +108,7 @@ public class SamplingHisExceptionActivity extends BaseActivity implements HisExc
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "绵竹市齐天镇";
+            location = Api.zhangbin;
             presenter.hisList(currentPage, location, regionId);
         } else {
             loading.show();

@@ -16,6 +16,7 @@ import com.xiangxun.sampling.R;
 import com.xiangxun.sampling.bean.PlannningData;
 import com.xiangxun.sampling.bean.SamplingSenceGroup;
 import com.xiangxun.sampling.common.SharePreferHelp;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.main.ChaoTuActivity;
 
 import java.util.List;
@@ -115,8 +116,18 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
 
 
         if (groupData.regType.equals("水样底泥")){
-            holder.tv_num.setText("暂未开通");
-            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            if (!Api.ISNEWVERSION) {
+                holder.tv_num.setText("暂未开通");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            }else {
+                if (groupData.shemeNum == 0){
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+                }else {
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+                }
+            }
             holder.img.setImageResource(R.mipmap.dbssymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.dbssymbol);
@@ -158,15 +169,35 @@ public class SamplingSenceAdapter extends BaseExpandableListAdapter {
                 holder.img.setImageResource(R.mipmap.nttrsymbol);
             }
         }else if (groupData.regType.equals("肥料")){
-            holder.tv_num.setText("暂未开通");
-            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            if (!Api.ISNEWVERSION) {
+                holder.tv_num.setText("暂未开通");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            }else {
+                if (groupData.shemeNum == 0){
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+                }else {
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+                }
+            }
             holder.img.setImageResource(R.mipmap.flsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.flsymbol);
             }
         }else if (groupData.regType.equals("背景土壤")){
-            holder.tv_num.setText("暂未开通");
-            holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            if (!Api.ISNEWVERSION) {
+                holder.tv_num.setText("暂未开通");
+                holder.tv_num.setTextColor(context.getResources().getColor(R.color.color999999));
+            }else {
+                if (groupData.shemeNum == 0){
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.black));
+                }else {
+                    holder.tv_num.setText("任务"+groupData.shemeNum+"个");
+                    holder.tv_num.setTextColor(context.getResources().getColor(R.color.red));
+                }
+            }
             holder.img.setImageResource(R.mipmap.bjtrsymbol1);
             if(!isExpanded){
                 holder.img.setImageResource(R.mipmap.bjtrsymbol);

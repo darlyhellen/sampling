@@ -3,6 +3,8 @@ package com.xiangxun.sampling.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.xiangxun.sampling.common.retrofit.Api;
+
 
 public class SystemCfg {
     private static SharedPreferences mysp = null;
@@ -54,32 +56,32 @@ public class SystemCfg {
 
     public static String getServerIP(Context context) {
         init(context);
-        if (AppBuildConfig.DEBUGURL)
-            return mysp.getString("serverip", "193.169.100.113");
+        if (Api.DEBUGURL)
+            return mysp.getString("serverip", "223.85.191.240");
         else
             return mysp.getString("serverip", "193.169.100.113");
     }
 
     public static String getServerPort(Context context) {
         init(context);
-        if (AppBuildConfig.DEBUGURL)
-            return mysp.getString("serverport", "8090");
+        if (Api.DEBUGURL)
+            return mysp.getString("serverport", "7002");
         else
             return mysp.getString("serverport", "8090");
     }
 
     public static String getGISServerIP(Context context) {
         init(context);
-        if (AppBuildConfig.DEBUGURL)
-            return mysp.getString("gisserverip", "193.169.100.232");
+        if (Api.DEBUGURL)
+            return mysp.getString("gisserverip", "223.85.191.240");
         else
             return mysp.getString("gisserverip", "193.169.100.232");
     }
 
     public static String getGISServerPort(Context context) {
         init(context);
-        if (AppBuildConfig.DEBUGURL)
-            return mysp.getString("gisserverport", "8090");
+        if (Api.DEBUGURL)
+            return mysp.getString("gisserverport", "7005");
         else
             return mysp.getString("gisserverport", "8090");
     }

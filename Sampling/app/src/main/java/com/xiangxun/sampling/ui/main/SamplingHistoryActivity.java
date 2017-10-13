@@ -112,7 +112,7 @@ public class SamplingHistoryActivity extends BaseActivity implements SamplingHis
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "绵竹市齐天镇";
+            location = Api.zhangbin;
             presenter.getHistory(currentPage, hisName,samplyName, resID, location);
         } else {
             loading.show();

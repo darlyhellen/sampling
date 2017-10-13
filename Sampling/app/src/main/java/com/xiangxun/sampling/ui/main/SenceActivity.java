@@ -225,7 +225,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                 longitude.isEdit(true);
                 longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
                 address.isEdit(false);
-                address.setInfo("*位置：", String.valueOf("绵竹市齐天镇"), "");
+                address.setInfo("*位置：", String.valueOf(Api.zhangbin), "");
             } else {
                 LocationTools.getInstance().setLocationToolsListener(this);
                 LocationTools.getInstance().start();
@@ -912,7 +912,7 @@ public class SenceActivity extends BaseActivity implements LocationToolsListener
                     longitude.isEdit(true);
                     longitude.setInfo("*经度：", String.valueOf(Api.longitude), "");
                     address.isEdit(false);
-                    address.setInfo("*位置：", String.valueOf("绵竹市齐天镇"), "");
+                    address.setInfo("*位置：", String.valueOf(Api.zhangbin), "");
                 } else {
                     LocationTools.getInstance().start();
                 }

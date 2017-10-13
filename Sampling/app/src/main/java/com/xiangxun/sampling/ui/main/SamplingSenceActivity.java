@@ -16,6 +16,7 @@ import com.xiangxun.sampling.binder.ViewsBinder;
 import com.xiangxun.sampling.common.SharePreferHelp;
 import com.xiangxun.sampling.common.ToastApp;
 import com.xiangxun.sampling.common.dlog.DLog;
+import com.xiangxun.sampling.common.retrofit.Api;
 import com.xiangxun.sampling.ui.adapter.SamplingSenceAdapter;
 import com.xiangxun.sampling.ui.biz.SamplingPlanningListener.SamplingPlanningInterface;
 import com.xiangxun.sampling.ui.presenter.SamplingPlanningPresenter;
@@ -75,29 +76,32 @@ public class SamplingSenceActivity extends BaseActivity implements SamplingPlann
                 if (groupData ==  null){
                     return false;
                 }
-                if ("背景土壤".equals(groupData.regType)){//背景土壤
-                   ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return true;
-                }else if ("农作物".equals(groupData.regType)){//农作物
-                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                if (Api.ISNEWVERSION) {
                     return false;
-                }else if ("农田土壤".equals(groupData.regType)){//农田土壤
-                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return false;
-                }else if ("水样底泥".equals(groupData.regType)){//水采样
-                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return true;
-                }else if ("大气沉降".equals(groupData.regType)){//大气沉降物
-                    //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return false;
-                }else if ("肥料".equals(groupData.regType)){//肥料
-                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return true;
                 }else {
-                    ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
-                    return true;
+                    if ("背景土壤".equals(groupData.regType)) {//背景土壤
+                        ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                         return true;
+                    } else if ("农作物".equals(groupData.regType)) {//农作物
+                        //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return false;
+                    } else if ("农田土壤".equals(groupData.regType)) {//农田土壤
+                        //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return false;
+                    } else if ("水样底泥".equals(groupData.regType)) {//水采样
+                        ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return true;
+                    } else if ("大气沉降".equals(groupData.regType)) {//大气沉降物
+                        //ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return false;
+                    } else if ("肥料".equals(groupData.regType)) {//肥料
+                        ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return true;
+                    } else {
+                        ToastApp.showToast(groupData.regType+"功能暂未开通，请等候新版本。");
+                        return true;
+                    }
                 }
-
 //                if (parent.isGroupExpanded(groupPosition)) {
 //                    parent.collapseGroup(groupPosition);
 //                } else {

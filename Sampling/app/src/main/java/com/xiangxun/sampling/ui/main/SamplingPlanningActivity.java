@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiangxun.sampling.R;
@@ -42,6 +44,10 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
     private StickyListHeadersListView wlist;
     @ViewsBinder(R.id.id_sence_text)
     private TextView textView;
+
+    @ViewsBinder(R.id.id_sence_db_ll)
+    private LinearLayout id_sence_db_ll;
+
     private List<Scheme> data;
     private StickyAdapter adapter;
 
@@ -52,6 +58,7 @@ public class SamplingPlanningActivity extends BaseActivity implements SamplingPl
     protected void initView(Bundle savedInstanceState) {
         titleView.setTitle("采样方案");
         //在这里进行方案列表请求。获取到的信息，进行缓存。对修改的信息进行处理操作。
+        id_sence_db_ll.setVisibility(View.GONE);
         presenter = new SamplingPlanningPresenter(this);
     }
 

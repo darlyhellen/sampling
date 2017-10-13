@@ -149,7 +149,7 @@ public class HisSenceActivity extends BaseActivity implements HisSenceInterface 
     @Override
     public void onDateSuccess(HisSencePageInfo.HisSencePage result) {
         if (result != null) {
-            id_user_sence_description.setText("已采样的CODE："+result.code);
+            id_user_sence_description.setText("您的采样编码为："+result.code);
                 if (result.samplingCode.equals("BJTR")){//背景土壤
                     id_user_sence_project_show.setVisibility(View.GONE);
                     type.isEdit(false);

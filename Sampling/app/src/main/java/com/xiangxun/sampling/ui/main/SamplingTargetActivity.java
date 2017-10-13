@@ -118,7 +118,7 @@ public class SamplingTargetActivity extends BaseActivity implements TargetInterf
         if (Api.TESTING) {
             //测试环境下，经纬度写死。手动让其修改。
             //定位成功回调信息，设置相关消息
-            location = "齐天镇";
+            location = Api.zhangbin;
             presenter.analysis(currentPage, location, resID, sampleOver, sampleName, sampleTarget);
         } else {
             loading.show();

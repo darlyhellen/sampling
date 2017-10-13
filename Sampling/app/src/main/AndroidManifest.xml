@@ -172,9 +172,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <!--高德定位-->
         <!-- 设置key -->
+        <!--Version 1.0-->
+        <!--<meta-data-->
+            <!--android:name="com.amap.api.v2.apikey"-->
+            <!--android:value="1717c506496508f8b9ac87edf0fd9579" />-->
+        <!--Version 1.1-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1717c506496508f8b9ac87edf0fd9579" />
+            android:value="7ab9bf8aef96521b32889d19ddc21edc" />
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
         <service android:name=".service.MainService" />
